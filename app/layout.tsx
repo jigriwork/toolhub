@@ -36,6 +36,11 @@ export const metadata: Metadata = {
     follow: true,
   },
   manifest: "/manifest.webmanifest",
+  icons: {
+    icon: "/icons/favicon.svg",
+    shortcut: "/icons/favicon.svg",
+    apple: "/icons/favicon.svg",
+  },
   openGraph: {
     type: "website",
     url: "https://toolhub.vercel.app",

@@ -20,8 +20,14 @@ export function Navbar() {
   return (
     <header className="border-b" style={{ borderColor: "var(--border)" }}>
       <div className="container flex flex-wrap items-center justify-between gap-3 py-4">
-        <Link href="/" className="text-xl font-bold tracking-tight">
-          ToolHub
+        <Link href="/" className="inline-flex items-center gap-2 text-xl font-bold tracking-tight">
+          <span
+            aria-hidden
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-extrabold text-white"
+          >
+            TH
+          </span>
+          <span>ToolHub</span>
         </Link>
         <nav className="flex items-center gap-2 sm:gap-3">
           {navLinks.map((link) => {

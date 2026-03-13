@@ -9,13 +9,21 @@ import {
   getRecentTools,
   onToolStorageUpdate,
 } from "@/lib/tool-storage";
-import { trackSearch, getStats } from "@/lib/analytics";
+import { trackSearch, getStats, onStatsUpdate, type ToolhubStats } from "@/lib/analytics";
+
+const emptyStats: ToolhubStats = {
+  toolVisits: {},
+  searches: {},
+  favoritesToggles: 0,
+  recentInteractions: 0,
+};
 
 export function ToolSearch() {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<ToolCategory | "All">("All");
   const [recent, setRecent] = useState<string[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [stats, setStats] = useState<ToolhubStats>(emptyStats);
 
   useEffect(() => {
     const handle = window.setTimeout(() => {
@@ -31,6 +39,12 @@ export function ToolSearch() {
     };
     sync();
     return onToolStorageUpdate(sync);
+  }, []);
+
+  useEffect(() => {
+    const syncStats = () => setStats(getStats());
+    syncStats();
+    return onStatsUpdate(syncStats);
   }, []);
 
   const featuredTools = useMemo(() => tools.filter((tool) => tool.featured), []);
@@ -50,14 +64,14 @@ export function ToolSearch() {
   );
 
   const trendingTools = useMemo(() => {
-    const stats = getStats();
     return [...tools]
       .sort(
         (a, b) =>
-          (stats.toolVisits[b.slug] ?? 0) - (stats.toolVisits[a.slug] ?? 0),
+          (stats.toolVisits[b.slug] ?? 0) - (stats.toolVisits[a.slug] ?? 0) ||
+          a.name.localeCompare(b.name),
       )
       .slice(0, 6);
-  }, [recent, favorites]);
+  }, [stats]);
 
   const newestTools = useMemo(() => [...tools].slice(-6).reverse(), []);
 
