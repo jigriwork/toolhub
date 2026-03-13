@@ -2,6 +2,7 @@
 
 import imageCompression from "browser-image-compression";
 import { useEffect, useMemo, useState } from "react";
+import { ToolResultCard } from "@/components/tool-result-card";
 
 function formatSize(bytes: number) {
   if (bytes < 1024) return `${bytes} B`;
@@ -21,11 +22,27 @@ export function ImageCompressorTool() {
     return URL.createObjectURL(compressedFile);
   }, [compressedFile]);
 
+  const originalPreviewUrl = useMemo(() => {
+    if (!originalFile) return "";
+    return URL.createObjectURL(originalFile);
+  }, [originalFile]);
+
   useEffect(() => {
     return () => {
       if (downloadUrl) URL.revokeObjectURL(downloadUrl);
     };
   }, [downloadUrl]);
+
+  useEffect(() => {
+    return () => {
+      if (originalPreviewUrl) URL.revokeObjectURL(originalPreviewUrl);
+    };
+  }, [originalPreviewUrl]);
+
+  const reduction =
+    originalFile && compressedFile
+      ? ((originalFile.size - compressedFile.size) / originalFile.size) * 100
+      : 0;
 
   const handleFile = async (file: File) => {
     setOriginalFile(file);
@@ -82,18 +99,84 @@ export function ImageCompressorTool() {
         style={{ borderColor: "var(--border)" }}
       />
 
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => {
+            setOriginalFile(null);
+            setCompressedFile(null);
+            setError("");
+          }}
+        >
+          Clear
+        </button>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => {
+            setQuality(70);
+            setOriginalFile(null);
+            setCompressedFile(null);
+            setError("");
+          }}
+        >
+          Reset
+        </button>
+      </div>
+
       {isCompressing && <p className="text-sm">Compressing image...</p>}
       {error && <p className="text-sm text-red-500">{error}</p>}
 
       {originalFile && (
-        <div className="rounded-xl border p-4" style={{ borderColor: "var(--border)" }}>
-          <p>
-            <strong>Original size:</strong> {formatSize(originalFile.size)}
-          </p>
-          <p>
-            <strong>Compressed size:</strong>{" "}
-            {compressedFile ? formatSize(compressedFile.size) : "-"}
-          </p>
+        <div className="grid gap-3">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <ToolResultCard
+              icon="📦"
+              label="Original size"
+              value={formatSize(originalFile.size)}
+            />
+            <ToolResultCard
+              icon="🗜"
+              label="Compressed size"
+              value={compressedFile ? formatSize(compressedFile.size) : "-"}
+            />
+          </div>
+
+          {compressedFile ? (
+            <ToolResultCard
+              icon="📉"
+              label="Size reduction"
+              value={`${reduction.toFixed(2)}%`}
+            />
+          ) : null}
+
+          {originalPreviewUrl && compressedFile && downloadUrl ? (
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <p className="mb-2 text-sm font-medium" style={{ color: "var(--muted)" }}>
+                  Before
+                </p>
+                <img
+                  src={originalPreviewUrl}
+                  alt="Original preview"
+                  className="max-h-56 w-full rounded-xl border object-contain"
+                  style={{ borderColor: "var(--border)" }}
+                />
+              </div>
+              <div>
+                <p className="mb-2 text-sm font-medium" style={{ color: "var(--muted)" }}>
+                  After
+                </p>
+                <img
+                  src={downloadUrl}
+                  alt="Compressed preview"
+                  className="max-h-56 w-full rounded-xl border object-contain"
+                  style={{ borderColor: "var(--border)" }}
+                />
+              </div>
+            </div>
+          ) : null}
 
           {compressedFile && downloadUrl && (
             <a
@@ -101,7 +184,7 @@ export function ImageCompressorTool() {
               download={compressedFile.name}
               className="btn btn-primary mt-4"
             >
-              Download Compressed Image
+              Download Compressed Image ({formatSize(compressedFile.size)})
             </a>
           )}
         </div>

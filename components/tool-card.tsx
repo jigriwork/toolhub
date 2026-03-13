@@ -1,19 +1,32 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import type { Tool } from "@/data/tools";
 
-export function ToolCard({ tool }: { tool: Tool }) {
+export function ToolCard({
+  tool,
+  rightSlot,
+}: {
+  tool: Tool;
+  rightSlot?: ReactNode;
+}) {
   return (
-    <Link
-      href={`/tools/${tool.slug}`}
-      className="card block p-5 transition hover:-translate-y-0.5 hover:shadow-md"
-    >
-      <h3 className="text-lg font-semibold">{tool.name}</h3>
-      <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
-        {tool.description}
-      </p>
-      <span className="mt-4 inline-block text-sm font-semibold text-blue-600">
-        Open Tool →
-      </span>
-    </Link>
+    <article className="card group relative overflow-hidden p-5 transition duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-violet-500 opacity-70" />
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <span className="rounded-full border px-2.5 py-1 text-xs font-medium" style={{ borderColor: "var(--border)", color: "var(--muted)" }}>
+          {tool.category}
+        </span>
+        {rightSlot}
+      </div>
+      <Link href={`/tools/${tool.slug}`} className="block">
+        <h3 className="text-lg font-semibold">{tool.name}</h3>
+        <p className="mt-2 text-sm leading-6" style={{ color: "var(--muted)" }}>
+          {tool.description}
+        </p>
+        <span className="mt-4 inline-block text-sm font-semibold text-blue-600 transition group-hover:translate-x-0.5">
+          Open Tool →
+        </span>
+      </Link>
+    </article>
   );
 }

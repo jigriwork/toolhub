@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ToolResultCard } from "@/components/tool-result-card";
 
 type AgeResult = {
   years: number;
@@ -43,7 +44,8 @@ function calculateAge(dateString: string): AgeResult | null {
 }
 
 export function AgeCalculatorTool() {
-  const [dob, setDob] = useState("");
+  const sampleDob = "1998-08-15";
+  const [dob, setDob] = useState(sampleDob);
   const [result, setResult] = useState<AgeResult | null>(null);
   const [error, setError] = useState("");
 
@@ -68,17 +70,33 @@ export function AgeCalculatorTool() {
         className="w-full rounded-xl border bg-transparent px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
         style={{ borderColor: "var(--border)" }}
       />
-      <button type="button" onClick={onCalculate} className="btn btn-primary">
-        Calculate Age
-      </button>
+      <div className="flex flex-wrap gap-2">
+        <button type="button" onClick={onCalculate} className="btn btn-primary">
+          Calculate Age
+        </button>
+        <button type="button" onClick={() => setDob("")} className="btn btn-secondary">
+          Clear
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setDob(sampleDob);
+            setResult(null);
+            setError("");
+          }}
+          className="btn btn-secondary"
+        >
+          Reset
+        </button>
+      </div>
 
       {error && <p className="text-sm text-red-500">{error}</p>}
 
       {result && (
-        <div className="rounded-xl border p-4" style={{ borderColor: "var(--border)" }}>
-          <p className="text-lg font-semibold">
-            {result.years} years, {result.months} months, {result.days} days
-          </p>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <ToolResultCard icon="🎂" label="Years" value={result.years} />
+          <ToolResultCard icon="🗓" label="Months" value={result.months} />
+          <ToolResultCard icon="📆" label="Days" value={result.days} />
         </div>
       )}
     </div>

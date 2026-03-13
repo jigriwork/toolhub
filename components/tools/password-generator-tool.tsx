@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { ToolResultCard } from "@/components/tool-result-card";
 
 const CHARSETS = {
   upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
@@ -34,11 +35,19 @@ function Toggle({
 }
 
 export function PasswordGeneratorTool() {
-  const [length, setLength] = useState(16);
-  const [useUpper, setUseUpper] = useState(true);
-  const [useLower, setUseLower] = useState(true);
-  const [useNumbers, setUseNumbers] = useState(true);
-  const [useSymbols, setUseSymbols] = useState(false);
+  const defaultState = {
+    length: 16,
+    useUpper: true,
+    useLower: true,
+    useNumbers: true,
+    useSymbols: false,
+  };
+
+  const [length, setLength] = useState(defaultState.length);
+  const [useUpper, setUseUpper] = useState(defaultState.useUpper);
+  const [useLower, setUseLower] = useState(defaultState.useLower);
+  const [useNumbers, setUseNumbers] = useState(defaultState.useNumbers);
+  const [useSymbols, setUseSymbols] = useState(defaultState.useSymbols);
   const [password, setPassword] = useState("");
   const [copied, setCopied] = useState(false);
 
@@ -122,6 +131,31 @@ export function PasswordGeneratorTool() {
         >
           {copied ? "Copied!" : "Copy"}
         </button>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => {
+            setPassword("");
+            setCopied(false);
+          }}
+        >
+          Clear
+        </button>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => {
+            setLength(defaultState.length);
+            setUseUpper(defaultState.useUpper);
+            setUseLower(defaultState.useLower);
+            setUseNumbers(defaultState.useNumbers);
+            setUseSymbols(defaultState.useSymbols);
+            setPassword("");
+            setCopied(false);
+          }}
+        >
+          Reset
+        </button>
       </div>
 
       {!availableSet && (
@@ -130,12 +164,12 @@ export function PasswordGeneratorTool() {
         </p>
       )}
 
-      <div
-        className="rounded-xl border p-4 break-all"
-        style={{ borderColor: "var(--border)" }}
-      >
-        {password || "Your generated password will appear here."}
-      </div>
+      <ToolResultCard
+        icon="🔐"
+        label="Generated Password"
+        value={<span className="break-all text-lg">{password || "Your generated password will appear here."}</span>}
+        helpText="Tip: Use at least 16 characters with symbols for stronger security."
+      />
     </div>
   );
 }

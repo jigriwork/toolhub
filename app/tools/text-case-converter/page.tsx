@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
 import { ToolLayout } from "@/components/tool-layout";
 import { TextCaseConverterTool } from "@/components/tools/text-case-converter-tool";
+import { getToolBySlug } from "@/data/tools";
+
+const tool = getToolBySlug("text-case-converter");
 
 export const metadata: Metadata = {
-  title: "Text Case Converter",
-  description:
-    "Convert text between lowercase, uppercase, sentence case, and capitalize words.",
+  title: tool?.name,
+  description: tool?.seoDescription,
 };
 
 export default function TextCaseConverterPage() {
   return (
     <ToolLayout
+      slug="text-case-converter"
       title="Text Case Converter"
       description="Transform text format instantly for writing, SEO, and editing workflows."
     >

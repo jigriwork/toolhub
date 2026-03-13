@@ -1,5 +1,7 @@
 import { AdPlaceholder } from "@/components/ad-placeholder";
+import { InstallAppPrompt } from "@/components/install-app-prompt";
 import { ToolSearch } from "@/components/tool-search";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -20,6 +22,7 @@ export default function HomePage() {
       </section>
 
       <section className="container pb-8">
+        <InstallAppPrompt />
         <ToolSearch />
       </section>
 
@@ -44,8 +47,39 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="container py-4">
+        <div className="card p-6 sm:p-8">
+          <h2 className="text-2xl font-semibold">Built for trust and production use</h2>
+          <p className="mt-3 text-sm sm:text-base" style={{ color: "var(--muted)" }}>
+            ToolHub is designed as a reliable utility platform with lightweight pages,
+            practical tool descriptions, structured FAQ content, and mobile-first
+            usability. This quality-first foundation helps improve user confidence,
+            retention, and AdSense readiness over time.
+          </p>
+        </div>
+      </section>
+
       <section className="container">
         <AdPlaceholder label="Homepage Bottom Ad Slot" />
+      </section>
+
+      <section className="container py-4">
+        <div className="card flex flex-wrap items-center justify-between gap-4 p-6">
+          <div>
+            <h2 className="text-xl font-semibold">Help us grow ToolHub</h2>
+            <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
+              Request a tool, send feedback, or report issues in a minute.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Link href="/request-tool" className="btn btn-primary">
+              Request a Tool
+            </Link>
+            <Link href="/feedback" className="btn btn-secondary">
+              Send Feedback
+            </Link>
+          </div>
+        </div>
       </section>
     </main>
   );

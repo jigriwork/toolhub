@@ -1,20 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { TextToolActions } from "@/components/text-tool-actions";
+import { ToolResultCard } from "@/components/tool-result-card";
 
-function StatCard({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="rounded-xl border p-4" style={{ borderColor: "var(--border)" }}>
-      <p className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-        {label}
-      </p>
-      <p className="mt-1 text-2xl font-semibold">{value}</p>
-    </div>
-  );
-}
+const SAMPLE_TEXT =
+  "ToolHub helps creators and teams work faster.\n\nUse this sample text to test word count, character count, and reading time.";
 
 export function WordCounterTool() {
-  const [text, setText] = useState("");
+  const [text, setText] = useState(SAMPLE_TEXT);
+  const [copied, setCopied] = useState(false);
 
   const stats = useMemo(() => {
     const trimmed = text.trim();
@@ -41,6 +36,19 @@ export function WordCounterTool() {
 
   return (
     <>
+      <TextToolActions
+        onSample={() => setText(SAMPLE_TEXT)}
+        onClear={() => setText("")}
+        onReset={() => setText(SAMPLE_TEXT)}
+        onCopy={async () => {
+          await navigator.clipboard.writeText(text);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 1200);
+        }}
+        copied={copied}
+        copyLabel="Copy Text"
+      />
+
       <textarea
         value={text}
         onChange={(event) => setText(event.target.value)}
@@ -50,15 +58,20 @@ export function WordCounterTool() {
       />
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        <StatCard label="Words" value={stats.words} />
-        <StatCard label="Characters" value={stats.characters} />
-        <StatCard
+        <ToolResultCard icon="📝" label="Words" value={stats.words} />
+        <ToolResultCard icon="🔤" label="Characters" value={stats.characters} />
+        <ToolResultCard
+          icon="✂️"
           label="Characters (No Spaces)"
           value={stats.charactersWithoutSpaces}
         />
-        <StatCard label="Sentences" value={stats.sentences} />
-        <StatCard label="Paragraphs" value={stats.paragraphs} />
-        <StatCard label="Reading Time (min)" value={stats.readingTime} />
+        <ToolResultCard icon="📍" label="Sentences" value={stats.sentences} />
+        <ToolResultCard icon="📄" label="Paragraphs" value={stats.paragraphs} />
+        <ToolResultCard
+          icon="⏱"
+          label="Reading Time (min)"
+          value={stats.readingTime}
+        />
       </div>
     </>
   );

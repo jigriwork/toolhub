@@ -1,6 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { TextToolActions } from "@/components/text-tool-actions";
+
+const SAMPLE_TEXT =
+  "toolhub makes online utilities feel clean, fast, and premium for daily work.";
 
 const toSentenceCase = (text: string) =>
   text
@@ -11,8 +15,8 @@ const toCapitalizeWords = (text: string) =>
   text.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
 
 export function TextCaseConverterTool() {
-  const [input, setInput] = useState("");
-  const [output, setOutput] = useState("");
+  const [input, setInput] = useState(SAMPLE_TEXT);
+  const [output, setOutput] = useState(SAMPLE_TEXT);
   const [copied, setCopied] = useState(false);
 
   const copyOutput = async () => {
@@ -37,6 +41,24 @@ export function TextCaseConverterTool() {
         placeholder="Type or paste your text..."
         className="h-40 w-full rounded-xl border bg-transparent p-4 outline-none focus:ring-2 focus:ring-blue-500"
         style={{ borderColor: "var(--border)" }}
+      />
+
+      <TextToolActions
+        onSample={() => {
+          setInput(SAMPLE_TEXT);
+          setOutput(SAMPLE_TEXT);
+        }}
+        onClear={() => {
+          setInput("");
+          setOutput("");
+        }}
+        onReset={() => {
+          setInput(SAMPLE_TEXT);
+          setOutput(SAMPLE_TEXT);
+        }}
+        onCopy={copyOutput}
+        copied={copied}
+        copyLabel="Copy Output"
       />
 
       <div className="flex flex-wrap gap-2">
@@ -67,9 +89,6 @@ export function TextCaseConverterTool() {
           onClick={() => setOutput(toCapitalizeWords(input))}
         >
           Capitalize Words
-        </button>
-        <button type="button" className="btn btn-primary" onClick={copyOutput}>
-          {copied ? "Copied!" : "Copy Output"}
         </button>
       </div>
 

@@ -3,9 +3,12 @@
 import Image from "next/image";
 import QRCode from "qrcode";
 import { useState } from "react";
+import { TextToolActions } from "@/components/text-tool-actions";
+
+const SAMPLE_VALUE = "https://toolhub.vercel.app";
 
 export function QrCodeGeneratorTool() {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(SAMPLE_VALUE);
   const [qrDataUrl, setQrDataUrl] = useState("");
   const [error, setError] = useState("");
 
@@ -35,6 +38,20 @@ export function QrCodeGeneratorTool() {
         placeholder="Enter text or URL"
         className="w-full rounded-xl border bg-transparent px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
         style={{ borderColor: "var(--border)" }}
+      />
+
+      <TextToolActions
+        onSample={() => setValue(SAMPLE_VALUE)}
+        onClear={() => {
+          setValue("");
+          setQrDataUrl("");
+          setError("");
+        }}
+        onReset={() => {
+          setValue(SAMPLE_VALUE);
+          setQrDataUrl("");
+          setError("");
+        }}
       />
 
       <button type="button" className="btn btn-primary" onClick={generateQr}>
