@@ -31,7 +31,18 @@ export default function AdminStatsPage() {
 
   return (
     <main className="container py-10">
-      <h1 className="text-3xl font-bold">Admin Stats (Demo)</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-3xl font-bold">Admin Stats</h1>
+        <form action="/admin/logout" method="post">
+          <button
+            type="submit"
+            className="rounded-md border px-3 py-1.5 text-sm font-medium"
+            style={{ borderColor: "var(--border)" }}
+          >
+            Logout
+          </button>
+        </form>
+      </div>
       <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
         Local analytics snapshot for product iteration. Replace with backend pipeline later.
       </p>
