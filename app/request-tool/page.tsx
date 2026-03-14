@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { submitToolRequestAction } from "@/app/actions/public-submissions";
 import { RequestToolForm } from "@/components/request-tool-form";
 
 export const metadata: Metadata = {
@@ -14,7 +15,7 @@ export default function RequestToolPage() {
       <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
         Tell us what utility you need. We prioritize requests with strong practical value.
       </p>
-      <RequestToolForm />
+      <RequestToolForm action={submitToolRequestAction} />
     </main>
   );
 }

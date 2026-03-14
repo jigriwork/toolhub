@@ -17,6 +17,26 @@ const defaultStats: ToolhubStats = {
   recentInteractions: 0,
 };
 
+async function sendAnalyticsEvent(event: {
+  eventType: "tool_visit" | "search" | "favorite_toggle" | "recent_interaction";
+  slug?: string;
+  term?: string;
+  metadata?: Record<string, unknown>;
+}) {
+  if (typeof window === "undefined") return;
+
+  try {
+    await fetch("/api/analytics", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(event),
+      keepalive: true,
+    });
+  } catch {
+    // Ignore analytics network errors silently.
+  }
+}
+
 export function getStats(): ToolhubStats {
   if (typeof window === "undefined") return defaultStats;
   try {
@@ -38,6 +58,7 @@ export function trackToolVisit(slug: string) {
   const stats = getStats();
   stats.toolVisits[slug] = (stats.toolVisits[slug] ?? 0) + 1;
   setStats(stats);
+  void sendAnalyticsEvent({ eventType: "tool_visit", slug });
 }
 
 export function trackSearch(query: string) {
@@ -46,18 +67,21 @@ export function trackSearch(query: string) {
   const stats = getStats();
   stats.searches[term] = (stats.searches[term] ?? 0) + 1;
   setStats(stats);
+  void sendAnalyticsEvent({ eventType: "search", term });
 }
 
 export function trackFavoriteInteraction() {
   const stats = getStats();
   stats.favoritesToggles += 1;
   setStats(stats);
+  void sendAnalyticsEvent({ eventType: "favorite_toggle" });
 }
 
 export function trackRecentInteraction() {
   const stats = getStats();
   stats.recentInteractions += 1;
   setStats(stats);
+  void sendAnalyticsEvent({ eventType: "recent_interaction" });
 }
 
 export function onStatsUpdate(handler: () => void) {

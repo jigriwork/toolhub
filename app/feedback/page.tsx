@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { submitFeedbackAction } from "@/app/actions/public-submissions";
 import { FeedbackForm } from "@/components/feedback-form";
 
 export const metadata: Metadata = {
@@ -14,7 +15,7 @@ export default function FeedbackPage() {
       <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
         Share bugs, UX improvements, or feature ideas. Your input drives product quality.
       </p>
-      <FeedbackForm />
+      <FeedbackForm action={submitFeedbackAction} />
     </main>
   );
 }
