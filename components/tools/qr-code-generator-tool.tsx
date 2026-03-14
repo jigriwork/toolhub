@@ -5,7 +5,7 @@ import QRCode from "qrcode";
 import { useState } from "react";
 import { TextToolActions } from "@/components/text-tool-actions";
 
-const SAMPLE_VALUE = "https://toolhub.vercel.app";
+const SAMPLE_VALUE = "https://www.toolhubsite.in";
 
 export function QrCodeGeneratorTool() {
   const [value, setValue] = useState(SAMPLE_VALUE);

@@ -15,7 +15,7 @@ export default function HomePage() {
             className="mx-auto mt-4 max-w-2xl text-base sm:text-lg"
             style={{ color: "var(--muted)" }}
           >
-            ToolHub helps you work faster with practical, accurate, and
+            toolhubsite helps you work faster with practical, accurate, and
             lightweight tools designed for everyday productivity.
           </p>
         </div>
@@ -32,7 +32,7 @@ export default function HomePage() {
 
       <section className="container py-8">
         <div className="card p-6 sm:p-8">
-          <h2 className="text-2xl font-semibold">Why ToolHub?</h2>
+          <h2 className="text-2xl font-semibold">Why toolhubsite?</h2>
           <ul
             className="mt-4 grid gap-3 text-sm sm:grid-cols-2"
             style={{ color: "var(--muted)" }}
@@ -51,10 +51,14 @@ export default function HomePage() {
         <div className="card p-6 sm:p-8">
           <h2 className="text-2xl font-semibold">Built for trust and production use</h2>
           <p className="mt-3 text-sm sm:text-base" style={{ color: "var(--muted)" }}>
-            ToolHub is designed as a reliable utility platform with lightweight pages,
+            toolhubsite is designed as a reliable utility platform with lightweight pages,
             practical tool descriptions, structured FAQ content, and mobile-first
             usability. This quality-first foundation helps improve user confidence,
             retention, and AdSense readiness over time.
+          </p>
+          <p className="mt-3 text-sm sm:text-base" style={{ color: "var(--muted)" }}>
+            We do not store your tool input data on our servers. Most processing
+            is done directly in your browser.
           </p>
         </div>
       </section>
@@ -66,7 +70,7 @@ export default function HomePage() {
       <section className="container py-4">
         <div className="card flex flex-wrap items-center justify-between gap-4 p-6">
           <div>
-            <h2 className="text-xl font-semibold">Help us grow ToolHub</h2>
+            <h2 className="text-xl font-semibold">Help us grow toolhubsite</h2>
             <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
               Request a tool, send feedback, or report issues in a minute.
             </p>

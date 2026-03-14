@@ -6,7 +6,7 @@ import { getToolBySlug } from "@/data/tools";
 export const metadata: Metadata = {
   title: "Resources",
   description:
-    "ToolHub resources with practical guides on SEO, text formatting, image optimization, and developer workflows.",
+    "toolhubsite resources with practical guides on SEO, text formatting, image optimization, and developer workflows.",
 };
 
 export default function ResourcesPage() {
@@ -14,7 +14,7 @@ export default function ResourcesPage() {
     <main className="container py-10">
       <h1 className="text-3xl font-bold tracking-tight">Resources</h1>
       <p className="mt-2 text-sm sm:text-base" style={{ color: "var(--muted)" }}>
-        Practical guides and tutorials to help you get more value from ToolHub.
+        Practical guides and tutorials to help you get more value from toolhubsite.
       </p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">

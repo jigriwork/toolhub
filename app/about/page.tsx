@@ -2,21 +2,31 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Learn about ToolHub and our mission.",
+  description: "Learn about toolhubsite and our mission.",
 };
 
 export default function AboutPage() {
   return (
     <main className="container py-10">
-      <h1 className="text-3xl font-bold">About ToolHub</h1>
+      <h1 className="text-3xl font-bold">About toolhubsite</h1>
       <div className="mt-4 max-w-3xl space-y-3" style={{ color: "var(--muted)" }}>
         <p>
-          ToolHub is a modern multi-tools web app built to help users complete
-          everyday tasks quickly and reliably.
+          toolhubsite is an online utility platform available at
+          <strong> www.toolhubsite.in</strong>. We build practical tools for
+          students, creators, developers, and professionals who need fast
+          results without complicated software.
         </p>
         <p>
-          Our focus is speed, clarity, and quality—offering useful tools in a
-          clean experience that works across mobile and desktop.
+          Our focus is speed, clarity, and trust. Most tools run directly in
+          your browser, and we do not collect or store your tool input on our
+          servers.
+        </p>
+        <p>
+          For support or partnerships, contact us at{" "}
+          <a className="text-blue-600" href="mailto:hello@toolhubsite.in">
+            hello@toolhubsite.in
+          </a>
+          .
         </p>
       </div>
     </main>

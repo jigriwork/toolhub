@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Read ToolHub privacy policy.",
+  description: "Read the toolhubsite privacy policy.",
 };
 
 export default function PrivacyPolicyPage() {
@@ -11,15 +11,28 @@ export default function PrivacyPolicyPage() {
       <h1 className="text-3xl font-bold">Privacy Policy</h1>
       <div className="mt-4 max-w-3xl space-y-3" style={{ color: "var(--muted)" }}>
         <p>
-          ToolHub respects your privacy. Most tool operations are performed in
-          your browser.
+          toolhubsite (www.toolhubsite.in) respects your privacy. Most tool
+          operations are performed directly in your browser.
         </p>
         <p>
-          We may use analytics and advertising partners in the future to improve
-          service and support monetization.
+          We do not store your tool input data on our servers. Text, image, and
+          calculator inputs are processed locally in your browser for most tools.
         </p>
         <p>
-          By using this site, you agree to this policy and future updates.
+          To improve experience, your browser may store limited local data such
+          as recent tools, favorites, and anonymous interaction counters via
+          localStorage. This data stays on your device unless you clear it.
+        </p>
+        <p>
+          If analytics or ads are enabled (such as Google services), they may
+          collect non-personal usage data according to their own policies.
+        </p>
+        <p>
+          For privacy questions, contact us at{" "}
+          <a className="text-blue-600" href="mailto:hello@toolhubsite.in">
+            hello@toolhubsite.in
+          </a>
+          .
         </p>
       </div>
     </main>

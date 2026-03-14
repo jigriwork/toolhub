@@ -4,7 +4,7 @@ import { FeedbackForm } from "@/components/feedback-form";
 export const metadata: Metadata = {
   title: "Feedback & Report Issue",
   description:
-    "Send product feedback or report issues to help improve ToolHub quality and reliability.",
+    "Send product feedback or report issues to help improve toolhubsite quality and reliability.",
 };
 
 export default function FeedbackPage() {

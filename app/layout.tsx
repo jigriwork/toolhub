@@ -7,15 +7,15 @@ import { GoogleAnalytics } from "@/components/google-analytics";
 import { PwaRegister } from "@/components/pwa-register";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://toolhub.vercel.app"),
+  metadataBase: new URL("https://www.toolhubsite.in"),
   title: {
-    default: "ToolHub - Premium Online Utility Platform",
-    template: "%s | ToolHub",
+    default: "toolhubsite - Free Online Utility Tools",
+    template: "%s | toolhubsite",
   },
   description:
-    "ToolHub is a fast, premium utility platform with text, image, SEO, developer, and calculator tools for modern workflows.",
+    "toolhubsite offers fast, browser-based utility tools for text, image, SEO, developer, and calculator workflows.",
   keywords: [
-    "toolhub",
+    "toolhubsite",
     "online tools",
     "free online utility platform",
     "seo tools",
@@ -43,17 +43,17 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    url: "https://toolhub.vercel.app",
-    siteName: "ToolHub",
-    title: "ToolHub - Premium Online Utility Platform",
+    url: "https://www.toolhubsite.in",
+    siteName: "toolhubsite",
+    title: "toolhubsite - Free Online Utility Tools",
     description:
-      "Use premium text, image, calculator, SEO, and developer utilities in one clean and fast experience.",
+      "Use text, image, calculator, SEO, and developer utilities in one clean and fast experience.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ToolHub - Premium Online Utility Platform",
+    title: "toolhubsite - Free Online Utility Tools",
     description:
-      "All essential online tools in one premium hub. Fast, mobile-friendly and privacy-first.",
+      "All essential online tools in one hub. Fast, mobile-friendly, and privacy-first.",
   },
 };
 
@@ -81,11 +81,11 @@ export default function RootLayout({
               __html: JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "WebSite",
-                name: "ToolHub",
-                url: "https://toolhub.vercel.app",
+                name: "toolhubsite",
+                url: "https://www.toolhubsite.in",
                 potentialAction: {
                   "@type": "SearchAction",
-                  target: "https://toolhub.vercel.app/?q={search_term_string}",
+                  target: "https://www.toolhubsite.in/?q={search_term_string}",
                   "query-input": "required name=search_term_string",
                 },
               }),

@@ -9,10 +9,10 @@ export function Footer() {
       <div className="container py-10">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <div>
-            <h2 className="text-lg font-semibold">ToolHub</h2>
+            <h2 className="text-lg font-semibold">toolhubsite</h2>
             <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
               Fast, modern, and practical online tools for creators, students,
-              and professionals.
+              and professionals at www.toolhubsite.in.
             </p>
           </div>
           <div className="flex flex-wrap gap-3 text-sm">
@@ -36,7 +36,7 @@ export function Footer() {
           </div>
         </div>
         <p className="mt-8 text-xs" style={{ color: "var(--muted)" }}>
-          © {new Date().getFullYear()} ToolHub. All rights reserved.
+          © {new Date().getFullYear()} toolhubsite. All rights reserved.
         </p>
       </div>
     </footer>

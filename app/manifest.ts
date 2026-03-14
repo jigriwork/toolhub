@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "ToolHub - Premium Online Utility Platform",
-    short_name: "ToolHub",
+    name: "toolhubsite - Free Online Utility Tools",
+    short_name: "toolhubsite",
     description:
-      "Install ToolHub for a fast app-like experience with text, image, SEO, and productivity tools.",
+      "Install toolhubsite for a fast app-like experience with text, image, SEO, and productivity tools.",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

@@ -25,9 +25,9 @@ export function Navbar() {
             aria-hidden
             className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-extrabold text-white"
           >
-            TH
+            TS
           </span>
-          <span>ToolHub</span>
+          <span>toolhubsite</span>
         </Link>
         <nav className="flex items-center gap-2 sm:gap-3">
           {navLinks.map((link) => {

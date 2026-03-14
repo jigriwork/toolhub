@@ -4,7 +4,7 @@ import { RequestToolForm } from "@/components/request-tool-form";
 export const metadata: Metadata = {
   title: "Request a Tool",
   description:
-    "Submit a tool request and help shape the next set of utilities on ToolHub.",
+    "Submit a tool request and help shape the next set of utilities on toolhubsite.",
 };
 
 export default function RequestToolPage() {

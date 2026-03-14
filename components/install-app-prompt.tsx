@@ -25,7 +25,7 @@ export function InstallAppPrompt() {
   return (
     <div className="card mt-4 flex flex-wrap items-center justify-between gap-3 p-4">
       <p className="text-sm" style={{ color: "var(--muted)" }}>
-        Install ToolHub for a faster app-like experience.
+        Install toolhubsite for a faster app-like experience.
       </p>
       <button
         type="button"
