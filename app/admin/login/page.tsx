@@ -23,7 +23,7 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
   const existingToken = cookieStore.get(getAdminCookieName())?.value;
 
   if (await verifyAdminSessionToken(existingToken)) {
-    redirect("/admin/stats");
+    redirect("/admin");
   }
 
   const nextPath = sanitizeAdminNextPath(resolvedSearchParams.next);

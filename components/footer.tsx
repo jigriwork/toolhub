@@ -22,7 +22,6 @@ export function Footer() {
             <Link href="/contact">Contact</Link>
             <Link href="/resources">Resources</Link>
             <Link href="/feedback">Feedback</Link>
-            <Link href="/admin/stats">Admin Stats</Link>
           </div>
           <div>
             <h3 className="text-sm font-semibold">Popular Tools</h3>

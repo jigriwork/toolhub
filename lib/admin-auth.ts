@@ -87,9 +87,9 @@ export function getAdminCookieOptions() {
 }
 
 export function sanitizeAdminNextPath(input?: string | null) {
-  if (!input) return "/admin/stats";
-  if (!input.startsWith("/admin")) return "/admin/stats";
-  if (input.startsWith("/admin/login")) return "/admin/stats";
+  if (!input) return "/admin";
+  if (!input.startsWith("/admin")) return "/admin";
+  if (input.startsWith("/admin/login")) return "/admin";
   return input;
 }
 
