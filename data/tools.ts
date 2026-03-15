@@ -519,6 +519,120 @@ export const tools: Tool[] = [
       },
     ],
   },
+  {
+    name: "AI Background Remover",
+    slug: "ai-background-remover",
+    description:
+      "Remove image backgrounds automatically with AI and export transparent PNG.",
+    seoDescription:
+      "Free AI background remover to erase photo backgrounds online, preview before/after, and download transparent PNG instantly.",
+    category: "Image",
+    featured: true,
+    related: ["image-cropper", "jpg-to-png-converter", "webp-converter"],
+    faqs: [
+      {
+        question: "Does this AI background remover keep transparent output?",
+        answer:
+          "Yes. The main download is a transparent PNG so you can place your cutout on any background.",
+      },
+      {
+        question: "Are my images uploaded to a server?",
+        answer:
+          "Processing is done in-browser whenever possible. Keep the page open until removal completes.",
+      },
+    ],
+  },
+  {
+    name: "Image to PDF Converter",
+    slug: "image-to-pdf-converter",
+    description:
+      "Convert multiple images into one PDF with page reorder and preview.",
+    seoDescription:
+      "Image to PDF converter online free. Upload multiple images, drag reorder pages, merge into one PDF, and download instantly.",
+    category: "Image",
+    featured: true,
+    related: ["compress-pdf", "image-cropper", "image-compressor"],
+    faqs: [
+      {
+        question: "Can I combine multiple images into a single PDF?",
+        answer:
+          "Yes. Upload multiple images, reorder them, then generate one merged PDF file.",
+      },
+      {
+        question: "Do I need to install anything?",
+        answer:
+          "No. Conversion runs directly in your browser on desktop and mobile.",
+      },
+    ],
+  },
+  {
+    name: "Compress PDF",
+    slug: "compress-pdf",
+    description:
+      "Reduce PDF file size online and compare original vs compressed size.",
+    seoDescription:
+      "Compress PDF online free to reduce file size, keep documents shareable, and download optimized PDF in seconds.",
+    category: "Utility",
+    featured: true,
+    related: ["image-to-pdf-converter", "image-compressor", "webp-converter"],
+    faqs: [
+      {
+        question: "Will compressing PDF change quality?",
+        answer:
+          "Compression level can affect quality. Start with medium and test if readability is preserved.",
+      },
+      {
+        question: "Can I see size reduction before downloading?",
+        answer:
+          "Yes. The tool displays original size, compressed size, and reduction percentage.",
+      },
+    ],
+  },
+  {
+    name: "Image Cropper",
+    slug: "image-cropper",
+    description:
+      "Crop images with drag handles, preset ratios, and instant download.",
+    seoDescription:
+      "Online image cropper tool with drag crop area, preset aspect ratios, and one-click cropped image download.",
+    category: "Image",
+    related: ["ai-background-remover", "image-resizer", "image-compressor"],
+    faqs: [
+      {
+        question: "Can I crop for social media aspect ratios?",
+        answer:
+          "Yes. You can choose preset ratios like 1:1, 4:3, and 16:9.",
+      },
+      {
+        question: "Does cropping reduce privacy?",
+        answer:
+          "No. Cropping is done in your browser and does not require uploading to cloud storage.",
+      },
+    ],
+  },
+  {
+    name: "URL Shortener",
+    slug: "url-shortener",
+    description:
+      "Create short shareable links from long URLs with one-click copy.",
+    seoDescription:
+      "Free URL shortener online to convert long links into short URLs, then copy and share instantly.",
+    category: "SEO",
+    featured: true,
+    related: ["qr-code-generator", "slug-generator", "character-counter"],
+    faqs: [
+      {
+        question: "How do I shorten a URL?",
+        answer:
+          "Paste your long link, click generate, then copy the short URL from the result box.",
+      },
+      {
+        question: "Can I use this on mobile?",
+        answer:
+          "Yes. The tool is mobile-friendly and includes a single-tap copy button.",
+      },
+    ],
+  },
 ];
 
 export const getToolBySlug = (slug: string) =>
