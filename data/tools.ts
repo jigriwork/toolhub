@@ -634,6 +634,75 @@ export const tools: Tool[] = [
     ],
   },
   {
+    name: "Festival Post Generator",
+    slug: "festival-post-generator",
+    description:
+      "Create premium branded festive social posts with logo, greeting, offer line, and instant image download.",
+    seoDescription:
+      "Festival post generator for businesses to create Diwali, Holi, Eid, Christmas, New Year and other festive creatives with logo and download as image.",
+    category: "Image",
+    featured: true,
+    related: ["offer-poster-generator", "instagram-caption-generator", "image-resizer"],
+    faqs: [
+      {
+        question: "Can I create festival creatives for different occasions?",
+        answer:
+          "Yes. You can choose from multiple festival presets like Diwali, Holi, Eid, Christmas, New Year, Independence Day, and more.",
+      },
+      {
+        question: "Can I add my business logo and contact details?",
+        answer:
+          "Yes. Upload your logo and add business name, phone, website/Instagram, tagline, CTA, and offer line before downloading.",
+      },
+    ],
+  },
+  {
+    name: "Offer Poster Generator",
+    slug: "offer-poster-generator",
+    description:
+      "Design premium retail offer posters with strong typography hierarchy, logo branding, and high-quality image export.",
+    seoDescription:
+      "Offer poster maker for fashion stores and local businesses. Add logo, headline, offer text, contact details, and download polished poster image.",
+    category: "Image",
+    featured: true,
+    related: ["festival-post-generator", "instagram-caption-generator", "image-compressor"],
+    faqs: [
+      {
+        question: "What kind of businesses can use this offer poster tool?",
+        answer:
+          "It works well for fashion stores, local retailers, service businesses, and any brand that needs clean promotional creatives.",
+      },
+      {
+        question: "Does the poster include logo branding and contact details?",
+        answer:
+          "Yes. You can upload a logo, add headline/subheadline, offer copy, footer text, and contact details before export.",
+      },
+    ],
+  },
+  {
+    name: "Instagram Caption Generator",
+    slug: "instagram-caption-generator",
+    description:
+      "Generate business-ready Instagram captions with selectable tone, post purpose, hashtag suggestions, and one-click copy.",
+    seoDescription:
+      "Instagram caption generator for brands and businesses. Create multiple caption ideas for product launches, offers, festive posts, and promotions.",
+    category: "SEO",
+    featured: true,
+    related: ["festival-post-generator", "offer-poster-generator", "character-counter"],
+    faqs: [
+      {
+        question: "Can I generate captions for different campaign goals?",
+        answer:
+          "Yes. Choose purpose like product launch, sale offer, festive greeting, store promotion, new arrival, or engagement post.",
+      },
+      {
+        question: "Does it provide hashtags and copy options?",
+        answer:
+          "Yes. You can include hashtag suggestions, copy each caption instantly, and regenerate fresh caption variants anytime.",
+      },
+    ],
+  },
+  {
     name: "URL Shortener",
     slug: "url-shortener",
     description:
