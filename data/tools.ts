@@ -611,6 +611,29 @@ export const tools: Tool[] = [
     ],
   },
   {
+    name: "Invoice Generator",
+    slug: "invoice-generator",
+    description:
+      "Create professional GST-ready invoices with logo, customer details, item rows, and PDF download.",
+    seoDescription:
+      "Free online invoice generator for businesses. Add logo, GST, customer details, items, tax, and download clean invoice PDF instantly.",
+    category: "Utility",
+    featured: true,
+    related: ["gst-calculator", "discount-calculator", "percentage-calculator"],
+    faqs: [
+      {
+        question: "Can I generate an invoice with GST?",
+        answer:
+          "Yes. Enable GST, set your tax rate, and the invoice automatically calculates subtotal, GST amount, and grand total.",
+      },
+      {
+        question: "Can I add multiple items and download PDF?",
+        answer:
+          "Yes. Add/edit item rows with quantity and price, preview the invoice, then download it as a clean PDF.",
+      },
+    ],
+  },
+  {
     name: "URL Shortener",
     slug: "url-shortener",
     description:
