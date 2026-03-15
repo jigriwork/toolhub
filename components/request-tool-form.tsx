@@ -20,24 +20,24 @@ export function RequestToolForm({ action }: RequestToolFormProps) {
   );
 
   return (
-    <form className="card mt-6 max-w-2xl space-y-4 p-6" action={formAction}>
+    <form className="card mt-6 max-w-2xl space-y-4 p-4 sm:p-6" action={formAction}>
       <input
         name="toolName"
-        className="w-full rounded-xl border bg-transparent px-4 py-3"
+        className="field"
         style={{ borderColor: "var(--border)" }}
         placeholder="Tool name"
         required
       />
       <textarea
         name="useCase"
-        className="h-36 w-full rounded-xl border bg-transparent p-4"
+        className="textarea"
         style={{ borderColor: "var(--border)" }}
         placeholder="Describe your use case"
         required
       />
       <input
         name="email"
-        className="w-full rounded-xl border bg-transparent px-4 py-3"
+        className="field"
         style={{ borderColor: "var(--border)" }}
         type="email"
         placeholder="Your email (optional)"

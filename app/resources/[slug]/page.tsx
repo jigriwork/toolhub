@@ -37,13 +37,13 @@ export default async function ResourceArticlePage({
   const relatedArticles = resources.filter((item) => item.slug !== article.slug).slice(0, 3);
 
   return (
-    <main className="container py-10">
+    <main className="container section-y">
       <article className="mx-auto max-w-3xl">
         <p className="text-xs" style={{ color: "var(--muted)" }}>
           {new Date(article.publishedAt).toLocaleDateString()}
         </p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">{article.title}</h1>
-        <p className="mt-3 text-base" style={{ color: "var(--muted)" }}>
+        <h1 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">{article.title}</h1>
+        <p className="mt-3 text-sm sm:text-base" style={{ color: "var(--muted)" }}>
           {article.description}
         </p>
 
@@ -64,7 +64,7 @@ export default async function ResourceArticlePage({
           })}
         </div>
 
-        <div className="mt-8 space-y-4 text-base leading-7">
+        <div className="mt-8 space-y-4 text-[15px] leading-7 sm:text-base">
           {article.content.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
@@ -73,7 +73,7 @@ export default async function ResourceArticlePage({
 
       <section className="mx-auto mt-10 max-w-3xl">
         <h2 className="text-xl font-semibold">Related resources</h2>
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {relatedArticles.map((related) => (
             <Link
               key={related.slug}

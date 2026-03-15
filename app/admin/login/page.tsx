@@ -52,10 +52,10 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
   }
 
   return (
-    <main className="container py-12">
-      <div className="mx-auto max-w-md rounded-xl border p-6" style={{ borderColor: "var(--border)" }}>
+    <main className="container section-y">
+      <div className="mx-auto max-w-md card p-4 sm:p-6" style={{ borderColor: "var(--border)" }}>
         <h1 className="text-2xl font-bold">Admin Login</h1>
-        <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
+        <p className="mt-2 text-sm leading-6" style={{ color: "var(--muted)" }}>
           Sign in to access ToolHub admin routes.
         </p>
 
@@ -85,7 +85,7 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
               type="email"
               required
               autoComplete="username"
-              className="w-full rounded-md border bg-transparent px-3 py-2 text-sm outline-none"
+              className="field text-sm outline-none"
               style={{ borderColor: "var(--border)" }}
             />
           </div>
@@ -100,14 +100,14 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
               type="password"
               required
               autoComplete="current-password"
-              className="w-full rounded-md border bg-transparent px-3 py-2 text-sm outline-none"
+              className="field text-sm outline-none"
               style={{ borderColor: "var(--border)" }}
             />
           </div>
 
           <button
             type="submit"
-            className="w-full rounded-md bg-black px-4 py-2 text-sm font-semibold text-white dark:bg-white dark:text-black"
+            className="btn btn-primary w-full"
             disabled={showConfigError}
           >
             Sign in

@@ -21,7 +21,7 @@ function Toggle({
 }) {
   return (
     <label
-      className="flex items-center gap-2 rounded-lg border p-3"
+      className="flex min-h-11 items-center gap-2 rounded-lg border p-3"
       style={{ borderColor: "var(--border)" }}
     >
       <input
@@ -167,7 +167,7 @@ export function PasswordGeneratorTool() {
       <ToolResultCard
         icon="🔐"
         label="Generated Password"
-        value={<span className="break-all text-lg">{password || "Your generated password will appear here."}</span>}
+        value={<span className="break-all text-base sm:text-lg">{password || "Your generated password will appear here."}</span>}
         helpText="Tip: Use at least 16 characters with symbols for stronger security."
       />
     </div>

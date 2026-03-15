@@ -11,20 +11,20 @@ export const metadata: Metadata = {
 
 export default function ResourcesPage() {
   return (
-    <main className="container py-10">
-      <h1 className="text-3xl font-bold tracking-tight">Resources</h1>
-      <p className="mt-2 text-sm sm:text-base" style={{ color: "var(--muted)" }}>
+    <main className="container section-y">
+      <h1 className="page-title font-bold tracking-tight">Resources</h1>
+      <p className="page-lead text-sm sm:text-base">
         Practical guides and tutorials to help you get more value from toolhubsite.
       </p>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {resources.map((article) => (
-          <article key={article.slug} className="card p-5">
+          <article key={article.slug} className="card p-4 sm:p-5">
             <p className="text-xs" style={{ color: "var(--muted)" }}>
               {new Date(article.publishedAt).toLocaleDateString()}
             </p>
-            <h2 className="mt-2 text-xl font-semibold">{article.title}</h2>
-            <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
+            <h2 className="mt-2 text-lg font-semibold sm:text-xl">{article.title}</h2>
+            <p className="mt-2 text-sm leading-6" style={{ color: "var(--muted)" }}>
               {article.excerpt}
             </p>
             <div className="mt-3 flex flex-wrap gap-2">

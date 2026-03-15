@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 
 export default function FeedbackPage() {
   return (
-    <main className="container py-10">
-      <h1 className="text-3xl font-bold">Feedback & Report Issue</h1>
-      <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
+    <main className="container section-y">
+      <h1 className="page-title font-bold">Feedback & Report Issue</h1>
+      <p className="page-lead text-sm">
         Share bugs, UX improvements, or feature ideas. Your input drives product quality.
       </p>
       <FeedbackForm action={submitFeedbackAction} />

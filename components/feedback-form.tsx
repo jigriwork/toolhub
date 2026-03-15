@@ -20,10 +20,10 @@ export function FeedbackForm({ action }: FeedbackFormProps) {
   );
 
   return (
-    <form className="card mt-6 max-w-2xl space-y-4 p-6" action={formAction}>
+    <form className="card mt-6 max-w-2xl space-y-4 p-4 sm:p-6" action={formAction}>
       <select
         name="type"
-        className="w-full rounded-xl border bg-transparent px-4 py-3"
+        className="select"
         style={{ borderColor: "var(--border)" }}
         defaultValue="feedback"
       >
@@ -33,14 +33,14 @@ export function FeedbackForm({ action }: FeedbackFormProps) {
       </select>
       <textarea
         name="message"
-        className="h-36 w-full rounded-xl border bg-transparent p-4"
+        className="textarea"
         style={{ borderColor: "var(--border)" }}
         placeholder="Describe your feedback"
         required
       />
       <input
         name="email"
-        className="w-full rounded-xl border bg-transparent px-4 py-3"
+        className="field"
         style={{ borderColor: "var(--border)" }}
         type="email"
         placeholder="Your email (optional)"

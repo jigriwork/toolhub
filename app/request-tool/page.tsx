@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 
 export default function RequestToolPage() {
   return (
-    <main className="container py-10">
-      <h1 className="text-3xl font-bold">Request a Tool</h1>
-      <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
+    <main className="container section-y">
+      <h1 className="page-title font-bold">Request a Tool</h1>
+      <p className="page-lead text-sm">
         Tell us what utility you need. We prioritize requests with strong practical value.
       </p>
       <RequestToolForm action={submitToolRequestAction} />

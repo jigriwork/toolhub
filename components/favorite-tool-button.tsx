@@ -18,7 +18,7 @@ export function FavoriteToolButton({ slug }: { slug: string }) {
         event.stopPropagation();
         setIsFavorite(toggleFavoriteTool(slug));
       }}
-      className="rounded-lg border px-2.5 py-1 text-xs font-semibold transition hover:bg-black/5 dark:hover:bg-white/10"
+      className="min-h-9 rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition hover:bg-black/5 dark:hover:bg-white/10"
       style={{ borderColor: "var(--border)" }}
       aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
       title={isFavorite ? "Remove from favorites" : "Add to favorites"}

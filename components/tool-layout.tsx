@@ -23,16 +23,18 @@ export function ToolLayout({
     : tools.slice(0, 3);
 
   return (
-    <main className="container py-10">
-      <header className="mb-8 flex flex-wrap items-start justify-between gap-4">
-        <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
-        <ToolPageActions slug={slug} />
-        <p className="w-full text-sm sm:text-base" style={{ color: "var(--muted)" }}>
+    <main className="container section-y">
+      <header className="mb-6 space-y-3 sm:mb-8">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <h1 className="page-title font-bold">{title}</h1>
+          <ToolPageActions slug={slug} />
+        </div>
+        <p className="page-lead w-full">
           {description}
         </p>
       </header>
 
-      <div className="card p-6">{children}</div>
+      <div className="card p-4 sm:p-6">{children}</div>
 
       {relatedTools.length > 0 && (
         <section className="mt-8">
@@ -46,7 +48,7 @@ export function ToolLayout({
                 style={{ borderColor: "var(--border)", background: "color-mix(in oklab, var(--card) 90%, transparent)" }}
               >
                 <p className="font-semibold">{relatedTool.name}</p>
-                <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
+                <p className="mt-1 text-sm leading-6" style={{ color: "var(--muted)" }}>
                   {relatedTool.description}
                 </p>
               </Link>
@@ -56,7 +58,7 @@ export function ToolLayout({
       )}
 
       {tool && tool.faqs.length > 0 && (
-        <section className="mt-8 card p-6">
+        <section className="mt-8 card p-4 sm:p-6">
           <h2 className="text-xl font-semibold">Frequently Asked Questions</h2>
           <div className="mt-4 space-y-4">
             {tool.faqs.map((faq) => (
@@ -68,7 +70,7 @@ export function ToolLayout({
                 <summary className="cursor-pointer list-none font-medium">
                   {faq.question}
                 </summary>
-                <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
+                <p className="mt-2 text-sm leading-6" style={{ color: "var(--muted)" }}>
                   {faq.answer}
                 </p>
               </details>

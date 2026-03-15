@@ -65,7 +65,7 @@ export function UrlShortenerTool() {
         value={inputUrl}
         placeholder="https://example.com/very/long/url"
         onChange={(event) => setInputUrl(event.target.value)}
-        className="w-full rounded-xl border bg-transparent px-4 py-3"
+        className="field"
         style={{ borderColor: "var(--border)" }}
       />
 

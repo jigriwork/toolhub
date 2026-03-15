@@ -4,7 +4,7 @@ export function AdPlaceholder({
   label?: string;
 }) {
   return (
-    <section className="card my-8 p-6 text-center">
+    <section className="card my-6 p-4 text-center sm:my-8 sm:p-6">
       <p
         className="text-xs uppercase tracking-widest"
         style={{ color: "var(--muted)" }}
@@ -15,7 +15,7 @@ export function AdPlaceholder({
         AdSense-ready ad slot placeholder
       </p>
       <div
-        className="mx-auto mt-4 h-28 w-full max-w-3xl rounded-lg border border-dashed"
+        className="mx-auto mt-4 h-24 w-full max-w-3xl rounded-lg border border-dashed sm:h-28"
         style={{ borderColor: "var(--border)" }}
       />
     </section>

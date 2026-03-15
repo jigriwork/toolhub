@@ -7,9 +7,9 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="container py-10">
-      <h1 className="text-3xl font-bold">Privacy Policy</h1>
-      <div className="mt-4 max-w-3xl space-y-3" style={{ color: "var(--muted)" }}>
+    <main className="container section-y">
+      <h1 className="page-title font-bold">Privacy Policy</h1>
+      <div className="page-lead mt-4 max-w-3xl space-y-3">
         <p>
           toolhubsite (www.toolhubsite.in) respects your privacy. Most tool
           operations are performed directly in your browser.

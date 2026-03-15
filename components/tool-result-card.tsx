@@ -17,9 +17,9 @@ export function ToolResultCard({
         {icon ? `${icon} ` : ""}
         {label}
       </p>
-      <p className="mt-1 text-2xl font-semibold">{value}</p>
+      <p className="mt-1 text-xl font-semibold sm:text-2xl break-words">{value}</p>
       {helpText ? (
-        <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
+        <p className="mt-1 text-xs leading-5" style={{ color: "var(--muted)" }}>
           {helpText}
         </p>
       ) : null}

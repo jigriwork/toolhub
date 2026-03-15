@@ -23,8 +23,8 @@ export function InstallAppPrompt() {
   if (!promptEvent) return null;
 
   return (
-    <div className="card mt-4 flex flex-wrap items-center justify-between gap-3 p-4">
-      <p className="text-sm" style={{ color: "var(--muted)" }}>
+    <div className="card mt-4 flex flex-wrap items-center justify-between gap-3 p-4 sm:p-5">
+      <p className="text-sm leading-6" style={{ color: "var(--muted)" }}>
         Install toolhubsite for a faster app-like experience.
       </p>
       <button

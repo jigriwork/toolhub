@@ -7,9 +7,9 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="container py-10">
-      <h1 className="text-3xl font-bold">About toolhubsite</h1>
-      <div className="mt-4 max-w-3xl space-y-3" style={{ color: "var(--muted)" }}>
+    <main className="container section-y">
+      <h1 className="page-title font-bold">About toolhubsite</h1>
+      <div className="page-lead mt-4 max-w-3xl space-y-3">
         <p>
           toolhubsite is an online utility platform available at
           <strong> www.toolhubsite.in</strong>. We build practical tools for

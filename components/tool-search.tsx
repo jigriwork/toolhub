@@ -88,20 +88,20 @@ export function ToolSearch() {
   }, [query, activeCategory]);
 
   return (
-    <section className="space-y-8">
+    <section className="space-y-8 sm:space-y-10">
       <div className="mb-4 space-y-4">
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search tools..."
-          className="w-full rounded-xl border bg-transparent px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+          className="field outline-none focus:ring-2 focus:ring-blue-500"
           style={{ borderColor: "var(--border)" }}
         />
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
             onClick={() => setActiveCategory("All")}
-            className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
+            className={`min-h-10 rounded-full border px-3 py-1.5 text-sm font-medium ${
               activeCategory === "All" ? "bg-blue-600 text-white" : ""
             }`}
             style={activeCategory === "All" ? undefined : { borderColor: "var(--border)" }}
@@ -113,7 +113,7 @@ export function ToolSearch() {
               key={category}
               type="button"
               onClick={() => setActiveCategory(category)}
-              className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
+              className={`min-h-10 rounded-full border px-3 py-1.5 text-sm font-medium ${
                 activeCategory === category ? "bg-blue-600 text-white" : ""
               }`}
               style={
@@ -127,7 +127,7 @@ export function ToolSearch() {
       </div>
 
       <div>
-        <h2 className="mb-4 text-xl font-semibold">All Tools</h2>
+        <h2 className="mb-4 text-lg font-semibold sm:text-xl">All Tools</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filteredTools.map((tool) => (
             <ToolCard
@@ -140,7 +140,7 @@ export function ToolSearch() {
       </div>
 
       <div>
-        <h2 className="mb-4 text-xl font-semibold">Featured Tools</h2>
+        <h2 className="mb-4 text-lg font-semibold sm:text-xl">Featured Tools</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {featuredTools.map((tool) => (
             <ToolCard
@@ -153,7 +153,7 @@ export function ToolSearch() {
       </div>
 
       <div>
-        <h2 className="mb-4 text-xl font-semibold">Trending Tools</h2>
+        <h2 className="mb-4 text-lg font-semibold sm:text-xl">Trending Tools</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {trendingTools.map((tool) => (
             <ToolCard
@@ -166,7 +166,7 @@ export function ToolSearch() {
       </div>
 
       <div>
-        <h2 className="mb-4 text-xl font-semibold">New Tools</h2>
+        <h2 className="mb-4 text-lg font-semibold sm:text-xl">New Tools</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {newestTools.map((tool) => (
             <ToolCard
@@ -179,7 +179,7 @@ export function ToolSearch() {
       </div>
 
       <div>
-        <h2 className="mb-4 text-xl font-semibold">Most Used Tools</h2>
+        <h2 className="mb-4 text-lg font-semibold sm:text-xl">Most Used Tools</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {trendingTools.map((tool) => (
             <ToolCard
@@ -192,7 +192,7 @@ export function ToolSearch() {
       </div>
 
       <div>
-        <h2 className="mb-4 text-xl font-semibold">Recently Used</h2>
+        <h2 className="mb-4 text-lg font-semibold sm:text-xl">Recently Used</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {recentTools.length === 0 ? (
             <p className="text-sm" style={{ color: "var(--muted)" }}>
@@ -211,7 +211,7 @@ export function ToolSearch() {
       </div>
 
       <div>
-        <h2 className="mb-4 text-xl font-semibold">Favorites</h2>
+        <h2 className="mb-4 text-lg font-semibold sm:text-xl">Favorites</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {favoriteTools.length === 0 ? (
             <p className="text-sm" style={{ color: "var(--muted)" }}>

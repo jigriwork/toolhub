@@ -6,13 +6,13 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <main>
-      <section className="container py-14">
+      <section className="container section-y">
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+          <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">
             All Essential Online Tools in One Premium Hub
           </h1>
           <p
-            className="mx-auto mt-4 max-w-2xl text-base sm:text-lg"
+            className="mx-auto mt-4 max-w-2xl text-sm sm:text-lg"
             style={{ color: "var(--muted)" }}
           >
             toolhubsite helps you work faster with practical, accurate, and
@@ -30,8 +30,8 @@ export default function HomePage() {
         <AdPlaceholder label="Homepage Top Ad Slot" />
       </section>
 
-      <section className="container py-8">
-        <div className="card p-6 sm:p-8">
+      <section className="container py-6 sm:py-8">
+        <div className="card p-4 sm:p-8">
           <h2 className="text-2xl font-semibold">Why toolhubsite?</h2>
           <ul
             className="mt-4 grid gap-3 text-sm sm:grid-cols-2"
@@ -48,7 +48,7 @@ export default function HomePage() {
       </section>
 
       <section className="container py-4">
-        <div className="card p-6 sm:p-8">
+        <div className="card p-4 sm:p-8">
           <h2 className="text-2xl font-semibold">Built for trust and production use</h2>
           <p className="mt-3 text-sm sm:text-base" style={{ color: "var(--muted)" }}>
             toolhubsite is designed as a reliable utility platform with lightweight pages,
@@ -68,8 +68,8 @@ export default function HomePage() {
       </section>
 
       <section className="container py-4">
-        <div className="card flex flex-wrap items-center justify-between gap-4 p-6">
-          <div>
+        <div className="card flex flex-wrap items-center justify-between gap-4 p-4 sm:p-6">
+          <div className="max-w-xl">
             <h2 className="text-xl font-semibold">Help us grow toolhubsite</h2>
             <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
               Request a tool, send feedback, or report issues in a minute.

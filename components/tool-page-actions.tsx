@@ -15,7 +15,7 @@ export function ToolPageActions({ slug }: { slug: string }) {
   return (
     <button
       type="button"
-      className="btn btn-secondary"
+      className="btn btn-secondary w-full sm:w-auto"
       onClick={async () => {
         await navigator.clipboard.writeText(window.location.href);
         setCopied(true);
