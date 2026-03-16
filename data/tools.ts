@@ -2,6 +2,7 @@ export const toolCategories = [
   "Text",
   "Image",
   "Utility",
+  "Business",
   "SEO",
   "Developer",
 ] as const;
@@ -614,12 +615,12 @@ export const tools: Tool[] = [
     name: "Invoice Generator",
     slug: "invoice-generator",
     description:
-      "Create professional GST-ready invoices with logo, customer details, item rows, and PDF download.",
+      "Create polished GST-ready invoices with logo branding, tax controls, line items, and clean PDF export.",
     seoDescription:
-      "Free online invoice generator for businesses. Add logo, GST, customer details, items, tax, and download clean invoice PDF instantly.",
-    category: "Utility",
+      "Business invoice generator for India. Add logo, GST/tax setup, customer details, editable items, and download professional invoice PDFs.",
+    category: "Business",
     featured: true,
-    related: ["gst-calculator", "discount-calculator", "percentage-calculator"],
+    related: ["festival-post-generator", "offer-poster-generator", "instagram-caption-generator"],
     faqs: [
       {
         question: "Can I generate an invoice with GST?",
@@ -631,28 +632,38 @@ export const tools: Tool[] = [
         answer:
           "Yes. Add/edit item rows with quantity and price, preview the invoice, then download it as a clean PDF.",
       },
+      {
+        question: "Is this suitable for small retail and service businesses?",
+        answer:
+          "Yes. The layout is optimized for local stores, freelancers, and service businesses that need simple professional invoices quickly.",
+      },
     ],
   },
   {
     name: "Festival Post Generator",
     slug: "festival-post-generator",
     description:
-      "Create premium branded festive social posts with logo, greeting, offer line, and instant image download.",
+      "Create Canva-style festive business creatives with custom occasions, rich themes, logo branding, and high-resolution export.",
     seoDescription:
-      "Festival post generator for businesses to create Diwali, Holi, Eid, Christmas, New Year and other festive creatives with logo and download as image.",
-    category: "Image",
+      "Advanced festival post generator for business marketing creatives. Supports preset festivals, custom occasions, multiple styles, branding fields, and export formats.",
+    category: "Business",
     featured: true,
-    related: ["offer-poster-generator", "instagram-caption-generator", "image-resizer"],
+    related: ["offer-poster-generator", "instagram-caption-generator", "invoice-generator"],
     faqs: [
       {
         question: "Can I create festival creatives for different occasions?",
         answer:
-          "Yes. You can choose from multiple festival presets like Diwali, Holi, Eid, Christmas, New Year, Independence Day, and more.",
+          "Yes. You can choose preset festivals or enter a custom occasion name like store anniversary, wedding season, or regional events.",
       },
       {
         question: "Can I add my business logo and contact details?",
         answer:
           "Yes. Upload your logo and add business name, phone, website/Instagram, tagline, CTA, and offer line before downloading.",
+      },
+      {
+        question: "Which output formats are supported?",
+        answer:
+          "You can export for Instagram post, Instagram story, and portrait flyer/poster formats with high-resolution output.",
       },
     ],
   },
@@ -660,12 +671,12 @@ export const tools: Tool[] = [
     name: "Offer Poster Generator",
     slug: "offer-poster-generator",
     description:
-      "Design premium retail offer posters with strong typography hierarchy, logo branding, and high-quality image export.",
+      "Design premium retail offer posters with stronger hierarchy, brand-ready layouts, modern themes, and sharper export.",
     seoDescription:
-      "Offer poster maker for fashion stores and local businesses. Add logo, headline, offer text, contact details, and download polished poster image.",
-    category: "Image",
+      "Offer poster generator for fashion stores and local brands. Create luxury sale, festive offer, grand opening, and wedding collection posters with business branding.",
+    category: "Business",
     featured: true,
-    related: ["festival-post-generator", "instagram-caption-generator", "image-compressor"],
+    related: ["festival-post-generator", "instagram-caption-generator", "invoice-generator"],
     faqs: [
       {
         question: "What kind of businesses can use this offer poster tool?",
@@ -677,18 +688,23 @@ export const tools: Tool[] = [
         answer:
           "Yes. You can upload a logo, add headline/subheadline, offer copy, footer text, and contact details before export.",
       },
+      {
+        question: "Can I use different promotional themes?",
+        answer:
+          "Yes. Choose premium retail themes such as luxury sale, festive offer, grand opening, clearance, wedding collection, and limited-time campaigns.",
+      },
     ],
   },
   {
     name: "Instagram Caption Generator",
     slug: "instagram-caption-generator",
     description:
-      "Generate business-ready Instagram captions with selectable tone, post purpose, hashtag suggestions, and one-click copy.",
+      "Generate business-ready Instagram captions with tone control, post-purpose targeting, hashtags, and one-click copy.",
     seoDescription:
-      "Instagram caption generator for brands and businesses. Create multiple caption ideas for product launches, offers, festive posts, and promotions.",
-    category: "SEO",
+      "Instagram caption generator for brands, local stores, and marketers. Generate sales, festive, launch, and engagement captions with hashtag suggestions.",
+    category: "Business",
     featured: true,
-    related: ["festival-post-generator", "offer-poster-generator", "character-counter"],
+    related: ["festival-post-generator", "offer-poster-generator", "invoice-generator"],
     faqs: [
       {
         question: "Can I generate captions for different campaign goals?",

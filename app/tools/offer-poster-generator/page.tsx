@@ -15,7 +15,7 @@ export default function OfferPosterGeneratorPage() {
     <ToolLayout
       slug="offer-poster-generator"
       title="Offer Poster Generator"
-      description="Build premium promotional posters for retail and local business campaigns with logo, offer hierarchy, and clean high-quality image export."
+      description="Build premium promotional posters for retail and local business campaigns with stronger visual hierarchy, campaign-ready themes, logo branding, and crisp exports."
     >
       <OfferPosterGeneratorTool />
     </ToolLayout>

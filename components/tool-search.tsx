@@ -48,6 +48,10 @@ export function ToolSearch() {
   }, []);
 
   const featuredTools = useMemo(() => tools.filter((tool) => tool.featured), []);
+  const businessTools = useMemo(
+    () => tools.filter((tool) => tool.category === "Business"),
+    [],
+  );
   const recentTools = useMemo(
     () =>
       recent
@@ -101,9 +105,8 @@ export function ToolSearch() {
           <button
             type="button"
             onClick={() => setActiveCategory("All")}
-            className={`min-h-10 rounded-full border px-3 py-1.5 text-sm font-medium ${
-              activeCategory === "All" ? "bg-blue-600 text-white" : ""
-            }`}
+            className={`min-h-10 rounded-full border px-3 py-1.5 text-sm font-medium ${activeCategory === "All" ? "bg-blue-600 text-white" : ""
+              }`}
             style={activeCategory === "All" ? undefined : { borderColor: "var(--border)" }}
           >
             All
@@ -113,15 +116,30 @@ export function ToolSearch() {
               key={category}
               type="button"
               onClick={() => setActiveCategory(category)}
-              className={`min-h-10 rounded-full border px-3 py-1.5 text-sm font-medium ${
-                activeCategory === category ? "bg-blue-600 text-white" : ""
-              }`}
+              className={`min-h-10 rounded-full border px-3 py-1.5 text-sm font-medium ${activeCategory === category ? "bg-blue-600 text-white" : ""
+                }`}
               style={
                 activeCategory === category ? undefined : { borderColor: "var(--border)" }
               }
             >
               {category}
             </button>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h2 className="mb-4 text-lg font-semibold sm:text-xl">Business Suite</h2>
+        <p className="mb-4 text-sm" style={{ color: "var(--muted)" }}>
+          Discover business-ready tools for invoices, festive creatives, offer posters, and marketing captions.
+        </p>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {businessTools.map((tool) => (
+            <ToolCard
+              key={`business-${tool.slug}`}
+              tool={tool}
+              rightSlot={<FavoriteToolButton slug={tool.slug} />}
+            />
           ))}
         </div>
       </div>

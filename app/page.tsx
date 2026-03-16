@@ -47,6 +47,25 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="container py-2 sm:py-4">
+        <div className="card p-4 sm:p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-xl font-semibold">Business Creative Suite</h2>
+              <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
+                Build invoices, festive creatives, offer posters, and social captions from one unified business workflow.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Link href="/tools/invoice-generator" className="btn btn-secondary">Invoice</Link>
+              <Link href="/tools/festival-post-generator" className="btn btn-secondary">Festival Post</Link>
+              <Link href="/tools/offer-poster-generator" className="btn btn-secondary">Offer Poster</Link>
+              <Link href="/tools/instagram-caption-generator" className="btn btn-secondary">Captions</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="container py-4">
         <div className="card p-4 sm:p-8">
           <h2 className="text-2xl font-semibold">Built for trust and production use</h2>

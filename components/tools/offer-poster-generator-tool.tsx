@@ -2,15 +2,34 @@
 
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
-type OfferTheme = "luxury" | "festive" | "modern-retail" | "bold-sale" | "minimal-premium";
+type OfferTheme =
+  | "luxury-sale"
+  | "festive-offer"
+  | "premium-fashion"
+  | "grand-opening"
+  | "clearance-sale"
+  | "wedding-collection"
+  | "limited-time";
 type ColorStyle = "gold" | "sunset" | "ocean" | "royal" | "mono";
+type PosterFormat = "instagram-post" | "instagram-story" | "poster-portrait";
 
-const THEME_STYLES: Record<OfferTheme, { title: string; panelOpacity: number; titleCase: "upper" | "normal" }> = {
-  luxury: { title: "Luxury", panelOpacity: 0.26, titleCase: "upper" },
-  festive: { title: "Festive", panelOpacity: 0.22, titleCase: "normal" },
-  "modern-retail": { title: "Modern Retail", panelOpacity: 0.3, titleCase: "normal" },
-  "bold-sale": { title: "Bold Sale", panelOpacity: 0.16, titleCase: "upper" },
-  "minimal-premium": { title: "Minimal Premium", panelOpacity: 0.4, titleCase: "normal" },
+const THEME_STYLES: Record<
+  OfferTheme,
+  {
+    title: string;
+    panelOpacity: number;
+    titleCase: "upper" | "normal";
+    accent: string;
+    decorative: "ornament" | "burst" | "frame";
+  }
+> = {
+  "luxury-sale": { title: "Luxury Sale", panelOpacity: 0.28, titleCase: "upper", accent: "#fbbf24", decorative: "frame" },
+  "festive-offer": { title: "Festive Offer", panelOpacity: 0.24, titleCase: "normal", accent: "#f472b6", decorative: "ornament" },
+  "premium-fashion": { title: "Premium Fashion", panelOpacity: 0.26, titleCase: "normal", accent: "#22d3ee", decorative: "frame" },
+  "grand-opening": { title: "Grand Opening", panelOpacity: 0.22, titleCase: "upper", accent: "#f59e0b", decorative: "burst" },
+  "clearance-sale": { title: "Clearance Sale", panelOpacity: 0.18, titleCase: "upper", accent: "#fb7185", decorative: "burst" },
+  "wedding-collection": { title: "Wedding Collection", panelOpacity: 0.3, titleCase: "normal", accent: "#f9a8d4", decorative: "ornament" },
+  "limited-time": { title: "Limited Time Offer", panelOpacity: 0.2, titleCase: "upper", accent: "#60a5fa", decorative: "burst" },
 };
 
 const COLOR_STYLES: Record<ColorStyle, [string, string, string]> = {
@@ -20,6 +39,14 @@ const COLOR_STYLES: Record<ColorStyle, [string, string, string]> = {
   royal: ["#1e1b4b", "#4338ca", "#a855f7"],
   mono: ["#111827", "#374151", "#9ca3af"],
 };
+
+const FORMAT_DIMENSIONS: Record<PosterFormat, { width: number; height: number; label: string; ratio: string }> = {
+  "instagram-post": { width: 1080, height: 1080, label: "Instagram Post (1:1)", ratio: "1 / 1" },
+  "instagram-story": { width: 1080, height: 1920, label: "Instagram Story (9:16)", ratio: "9 / 16" },
+  "poster-portrait": { width: 1080, height: 1350, label: "Poster Portrait (4:5)", ratio: "4 / 5" },
+};
+
+const FORMAT_KEYS = Object.keys(FORMAT_DIMENSIONS) as PosterFormat[];
 
 function wrapLines(ctx: CanvasRenderingContext2D, text: string, maxWidth: number, maxLines = 3) {
   const words = text.split(/\s+/).filter(Boolean);
@@ -55,9 +82,11 @@ export function OfferPosterGeneratorTool() {
   const [subheadline, setSubheadline] = useState("Premium styles. Better prices.");
   const [offerText, setOfferText] = useState("Flat 40% OFF + Extra 10% on selected collection");
   const [footerText, setFooterText] = useState("Limited period offer");
+  const [ctaText, setCtaText] = useState("Shop now • Visit store today");
   const [contactInfo, setContactInfo] = useState("+91 90000 00000  •  www.yourstore.com  •  Your City");
-  const [theme, setTheme] = useState<OfferTheme>("luxury");
+  const [theme, setTheme] = useState<OfferTheme>("luxury-sale");
   const [colorStyle, setColorStyle] = useState<ColorStyle>("gold");
+  const [format, setFormat] = useState<PosterFormat>("poster-portrait");
 
   useEffect(() => {
     if (!logoDataUrl) {
@@ -79,10 +108,12 @@ export function OfferPosterGeneratorTool() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const width = 1080;
-    const height = 1350;
-    canvas.width = width;
-    canvas.height = height;
+    const { width, height } = FORMAT_DIMENSIONS[format];
+    const scale = 2;
+    canvas.width = width * scale;
+    canvas.height = height * scale;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(scale, scale);
 
     const gradientColors = COLOR_STYLES[colorStyle];
     const themeStyle = THEME_STYLES[theme];
@@ -109,6 +140,33 @@ export function OfferPosterGeneratorTool() {
     ctx.roundRect(70, 80, width - 140, height - 160, 40);
     ctx.fill();
 
+    if (themeStyle.decorative === "frame") {
+      ctx.strokeStyle = `${themeStyle.accent}99`;
+      ctx.lineWidth = 4;
+      ctx.strokeRect(90, 98, width - 180, height - 196);
+    } else if (themeStyle.decorative === "burst") {
+      ctx.globalAlpha = 0.24;
+      ctx.fillStyle = themeStyle.accent;
+      ctx.beginPath();
+      ctx.arc(width - 130, 180, 120, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(140, height - 200, 100, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    } else {
+      ctx.globalAlpha = 0.2;
+      ctx.strokeStyle = themeStyle.accent;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(width * 0.2, 140, 52, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(width * 0.84, 190, 34, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+
     const logo = logoRef.current;
     if (logo) {
       ctx.fillStyle = "rgba(255,255,255,0.95)";
@@ -132,7 +190,7 @@ export function OfferPosterGeneratorTool() {
     ctx.fillText(themeStyle.titleCase === "upper" ? businessName.toUpperCase() : businessName, 226, 158);
 
     ctx.font = "500 20px Inter, system-ui, sans-serif";
-    ctx.fillStyle = "#cbd5e1";
+    ctx.fillStyle = themeStyle.accent;
     ctx.fillText(`${THEME_STYLES[theme].title} Collection`, 226, 192);
 
     const contentX = 110;
@@ -169,7 +227,18 @@ export function OfferPosterGeneratorTool() {
       ctx.fillText(line, contentX + 34, offerY + 112 + index * 50);
     });
 
-    const footerY = height - 252;
+    const ctaY = height - 320;
+    if (ctaText.trim()) {
+      ctx.fillStyle = `${themeStyle.accent}dd`;
+      ctx.beginPath();
+      ctx.roundRect(contentX, ctaY, contentWidth, 62, 16);
+      ctx.fill();
+      ctx.fillStyle = "#0f172a";
+      ctx.font = "700 28px Inter, system-ui, sans-serif";
+      ctx.fillText(ctaText, contentX + 24, ctaY + 40);
+    }
+
+    const footerY = height - 222;
     if (footerText.trim()) {
       ctx.fillStyle = "#fef3c7";
       ctx.font = "700 36px Inter, system-ui, sans-serif";
@@ -189,7 +258,7 @@ export function OfferPosterGeneratorTool() {
   useEffect(() => {
     drawPoster();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [businessName, headline, subheadline, offerText, footerText, contactInfo, theme, colorStyle]);
+  }, [businessName, headline, subheadline, offerText, footerText, ctaText, contactInfo, theme, colorStyle, format]);
 
   const onUploadLogo = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -205,7 +274,7 @@ export function OfferPosterGeneratorTool() {
 
     const link = document.createElement("a");
     link.href = canvas.toDataURL("image/png", 1);
-    link.download = `toolhub-offer-poster-${theme}.png`;
+    link.download = `toolhub-offer-poster-${theme}-${format}.png`;
     link.click();
   };
 
@@ -217,13 +286,26 @@ export function OfferPosterGeneratorTool() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="space-y-1 text-sm">
+              <span className="muted">Poster format</span>
+              <select className="select" value={format} onChange={(e) => setFormat(e.target.value as PosterFormat)}>
+                {FORMAT_KEYS.map((key) => (
+                  <option key={key} value={key}>
+                    {FORMAT_DIMENSIONS[key].label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="space-y-1 text-sm">
               <span className="muted">Theme</span>
               <select className="select" value={theme} onChange={(e) => setTheme(e.target.value as OfferTheme)}>
-                <option value="luxury">Luxury</option>
-                <option value="festive">Festive</option>
-                <option value="modern-retail">Modern Retail</option>
-                <option value="bold-sale">Bold Sale</option>
-                <option value="minimal-premium">Minimal Premium</option>
+                <option value="luxury-sale">Luxury Sale</option>
+                <option value="festive-offer">Festive Offer</option>
+                <option value="premium-fashion">Premium Fashion Retail</option>
+                <option value="grand-opening">Grand Opening</option>
+                <option value="clearance-sale">Clearance Sale</option>
+                <option value="wedding-collection">Wedding Collection</option>
+                <option value="limited-time">Limited Time Offer</option>
               </select>
             </label>
 
@@ -243,6 +325,7 @@ export function OfferPosterGeneratorTool() {
           <input className="field" value={headline} onChange={(e) => setHeadline(e.target.value)} placeholder="Main headline" />
           <input className="field" value={subheadline} onChange={(e) => setSubheadline(e.target.value)} placeholder="Subheadline" />
           <textarea className="textarea" value={offerText} onChange={(e) => setOfferText(e.target.value)} placeholder="Offer text" />
+          <input className="field" value={ctaText} onChange={(e) => setCtaText(e.target.value)} placeholder="CTA line" />
           <input className="field" value={footerText} onChange={(e) => setFooterText(e.target.value)} placeholder="Optional footer text" />
           <textarea className="textarea" value={contactInfo} onChange={(e) => setContactInfo(e.target.value)} placeholder="Phone / website / address" />
 
@@ -263,7 +346,7 @@ export function OfferPosterGeneratorTool() {
             <canvas
               ref={canvasRef}
               className="mx-auto block h-auto w-full rounded-xl"
-              style={{ aspectRatio: "4 / 5", maxHeight: "78vh", background: "#111827" }}
+              style={{ aspectRatio: FORMAT_DIMENSIONS[format].ratio, maxHeight: "78vh", background: "#111827" }}
             />
           </div>
         </section>

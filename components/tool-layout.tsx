@@ -18,9 +18,18 @@ export function ToolLayout({
   const tool = getToolBySlug(slug);
   const relatedTools = tool
     ? tool.related
-        .map((relatedSlug) => getToolBySlug(relatedSlug))
-        .filter((item): item is NonNullable<typeof item> => Boolean(item))
+      .map((relatedSlug) => getToolBySlug(relatedSlug))
+      .filter((item): item is NonNullable<typeof item> => Boolean(item))
     : tools.slice(0, 3);
+  const businessSuiteTools =
+    tool?.category === "Business"
+      ? tools.filter(
+        (item) =>
+          item.category === "Business" &&
+          item.slug !== slug &&
+          !relatedTools.some((related) => related.slug === item.slug),
+      )
+      : [];
 
   return (
     <main className="container section-y">
@@ -50,6 +59,30 @@ export function ToolLayout({
                 <p className="font-semibold">{relatedTool.name}</p>
                 <p className="mt-1 text-sm leading-6" style={{ color: "var(--muted)" }}>
                   {relatedTool.description}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {businessSuiteTools.length > 0 && (
+        <section className="mt-8">
+          <h2 className="text-xl font-semibold">Business Suite</h2>
+          <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
+            Pair this tool with other business-focused creators in ToolHub.
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {businessSuiteTools.map((suiteTool) => (
+              <Link
+                key={suiteTool.slug}
+                href={`/tools/${suiteTool.slug}`}
+                className="rounded-xl border p-4 transition hover:-translate-y-0.5 hover:shadow-md"
+                style={{ borderColor: "var(--border)", background: "color-mix(in oklab, var(--card) 90%, transparent)" }}
+              >
+                <p className="font-semibold">{suiteTool.name}</p>
+                <p className="mt-1 text-sm leading-6" style={{ color: "var(--muted)" }}>
+                  {suiteTool.description}
                 </p>
               </Link>
             ))}
