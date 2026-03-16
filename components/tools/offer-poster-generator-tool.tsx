@@ -4,6 +4,7 @@ import { ChangeEvent, PointerEvent, useEffect, useMemo, useRef, useState } from 
 import { useCreativeUnlocks } from "@/lib/use-creative-unlocks";
 
 type OfferTheme = "luxury-sale" | "festive-offer" | "premium-fashion" | "grand-opening" | "clearance-sale" | "wedding-collection" | "limited-time";
+type EditorMode = "normal" | "advanced";
 type PosterFormat = "instagram-post" | "instagram-story" | "poster-portrait" | "landscape";
 type Align = "left" | "center" | "right";
 type BgMode = "template" | "upload" | "plain" | "gradient";
@@ -71,7 +72,7 @@ function drawTextBlock(ctx: CanvasRenderingContext2D, text: string, width: numbe
   });
 }
 
-type DragTarget = "logo" | "headline" | "offer" | "cta";
+type DragTarget = "logo" | "headline" | "subheadline" | "offer" | "badge" | "cta" | "business" | "footer" | "contact";
 
 export function OfferPosterGeneratorTool() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -80,6 +81,7 @@ export function OfferPosterGeneratorTool() {
   const bgRef = useRef<HTMLImageElement | null>(null);
 
   const [theme, setTheme] = useState<OfferTheme>("luxury-sale");
+  const [editorMode, setEditorMode] = useState<EditorMode>("normal");
   const [format, setFormat] = useState<PosterFormat>("poster-portrait");
   const [bgMode, setBgMode] = useState<BgMode>("template");
   const [overlayOpacity, setOverlayOpacity] = useState(16);
@@ -106,6 +108,9 @@ export function OfferPosterGeneratorTool() {
   const [offerStyle, setOfferStyle] = useState<BlockStyle>({ visible: true, size: 42, color: "#f8fafc", align: "left", weight: "700", x: 0.12, y: 0.66 });
   const [badgeStyle, setBadgeStyle] = useState<BlockStyle>({ visible: true, size: 27, color: "#111827", align: "left", weight: "700", x: 0.12, y: 0.74 });
   const [ctaStyle, setCtaStyle] = useState<BlockStyle>({ visible: true, size: 28, color: "#111827", align: "left", weight: "700", x: 0.1, y: 0.83 });
+  const [businessStyle, setBusinessStyle] = useState<BlockStyle>({ visible: true, size: 29, color: "#f8fafc", align: "left", weight: "700", x: 0.24, y: 0.105 });
+  const [footerStyle, setFooterStyle] = useState<BlockStyle>({ visible: true, size: 32, color: "#fef3c7", align: "left", weight: "700", x: 0.1, y: 0.91 });
+  const [contactStyle, setContactStyle] = useState<BlockStyle>({ visible: true, size: 22, color: "#e2e8f0", align: "left", weight: "500", x: 0.1, y: 0.955 });
 
   const [logoPos, setLogoPos] = useState({ x: 0.12, y: 0.1 });
   const [dragging, setDragging] = useState<DragTarget | null>(null);
@@ -132,8 +137,13 @@ export function OfferPosterGeneratorTool() {
     const y = Math.max(0.05, Math.min(0.95, (event.clientY - rect.top) / rect.height));
     if (target === "logo") setLogoPos({ x, y });
     if (target === "headline") setHeadlineStyle((s) => ({ ...s, x, y }));
+    if (target === "subheadline") setSubStyle((s) => ({ ...s, x, y }));
     if (target === "offer") setOfferStyle((s) => ({ ...s, x, y }));
+    if (target === "badge") setBadgeStyle((s) => ({ ...s, x, y }));
     if (target === "cta") setCtaStyle((s) => ({ ...s, x, y }));
+    if (target === "business") setBusinessStyle((s) => ({ ...s, x, y }));
+    if (target === "footer") setFooterStyle((s) => ({ ...s, x, y }));
+    if (target === "contact") setContactStyle((s) => ({ ...s, x, y }));
   };
 
   useEffect(() => {
@@ -246,62 +256,125 @@ export function OfferPosterGeneratorTool() {
       ctx.drawImage(logoRef.current, lx + (size - dw) / 2, ly + (size - dh) / 2, dw, dh);
     }
 
-    ctx.fillStyle = "#f8fafc";
-    ctx.font = "700 29px Inter, system-ui, sans-serif";
-    ctx.fillText(businessName, width * 0.24, height * 0.105);
-    ctx.fillStyle = style.accent;
-    ctx.font = "600 20px Inter, system-ui, sans-serif";
-    ctx.fillText(style.title, width * 0.24, height * 0.135);
+    if (editorMode === "normal") {
+      const left = width * 0.1;
+      const maxW = width * 0.8;
+      let y = height * 0.14;
 
-    drawTextBlock(ctx, headline, width, height, headlineStyle, 0.78, 2);
-    drawTextBlock(ctx, subheadline, width, height, subStyle, 0.78, 2);
+      ctx.fillStyle = "#f8fafc";
+      ctx.font = `700 ${Math.max(24, Math.round(height * 0.024))}px Inter, system-ui, sans-serif`;
+      wrap(ctx, businessName, maxW * 0.75, 1).forEach((line) => ctx.fillText(line, left, y));
+      ctx.fillStyle = style.accent;
+      ctx.font = `600 ${Math.max(18, Math.round(height * 0.016))}px Inter, system-ui, sans-serif`;
+      wrap(ctx, style.title, maxW * 0.75, 1).forEach((line) => ctx.fillText(line, left, y + Math.max(28, Math.round(height * 0.03))));
 
-    if (offerStyle.visible && offerText.trim()) {
-      const ox = width * (offerStyle.align === "center" ? offerStyle.x - 0.24 : offerStyle.align === "right" ? offerStyle.x - 0.48 : offerStyle.x);
-      const oy = height * offerStyle.y;
-      ctx.fillStyle = "rgba(15,23,42,0.8)";
+      y = height * 0.28;
+      ctx.fillStyle = "#ffffff";
+      ctx.font = `800 ${Math.max(44, Math.round(height * 0.062))}px Inter, system-ui, sans-serif`;
+      wrap(ctx, headline, maxW, 2).forEach((line, i) => ctx.fillText(line, left, y + i * Math.max(56, Math.round(height * 0.06))));
+
+      y += Math.max(130, Math.round(height * 0.14));
+      ctx.fillStyle = "#dbeafe";
+      ctx.font = `600 ${Math.max(24, Math.round(height * 0.03))}px Inter, system-ui, sans-serif`;
+      wrap(ctx, subheadline, maxW, 2).forEach((line, i) => ctx.fillText(line, left, y + i * Math.max(35, Math.round(height * 0.035))));
+
+      y += Math.max(95, Math.round(height * 0.1));
+      ctx.fillStyle = "rgba(15,23,42,0.82)";
       ctx.beginPath();
-      ctx.roundRect(ox, oy - 50, width * 0.48, 170, 22);
+      ctx.roundRect(left, y - 42, width * 0.76, Math.max(160, Math.round(height * 0.17)), 22);
       ctx.fill();
       ctx.fillStyle = style.accent;
-      ctx.font = "700 25px Inter, system-ui, sans-serif";
-      ctx.fillText("LIMITED TIME OFFER", ox + 18, oy - 18);
-      drawTextBlock(ctx, offerText, width, height, offerStyle, 0.42, 3);
+      ctx.font = `700 ${Math.max(21, Math.round(height * 0.019))}px Inter, system-ui, sans-serif`;
+      ctx.fillText("LIMITED TIME OFFER", left + 18, y - 12);
+      ctx.fillStyle = "#f8fafc";
+      ctx.font = `700 ${Math.max(30, Math.round(height * 0.038))}px Inter, system-ui, sans-serif`;
+      wrap(ctx, offerText, width * 0.7, 3).forEach((line, i) => ctx.fillText(line, left + 18, y + 34 + i * Math.max(40, Math.round(height * 0.04))));
 
-      if (badgeStyle.visible && badgeText.trim()) {
-        const bx = width * (badgeStyle.align === "center" ? badgeStyle.x - 0.16 : badgeStyle.align === "right" ? badgeStyle.x - 0.32 : badgeStyle.x);
-        const by = height * badgeStyle.y;
+      if (badgeText.trim()) {
+        const by = y + Math.max(128, Math.round(height * 0.135));
         ctx.fillStyle = `${style.accent}ee`;
         ctx.beginPath();
-        ctx.roundRect(bx, by - 28, width * 0.32, 50, 999);
+        ctx.roundRect(left, by - 24, width * 0.42, 48, 999);
         ctx.fill();
-        drawTextBlock(ctx, badgeText, width, height, badgeStyle, 0.28, 1);
+        ctx.fillStyle = "#111827";
+        ctx.font = `700 ${Math.max(20, Math.round(height * 0.021))}px Inter, system-ui, sans-serif`;
+        wrap(ctx, badgeText, width * 0.36, 1).forEach((line) => ctx.fillText(line, left + 16, by + 7));
       }
-    }
 
-    if (ctaStyle.visible && ctaText.trim()) {
-      const cx = width * (ctaStyle.align === "center" ? ctaStyle.x - 0.2 : ctaStyle.align === "right" ? ctaStyle.x - 0.4 : ctaStyle.x);
-      const cy = height * ctaStyle.y;
-      ctx.fillStyle = `${style.accent}e5`;
-      ctx.beginPath();
-      ctx.roundRect(cx, cy - 36, width * 0.4, 64, 18);
-      ctx.fill();
-      drawTextBlock(ctx, ctaText, width, height, ctaStyle, 0.36, 1);
-    }
+      if (ctaText.trim()) {
+        const cy = height * (format === "instagram-story" ? 0.84 : 0.82);
+        ctx.fillStyle = `${style.accent}e5`;
+        ctx.beginPath();
+        ctx.roundRect(left, cy - 34, width * 0.62, 62, 18);
+        ctx.fill();
+        ctx.fillStyle = "#111827";
+        ctx.font = `700 ${Math.max(22, Math.round(height * 0.025))}px Inter, system-ui, sans-serif`;
+        wrap(ctx, ctaText, width * 0.56, 1).forEach((line) => ctx.fillText(line, left + 16, cy + 6));
+      }
 
-    if (footerText.trim()) {
-      ctx.fillStyle = "#fef3c7";
-      ctx.font = "700 32px Inter, system-ui, sans-serif";
-      ctx.fillText(footerText, width * 0.1, height * 0.91);
-    }
+      if (footerText.trim()) {
+        ctx.fillStyle = "#fef3c7";
+        ctx.font = `700 ${Math.max(24, Math.round(height * 0.024))}px Inter, system-ui, sans-serif`;
+        wrap(ctx, footerText, maxW, 1).forEach((line) => ctx.fillText(line, left, height * 0.91));
+      }
 
-    ctx.fillStyle = "rgba(255,255,255,0.32)";
-    ctx.fillRect(width * 0.1, height * 0.925, width * 0.8, 2);
-    ctx.fillStyle = "#e2e8f0";
-    ctx.font = "500 22px Inter, system-ui, sans-serif";
-    wrap(ctx, contactDetails, width * 0.8, 2).forEach((line, i) => {
-      ctx.fillText(line, width * 0.1, height * (0.955 + i * 0.023));
-    });
+      ctx.fillStyle = "rgba(255,255,255,0.32)";
+      ctx.fillRect(width * 0.1, height * 0.925, width * 0.8, 2);
+      ctx.fillStyle = "#e2e8f0";
+      ctx.font = `500 ${Math.max(16, Math.round(height * 0.016))}px Inter, system-ui, sans-serif`;
+      wrap(ctx, contactDetails, width * 0.8, 2).forEach((line, i) => {
+        ctx.fillText(line, width * 0.1, height * (0.955 + i * 0.022));
+      });
+    } else {
+      drawTextBlock(ctx, businessName, width, height, businessStyle, 0.7, 1);
+      ctx.fillStyle = style.accent;
+      ctx.font = `600 ${Math.max(18, Math.round(height * 0.016))}px Inter, system-ui, sans-serif`;
+      wrap(ctx, style.title, width * 0.6, 1).forEach((line) => ctx.fillText(line, width * 0.24, height * 0.135));
+
+      drawTextBlock(ctx, headline, width, height, headlineStyle, 0.78, 2);
+      drawTextBlock(ctx, subheadline, width, height, subStyle, 0.78, 2);
+
+      if (offerStyle.visible && offerText.trim()) {
+        const ox = width * (offerStyle.align === "center" ? offerStyle.x - 0.24 : offerStyle.align === "right" ? offerStyle.x - 0.48 : offerStyle.x);
+        const oy = height * offerStyle.y;
+        ctx.fillStyle = "rgba(15,23,42,0.8)";
+        ctx.beginPath();
+        ctx.roundRect(ox, oy - 50, width * 0.48, 170, 22);
+        ctx.fill();
+        ctx.fillStyle = style.accent;
+        ctx.font = "700 25px Inter, system-ui, sans-serif";
+        ctx.fillText("LIMITED TIME OFFER", ox + 18, oy - 18);
+        drawTextBlock(ctx, offerText, width, height, offerStyle, 0.42, 3);
+
+        if (badgeStyle.visible && badgeText.trim()) {
+          const bx = width * (badgeStyle.align === "center" ? badgeStyle.x - 0.16 : badgeStyle.align === "right" ? badgeStyle.x - 0.32 : badgeStyle.x);
+          const by = height * badgeStyle.y;
+          ctx.fillStyle = `${style.accent}ee`;
+          ctx.beginPath();
+          ctx.roundRect(bx, by - 28, width * 0.32, 50, 999);
+          ctx.fill();
+          drawTextBlock(ctx, badgeText, width, height, badgeStyle, 0.28, 1);
+        }
+      }
+
+      if (ctaStyle.visible && ctaText.trim()) {
+        const cx = width * (ctaStyle.align === "center" ? ctaStyle.x - 0.2 : ctaStyle.align === "right" ? ctaStyle.x - 0.4 : ctaStyle.x);
+        const cy = height * ctaStyle.y;
+        ctx.fillStyle = `${style.accent}e5`;
+        ctx.beginPath();
+        ctx.roundRect(cx, cy - 36, width * 0.4, 64, 18);
+        ctx.fill();
+        drawTextBlock(ctx, ctaText, width, height, ctaStyle, 0.36, 1);
+      }
+
+      if (footerText.trim()) {
+        drawTextBlock(ctx, footerText, width, height, footerStyle, 0.8, 1);
+      }
+
+      ctx.fillStyle = "rgba(255,255,255,0.32)";
+      ctx.fillRect(width * 0.1, height * 0.925, width * 0.8, 2);
+      drawTextBlock(ctx, contactDetails, width, height, contactStyle, 0.8, 2);
+    }
 
     if (watermarkEnabled) {
       ctx.fillStyle = "rgba(255,255,255,0.72)";
@@ -315,7 +388,7 @@ export function OfferPosterGeneratorTool() {
   useEffect(() => {
     draw(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [style, format, bgMode, overlayOpacity, plainColor, gradientA, gradientB, businessName, headline, subheadline, offerText, badgeText, ctaText, footerText, contactDetails, logoVisible, logoSize, logoPos, headlineStyle, subStyle, offerStyle, badgeStyle, ctaStyle, watermarkEnabled]);
+  }, [style, format, bgMode, overlayOpacity, plainColor, gradientA, gradientB, businessName, headline, subheadline, offerText, badgeText, ctaText, footerText, contactDetails, logoVisible, logoSize, logoPos, headlineStyle, subStyle, offerStyle, badgeStyle, ctaStyle, businessStyle, footerStyle, contactStyle, editorMode, watermarkEnabled]);
 
   const upload = (event: ChangeEvent<HTMLInputElement>, setter: (v: string) => void) => {
     const file = event.target.files?.[0];
@@ -364,6 +437,10 @@ export function OfferPosterGeneratorTool() {
       <div className="grid gap-4 xl:grid-cols-[1.05fr_1fr]">
         <section className="space-y-4 rounded-2xl border p-4" style={{ borderColor: "var(--border)" }}>
           <h3 className="text-base font-semibold">Offer poster editor controls</h3>
+          <div className="flex gap-2">
+            <button className={`btn ${editorMode === "normal" ? "btn-primary" : "btn-secondary"}`} onClick={() => setEditorMode("normal")}>Normal</button>
+            <button className={`btn ${editorMode === "advanced" ? "btn-primary" : "btn-secondary"}`} onClick={() => setEditorMode("advanced")}>Advanced</button>
+          </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="text-sm">Theme
               <select className="select" value={theme} onChange={(e) => setTheme(e.target.value as OfferTheme)}>
@@ -417,13 +494,18 @@ export function OfferPosterGeneratorTool() {
             <input className="field" value={contactDetails} onChange={(e) => setContactDetails(e.target.value)} placeholder="Contact details" />
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
-            <TextControl label="Headline" style={headlineStyle} setStyle={setHeadlineStyle} />
-            <TextControl label="Subheadline" style={subStyle} setStyle={setSubStyle} />
-            <TextControl label="Offer" style={offerStyle} setStyle={setOfferStyle} />
-            <TextControl label="Price badge" style={badgeStyle} setStyle={setBadgeStyle} />
-            <TextControl label="CTA" style={ctaStyle} setStyle={setCtaStyle} />
-          </div>
+          {editorMode === "advanced" ? (
+            <div className="grid gap-3 sm:grid-cols-2">
+              <TextControl label="Headline" style={headlineStyle} setStyle={setHeadlineStyle} />
+              <TextControl label="Subheadline" style={subStyle} setStyle={setSubStyle} />
+              <TextControl label="Offer" style={offerStyle} setStyle={setOfferStyle} />
+              <TextControl label="Price badge" style={badgeStyle} setStyle={setBadgeStyle} />
+              <TextControl label="CTA" style={ctaStyle} setStyle={setCtaStyle} />
+              <TextControl label="Business name" style={businessStyle} setStyle={setBusinessStyle} />
+              <TextControl label="Footer" style={footerStyle} setStyle={setFooterStyle} />
+              <TextControl label="Contact" style={contactStyle} setStyle={setContactStyle} />
+            </div>
+          ) : null}
 
           <div className="rounded-xl border p-3" style={{ borderColor: "var(--border)" }}>
             <p className="text-sm font-semibold">Logo controls</p>
@@ -460,7 +542,7 @@ export function OfferPosterGeneratorTool() {
         </section>
 
         <section className="space-y-3">
-          <p className="text-sm font-medium">Live editor preview (drag logo/headline/offer/CTA)</p>
+          <p className="text-sm font-medium">Live editor preview {editorMode === "advanced" ? "(drag enabled for key blocks)" : "(stable normal layout)"}</p>
           <div className="rounded-2xl border p-2" style={{ borderColor: "var(--border)" }}>
             <div
               ref={previewWrapRef}
@@ -474,10 +556,15 @@ export function OfferPosterGeneratorTool() {
               onPointerLeave={() => setDragging(null)}
             >
               <canvas ref={canvasRef} className="block h-full w-full" style={{ aspectRatio: FORMAT_DIMENSIONS[format].ratio }} />
-              {([
+              {editorMode === "advanced" ? ([
                 ["headline", headlineStyle],
+                ["subheadline", subStyle],
                 ["offer", offerStyle],
+                ["badge", badgeStyle],
                 ["cta", ctaStyle],
+                ["business", businessStyle],
+                ["footer", footerStyle],
+                ["contact", contactStyle],
               ] as [DragTarget, BlockStyle][]).map(([key, current]) => (
                 current.visible ? (
                   <button
@@ -493,8 +580,8 @@ export function OfferPosterGeneratorTool() {
                     {key[0].toUpperCase()}
                   </button>
                 ) : null
-              ))}
-              {logoVisible ? (
+              )) : null}
+              {editorMode === "advanced" && logoVisible ? (
                 <button
                   type="button"
                   className="absolute h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-300 bg-black/60 text-[10px] text-amber-200"

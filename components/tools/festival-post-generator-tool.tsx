@@ -7,6 +7,7 @@ type FestivalKey = "diwali" | "holi" | "eid" | "christmas" | "new-year" | "indep
 type OccasionMode = "preset" | "custom";
 type PostIntent = "greeting-only" | "greeting-branding" | "greeting-offer";
 type LayoutKey = "classic" | "premium" | "mandala" | "night" | "minimal";
+type EditorMode = "normal" | "advanced";
 type FormatKey = "instagram-post" | "instagram-story" | "flyer-portrait" | "landscape";
 type BackgroundMode = "template" | "upload" | "plain" | "gradient";
 type Align = "left" | "center" | "right";
@@ -106,7 +107,7 @@ function drawTextBlock(
   });
 }
 
-type DragTarget = "logo" | "headline" | "subheadline" | "greeting" | "offer" | "cta";
+type DragTarget = "logo" | "headline" | "subheadline" | "greeting" | "offer" | "cta" | "business" | "contact" | "footer";
 
 export function FestivalPostGeneratorTool() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -117,6 +118,7 @@ export function FestivalPostGeneratorTool() {
   const [festival, setFestival] = useState<FestivalKey>("diwali");
   const [customOccasionName, setCustomOccasionName] = useState("Store Anniversary");
   const [layout, setLayout] = useState<LayoutKey>("premium");
+  const [editorMode, setEditorMode] = useState<EditorMode>("normal");
   const [postIntent, setPostIntent] = useState<PostIntent>("greeting-branding");
   const [format, setFormat] = useState<FormatKey>("instagram-post");
   const [backgroundMode, setBackgroundMode] = useState<BackgroundMode>("template");
@@ -146,6 +148,9 @@ export function FestivalPostGeneratorTool() {
   const [greetingStyle, setGreetingStyle] = useState<BlockStyle>({ visible: true, size: 32, color: "#f8fafc", align: "left", weight: "500", x: 0.12, y: 0.52 });
   const [offerStyle, setOfferStyle] = useState<BlockStyle>({ visible: true, size: 34, color: "#fde68a", align: "left", weight: "700", x: 0.12, y: 0.65 });
   const [ctaStyle, setCtaStyle] = useState<BlockStyle>({ visible: true, size: 30, color: "#111827", align: "left", weight: "700", x: 0.12, y: 0.76 });
+  const [businessStyle, setBusinessStyle] = useState<BlockStyle>({ visible: true, size: 30, color: "#ffffff", align: "left", weight: "700", x: 0.1, y: 0.9 });
+  const [contactStyle, setContactStyle] = useState<BlockStyle>({ visible: true, size: 21, color: "#dbeafe", align: "left", weight: "500", x: 0.1, y: 0.935 });
+  const [footerStyle, setFooterStyle] = useState<BlockStyle>({ visible: true, size: 20, color: "#f8fafc", align: "left", weight: "500", x: 0.08, y: 0.975 });
 
   const [logoPos, setLogoPos] = useState({ x: 0.84, y: 0.14 });
   const [dragging, setDragging] = useState<DragTarget | null>(null);
@@ -182,6 +187,27 @@ export function FestivalPostGeneratorTool() {
     if (target === "greeting") setGreetingStyle((s) => ({ ...s, x, y }));
     if (target === "offer") setOfferStyle((s) => ({ ...s, x, y }));
     if (target === "cta") setCtaStyle((s) => ({ ...s, x, y }));
+    if (target === "business") setBusinessStyle((s) => ({ ...s, x, y }));
+    if (target === "contact") setContactStyle((s) => ({ ...s, x, y }));
+    if (target === "footer") setFooterStyle((s) => ({ ...s, x, y }));
+  };
+
+  const drawBlockWithBackground = (
+    ctx: CanvasRenderingContext2D,
+    text: string,
+    width: number,
+    height: number,
+    style: BlockStyle,
+    blockWidthRatio: number,
+    blockHeight: number,
+  ) => {
+    const ox = width * (style.align === "center" ? style.x - blockWidthRatio / 2 : style.align === "right" ? style.x - blockWidthRatio : style.x);
+    const oy = height * style.y;
+    ctx.fillStyle = "rgba(15,23,42,0.72)";
+    ctx.beginPath();
+    ctx.roundRect(ox, oy - blockHeight / 2, width * blockWidthRatio, blockHeight, 18);
+    ctx.fill();
+    drawTextBlock(ctx, text, width, height, style, blockWidthRatio - 0.04, 2);
   };
 
   useEffect(() => {
@@ -274,46 +300,107 @@ export function FestivalPostGeneratorTool() {
     ctx.fill();
 
     const showOffer = postIntent === "greeting-offer";
-    drawTextBlock(ctx, occasionName, width, height, { ...subheadlineStyle, size: Math.max(24, subheadlineStyle.size - 6), color: palette.accent, y: subheadlineStyle.y - 0.1 }, 0.5, 1);
-    drawTextBlock(ctx, headline, width, height, headlineStyle, 0.76, 2);
-    drawTextBlock(ctx, subheadline, width, height, subheadlineStyle, 0.76, 2);
-    drawTextBlock(ctx, greeting, width, height, greetingStyle, 0.76, 3);
 
-    if (showOffer && offerStyle.visible && offerText.trim()) {
-      const ox = width * (offerStyle.align === "center" ? offerStyle.x - 0.22 : offerStyle.align === "right" ? offerStyle.x - 0.44 : offerStyle.x);
-      const oy = height * offerStyle.y;
-      ctx.fillStyle = "rgba(15,23,42,0.7)";
-      ctx.beginPath();
-      ctx.roundRect(ox, oy - 36, width * 0.44, 74, 18);
-      ctx.fill();
-      drawTextBlock(ctx, offerText, width, height, offerStyle, 0.4, 2);
-    }
+    if (editorMode === "normal") {
+      const leftX = width * 0.1;
+      const maxWidth = width * 0.78;
+      let y = height * 0.19;
 
-    if (ctaStyle.visible && ctaText.trim()) {
-      const ctaX = width * (ctaStyle.align === "center" ? ctaStyle.x - 0.12 : ctaStyle.align === "right" ? ctaStyle.x - 0.24 : ctaStyle.x);
-      const ctaY = height * ctaStyle.y;
-      ctx.fillStyle = "rgba(251,191,36,0.95)";
-      ctx.beginPath();
-      ctx.roundRect(ctaX, ctaY - 34, width * 0.24, 58, 999);
-      ctx.fill();
-      drawTextBlock(ctx, ctaText, width, height, ctaStyle, 0.2, 1);
-    }
+      ctx.fillStyle = palette.accent;
+      ctx.font = `700 ${Math.max(24, Math.round(height * 0.028))}px Inter, system-ui, sans-serif`;
+      wrap(ctx, occasionName, maxWidth, 1).forEach((line) => {
+        ctx.fillText(line, leftX, y);
+      });
 
-    if (postIntent !== "greeting-only") {
-      ctx.fillStyle = "rgba(255,255,255,0.35)";
-      ctx.fillRect(width * 0.1, height * 0.86, width * 0.8, 2);
+      y += Math.max(56, Math.round(height * 0.06));
       ctx.fillStyle = "#ffffff";
-      ctx.font = "700 30px Inter, system-ui, sans-serif";
-      ctx.fillText(businessName, width * 0.1, height * 0.9);
-      ctx.fillStyle = "#dbeafe";
-      ctx.font = "500 21px Inter, system-ui, sans-serif";
-      ctx.fillText(contactLine, width * 0.1, height * 0.935);
-    }
+      ctx.font = `800 ${Math.max(42, Math.round(height * 0.06))}px Inter, system-ui, sans-serif`;
+      wrap(ctx, headline, maxWidth, 2).forEach((line, i) => {
+        ctx.fillText(line, leftX, y + i * Math.max(52, Math.round(height * 0.055)));
+      });
 
-    if (footerText.trim()) {
-      ctx.fillStyle = "rgba(255,255,255,0.9)";
-      ctx.font = "500 20px Inter, system-ui, sans-serif";
-      ctx.fillText(footerText, width * 0.08, height * 0.975);
+      y += Math.max(120, Math.round(height * 0.13));
+      ctx.fillStyle = "#e2e8f0";
+      ctx.font = `600 ${Math.max(26, Math.round(height * 0.034))}px Inter, system-ui, sans-serif`;
+      wrap(ctx, subheadline, maxWidth, 2).forEach((line, i) => {
+        ctx.fillText(line, leftX, y + i * Math.max(36, Math.round(height * 0.036)));
+      });
+
+      y += Math.max(90, Math.round(height * 0.1));
+      ctx.fillStyle = "#f8fafc";
+      ctx.font = `500 ${Math.max(24, Math.round(height * 0.03))}px Inter, system-ui, sans-serif`;
+      wrap(ctx, greeting, maxWidth, 3).forEach((line, i) => {
+        ctx.fillText(line, leftX, y + i * Math.max(34, Math.round(height * 0.034)));
+      });
+
+      if (showOffer && offerText.trim()) {
+        const offerY = y + Math.max(110, Math.round(height * 0.12));
+        ctx.fillStyle = "rgba(15,23,42,0.72)";
+        ctx.beginPath();
+        ctx.roundRect(leftX, offerY - 34, width * 0.54, 78, 16);
+        ctx.fill();
+        ctx.fillStyle = "#fde68a";
+        ctx.font = `700 ${Math.max(24, Math.round(height * 0.03))}px Inter, system-ui, sans-serif`;
+        wrap(ctx, offerText, width * 0.5, 2).forEach((line, i) => ctx.fillText(line, leftX + 20, offerY + i * 30));
+      }
+
+      if (ctaText.trim()) {
+        const ctaY = height * (format === "instagram-story" ? 0.77 : 0.74);
+        ctx.fillStyle = "rgba(251,191,36,0.95)";
+        ctx.beginPath();
+        ctx.roundRect(leftX, ctaY - 30, width * 0.28, 56, 999);
+        ctx.fill();
+        ctx.fillStyle = "#111827";
+        ctx.font = `700 ${Math.max(22, Math.round(height * 0.026))}px Inter, system-ui, sans-serif`;
+        wrap(ctx, ctaText, width * 0.24, 1).forEach((line) => ctx.fillText(line, leftX + 18, ctaY + 6));
+      }
+
+      if (postIntent !== "greeting-only") {
+        ctx.fillStyle = "rgba(255,255,255,0.35)";
+        ctx.fillRect(width * 0.1, height * 0.86, width * 0.8, 2);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = `700 ${Math.max(24, Math.round(height * 0.028))}px Inter, system-ui, sans-serif`;
+        ctx.fillText(businessName, width * 0.1, height * 0.9);
+        ctx.fillStyle = "#dbeafe";
+        ctx.font = `500 ${Math.max(18, Math.round(height * 0.02))}px Inter, system-ui, sans-serif`;
+        wrap(ctx, contactLine, width * 0.8, 2).forEach((line, i) => ctx.fillText(line, width * 0.1, height * (0.935 + i * 0.02)));
+      }
+
+      if (footerText.trim()) {
+        ctx.fillStyle = "rgba(255,255,255,0.9)";
+        ctx.font = `500 ${Math.max(16, Math.round(height * 0.017))}px Inter, system-ui, sans-serif`;
+        wrap(ctx, footerText, width * 0.82, 1).forEach((line) => ctx.fillText(line, width * 0.08, height * 0.975));
+      }
+    } else {
+      drawTextBlock(ctx, occasionName, width, height, { ...subheadlineStyle, size: Math.max(24, subheadlineStyle.size - 6), color: palette.accent, y: subheadlineStyle.y - 0.1 }, 0.5, 1);
+      drawTextBlock(ctx, headline, width, height, headlineStyle, 0.76, 2);
+      drawTextBlock(ctx, subheadline, width, height, subheadlineStyle, 0.76, 2);
+      drawTextBlock(ctx, greeting, width, height, greetingStyle, 0.76, 3);
+
+      if (showOffer && offerStyle.visible && offerText.trim()) {
+        drawBlockWithBackground(ctx, offerText, width, height, offerStyle, 0.44, 74);
+      }
+
+      if (ctaStyle.visible && ctaText.trim()) {
+        const ctaX = width * (ctaStyle.align === "center" ? ctaStyle.x - 0.12 : ctaStyle.align === "right" ? ctaStyle.x - 0.24 : ctaStyle.x);
+        const ctaY = height * ctaStyle.y;
+        ctx.fillStyle = "rgba(251,191,36,0.95)";
+        ctx.beginPath();
+        ctx.roundRect(ctaX, ctaY - 34, width * 0.24, 58, 999);
+        ctx.fill();
+        drawTextBlock(ctx, ctaText, width, height, ctaStyle, 0.2, 1);
+      }
+
+      if (postIntent !== "greeting-only") {
+        ctx.fillStyle = "rgba(255,255,255,0.35)";
+        ctx.fillRect(width * 0.1, height * 0.86, width * 0.8, 2);
+        drawTextBlock(ctx, businessName, width, height, businessStyle, 0.8, 1);
+        drawTextBlock(ctx, contactLine, width, height, contactStyle, 0.8, 2);
+      }
+
+      if (footerText.trim()) {
+        drawTextBlock(ctx, footerText, width, height, footerStyle, 0.82, 1);
+      }
     }
 
     if (logoVisible && logoRef.current) {
@@ -344,7 +431,7 @@ export function FestivalPostGeneratorTool() {
   useEffect(() => {
     draw(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [palette, layout, postIntent, format, backgroundMode, plainColor, gradientA, gradientB, overlayOpacity, businessName, contactLine, headline, subheadline, greeting, offerText, ctaText, footerText, logoSize, logoVisible, logoPos, headlineStyle, subheadlineStyle, greetingStyle, offerStyle, ctaStyle, watermarkEnabled]);
+  }, [palette, layout, postIntent, format, backgroundMode, plainColor, gradientA, gradientB, overlayOpacity, businessName, contactLine, headline, subheadline, greeting, offerText, ctaText, footerText, logoSize, logoVisible, logoPos, headlineStyle, subheadlineStyle, greetingStyle, offerStyle, ctaStyle, businessStyle, contactStyle, footerStyle, editorMode, watermarkEnabled]);
 
   const uploadImage = (event: ChangeEvent<HTMLInputElement>, setter: (v: string) => void) => {
     const file = event.target.files?.[0];
@@ -393,6 +480,10 @@ export function FestivalPostGeneratorTool() {
       <div className="grid gap-4 xl:grid-cols-[1.05fr_1fr]">
         <section className="space-y-4 rounded-2xl border p-4" style={{ borderColor: "var(--border)" }}>
           <h3 className="text-base font-semibold">Festival editor controls</h3>
+          <div className="flex gap-2">
+            <button className={`btn ${editorMode === "normal" ? "btn-primary" : "btn-secondary"}`} onClick={() => setEditorMode("normal")}>Normal</button>
+            <button className={`btn ${editorMode === "advanced" ? "btn-primary" : "btn-secondary"}`} onClick={() => setEditorMode("advanced")}>Advanced</button>
+          </div>
           <div className="flex flex-wrap gap-2">
             <button className={`btn ${postIntent === "greeting-only" ? "btn-primary" : "btn-secondary"}`} onClick={() => setPostIntent("greeting-only")}>Greeting only</button>
             <button className={`btn ${postIntent === "greeting-branding" ? "btn-primary" : "btn-secondary"}`} onClick={() => setPostIntent("greeting-branding")}>Greeting + branding</button>
@@ -461,13 +552,18 @@ export function FestivalPostGeneratorTool() {
             <input className="field" value={contactLine} onChange={(e) => setContactLine(e.target.value)} placeholder="Handle/website/phone/tagline" />
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
-            <Control label="Headline style" style={headlineStyle} setStyle={setHeadlineStyle} />
-            <Control label="Subheadline style" style={subheadlineStyle} setStyle={setSubheadlineStyle} />
-            <Control label="Greeting style" style={greetingStyle} setStyle={setGreetingStyle} />
-            <Control label="Offer style" style={offerStyle} setStyle={setOfferStyle} />
-            <Control label="CTA style" style={ctaStyle} setStyle={setCtaStyle} />
-          </div>
+          {editorMode === "advanced" ? (
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Control label="Headline style" style={headlineStyle} setStyle={setHeadlineStyle} />
+              <Control label="Subheadline style" style={subheadlineStyle} setStyle={setSubheadlineStyle} />
+              <Control label="Greeting style" style={greetingStyle} setStyle={setGreetingStyle} />
+              <Control label="Offer style" style={offerStyle} setStyle={setOfferStyle} />
+              <Control label="CTA style" style={ctaStyle} setStyle={setCtaStyle} />
+              <Control label="Business name style" style={businessStyle} setStyle={setBusinessStyle} />
+              <Control label="Contact style" style={contactStyle} setStyle={setContactStyle} />
+              <Control label="Footer style" style={footerStyle} setStyle={setFooterStyle} />
+            </div>
+          ) : null}
 
           <div className="rounded-xl border p-3" style={{ borderColor: "var(--border)" }}>
             <p className="text-sm font-semibold">Logo controls</p>
@@ -504,7 +600,7 @@ export function FestivalPostGeneratorTool() {
         </section>
 
         <section className="space-y-3">
-          <p className="text-sm font-medium">Live canvas editor (drag headline/subheadline/greeting/offer/cta/logo)</p>
+          <p className="text-sm font-medium">Live canvas editor {editorMode === "advanced" ? "(drag enabled for all major text/logo)" : "(stable normal layout)"}</p>
           <div className="rounded-2xl border p-2" style={{ borderColor: "var(--border)" }}>
             <div
               ref={previewWrapRef}
@@ -518,12 +614,15 @@ export function FestivalPostGeneratorTool() {
               onPointerLeave={() => setDragging(null)}
             >
               <canvas ref={canvasRef} className="block h-full w-full" style={{ aspectRatio: FORMAT_DIMENSIONS[format].ratio }} />
-              {([
+              {editorMode === "advanced" ? ([
                 ["headline", headlineStyle],
                 ["subheadline", subheadlineStyle],
                 ["greeting", greetingStyle],
                 ["offer", offerStyle],
                 ["cta", ctaStyle],
+                ["business", businessStyle],
+                ["contact", contactStyle],
+                ["footer", footerStyle],
               ] as [DragTarget, BlockStyle][]).map(([key, style]) => (
                 style.visible ? (
                   <button
@@ -540,8 +639,8 @@ export function FestivalPostGeneratorTool() {
                     {key[0].toUpperCase()}
                   </button>
                 ) : null
-              ))}
-              {logoVisible ? (
+              )) : null}
+              {editorMode === "advanced" && logoVisible ? (
                 <button
                   type="button"
                   className="absolute h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-300 bg-black/60 text-[10px] text-amber-200"
