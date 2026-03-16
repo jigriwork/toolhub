@@ -6,7 +6,7 @@ import { useCreativeUnlocks } from "@/lib/use-creative-unlocks";
 type FestivalKey = "diwali" | "holi" | "eid" | "christmas" | "new-year" | "independence-day" | "republic-day";
 type OccasionMode = "preset" | "custom";
 type PostIntent = "greeting-only" | "greeting-branding" | "greeting-offer";
-type LayoutKey = "classic" | "premium" | "mandala" | "night" | "minimal";
+type LayoutKey = "elegant" | "decorative" | "modern" | "premium";
 type EditorMode = "normal" | "advanced";
 type FormatKey = "instagram-post" | "instagram-story" | "flyer-portrait" | "landscape";
 type BackgroundMode = "template" | "upload" | "plain" | "gradient";
@@ -18,6 +18,8 @@ type BlockStyle = {
   color: string;
   align: Align;
   weight: "400" | "500" | "600" | "700" | "800";
+  letterSpacing: number;
+  lineHeight: number;
   x: number;
   y: number;
 };
@@ -50,12 +52,25 @@ const FESTIVAL_KEYS = Object.keys(FESTIVALS) as FestivalKey[];
 const FORMAT_KEYS = Object.keys(FORMAT_DIMENSIONS) as FormatKey[];
 
 const layoutOptions: Record<LayoutKey, { title: string; panelOpacity: number; decorative: "mandala" | "ornament" | "minimal" }> = {
-  classic: { title: "Classic Greeting", panelOpacity: 0.14, decorative: "ornament" },
-  premium: { title: "Premium Festive", panelOpacity: 0.24, decorative: "ornament" },
-  mandala: { title: "Mandala Greeting", panelOpacity: 0.2, decorative: "mandala" },
-  night: { title: "Celebration Night", panelOpacity: 0.32, decorative: "ornament" },
-  minimal: { title: "Minimal Premium", panelOpacity: 0.1, decorative: "minimal" },
+  elegant: { title: "Elegant Greeting", panelOpacity: 0.14, decorative: "minimal" },
+  decorative: { title: "Decorative Festive", panelOpacity: 0.22, decorative: "mandala" },
+  modern: { title: "Modern Celebration", panelOpacity: 0.18, decorative: "ornament" },
+  premium: { title: "Premium Ceremonial", panelOpacity: 0.3, decorative: "ornament" },
 };
+
+const PREMIUM_LAYOUTS: LayoutKey[] = ["premium"];
+
+function fillTextWithLetterSpacing(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, letterSpacing: number) {
+  if (!letterSpacing) {
+    ctx.fillText(text, x, y);
+    return;
+  }
+  let cursor = x;
+  for (const char of text) {
+    ctx.fillText(char, cursor, y);
+    cursor += ctx.measureText(char).width + letterSpacing;
+  }
+}
 
 function customFestival(name: string): FestivalPalette {
   const n = name.toLowerCase();
@@ -97,13 +112,13 @@ function drawTextBlock(
   ctx.fillStyle = style.color;
   ctx.font = `${style.weight} ${style.size}px Inter, system-ui, sans-serif`;
   const lines = wrap(ctx, text, width * maxWidthFactor, maxLines);
-  const lh = style.size * 1.2;
+  const lh = style.size * style.lineHeight;
   lines.forEach((line, i) => {
     const measured = ctx.measureText(line).width;
     let dx = x;
     if (style.align === "center") dx = x - measured / 2;
     if (style.align === "right") dx = x - measured;
-    ctx.fillText(line, dx, y + i * lh);
+    fillTextWithLetterSpacing(ctx, line, dx, y + i * lh, style.letterSpacing);
   });
 }
 
@@ -143,14 +158,14 @@ export function FestivalPostGeneratorTool() {
   const [logoSize, setLogoSize] = useState(112);
   const [logoVisible, setLogoVisible] = useState(true);
 
-  const [headlineStyle, setHeadlineStyle] = useState<BlockStyle>({ visible: true, size: 64, color: "#ffffff", align: "left", weight: "800", x: 0.12, y: 0.3 });
-  const [subheadlineStyle, setSubheadlineStyle] = useState<BlockStyle>({ visible: true, size: 36, color: "#e2e8f0", align: "left", weight: "600", x: 0.12, y: 0.42 });
-  const [greetingStyle, setGreetingStyle] = useState<BlockStyle>({ visible: true, size: 32, color: "#f8fafc", align: "left", weight: "500", x: 0.12, y: 0.52 });
-  const [offerStyle, setOfferStyle] = useState<BlockStyle>({ visible: true, size: 34, color: "#fde68a", align: "left", weight: "700", x: 0.12, y: 0.65 });
-  const [ctaStyle, setCtaStyle] = useState<BlockStyle>({ visible: true, size: 30, color: "#111827", align: "left", weight: "700", x: 0.12, y: 0.76 });
-  const [businessStyle, setBusinessStyle] = useState<BlockStyle>({ visible: true, size: 30, color: "#ffffff", align: "left", weight: "700", x: 0.1, y: 0.9 });
-  const [contactStyle, setContactStyle] = useState<BlockStyle>({ visible: true, size: 21, color: "#dbeafe", align: "left", weight: "500", x: 0.1, y: 0.935 });
-  const [footerStyle, setFooterStyle] = useState<BlockStyle>({ visible: true, size: 20, color: "#f8fafc", align: "left", weight: "500", x: 0.08, y: 0.975 });
+  const [headlineStyle, setHeadlineStyle] = useState<BlockStyle>({ visible: true, size: 64, color: "#ffffff", align: "left", weight: "800", letterSpacing: 0, lineHeight: 1.2, x: 0.12, y: 0.3 });
+  const [subheadlineStyle, setSubheadlineStyle] = useState<BlockStyle>({ visible: true, size: 36, color: "#e2e8f0", align: "left", weight: "600", letterSpacing: 0, lineHeight: 1.2, x: 0.12, y: 0.42 });
+  const [greetingStyle, setGreetingStyle] = useState<BlockStyle>({ visible: true, size: 32, color: "#f8fafc", align: "left", weight: "500", letterSpacing: 0, lineHeight: 1.2, x: 0.12, y: 0.52 });
+  const [offerStyle, setOfferStyle] = useState<BlockStyle>({ visible: true, size: 34, color: "#fde68a", align: "left", weight: "700", letterSpacing: 0, lineHeight: 1.2, x: 0.12, y: 0.65 });
+  const [ctaStyle, setCtaStyle] = useState<BlockStyle>({ visible: true, size: 30, color: "#111827", align: "left", weight: "700", letterSpacing: 0, lineHeight: 1.2, x: 0.12, y: 0.76 });
+  const [businessStyle, setBusinessStyle] = useState<BlockStyle>({ visible: true, size: 30, color: "#ffffff", align: "left", weight: "700", letterSpacing: 0, lineHeight: 1.2, x: 0.1, y: 0.9 });
+  const [contactStyle, setContactStyle] = useState<BlockStyle>({ visible: true, size: 21, color: "#dbeafe", align: "left", weight: "500", letterSpacing: 0, lineHeight: 1.2, x: 0.1, y: 0.935 });
+  const [footerStyle, setFooterStyle] = useState<BlockStyle>({ visible: true, size: 20, color: "#f8fafc", align: "left", weight: "500", letterSpacing: 0, lineHeight: 1.2, x: 0.08, y: 0.975 });
 
   const [logoPos, setLogoPos] = useState({ x: 0.84, y: 0.14 });
   const [dragging, setDragging] = useState<DragTarget | null>(null);
@@ -292,6 +307,20 @@ export function FestivalPostGeneratorTool() {
         }
       }
       ctx.globalAlpha = 1;
+    }
+
+    if (layout === "elegant") {
+      ctx.globalAlpha = 0.22;
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(width * 0.07, height * 0.09, width * 0.86, height * 0.82);
+      ctx.globalAlpha = 1;
+    }
+
+    if (layout === "modern") {
+      ctx.fillStyle = "rgba(255,255,255,0.16)";
+      ctx.fillRect(width * 0.08, height * 0.16, width * 0.84, 2);
+      ctx.fillRect(width * 0.08, height * 0.86, width * 0.84, 2);
     }
 
     ctx.fillStyle = `rgba(15,23,42,${layoutStyle.panelOpacity})`;
@@ -471,6 +500,12 @@ export function FestivalPostGeneratorTool() {
             <option value="400">Regular</option><option value="500">Medium</option><option value="600">Semi Bold</option><option value="700">Bold</option><option value="800">Extra Bold</option>
           </select>
         </label>
+        <label className="text-xs">Letter spacing
+          <input type="range" min={0} max={8} step={0.5} value={style.letterSpacing} onChange={(e) => setStyle({ ...style, letterSpacing: Number(e.target.value) })} className="w-full" />
+        </label>
+        <label className="text-xs">Line spacing
+          <input type="range" min={1} max={2} step={0.05} value={style.lineHeight} onChange={(e) => setStyle({ ...style, lineHeight: Number(e.target.value) })} className="w-full" />
+        </label>
       </div>
     </div>
   );
@@ -507,8 +542,20 @@ export function FestivalPostGeneratorTool() {
               <label className="text-sm">Occasion name<input className="field" value={customOccasionName} onChange={(e) => setCustomOccasionName(e.target.value)} /></label>
             )}
             <label className="text-sm">Layout
-              <select className="select" value={layout} onChange={(e) => setLayout(e.target.value as LayoutKey)}>
-                {(Object.keys(layoutOptions) as LayoutKey[]).map((k) => <option key={k} value={k}>{layoutOptions[k].title}</option>)}
+              <select
+                className="select"
+                value={layout}
+                onChange={(e) => {
+                  const next = e.target.value as LayoutKey;
+                  if (PREMIUM_LAYOUTS.includes(next) && !premiumUnlocked) return;
+                  setLayout(next);
+                }}
+              >
+                {(Object.keys(layoutOptions) as LayoutKey[]).map((k) => (
+                  <option key={k} value={k} disabled={PREMIUM_LAYOUTS.includes(k) && !premiumUnlocked}>
+                    {layoutOptions[k].title}{PREMIUM_LAYOUTS.includes(k) ? " (Premium)" : ""}
+                  </option>
+                ))}
               </select>
             </label>
             <label className="text-sm">Format

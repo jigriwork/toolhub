@@ -15,6 +15,8 @@ type BlockStyle = {
   color: string;
   align: Align;
   weight: "500" | "600" | "700" | "800";
+  letterSpacing: number;
+  lineHeight: number;
   x: number;
   y: number;
 };
@@ -37,6 +39,7 @@ const FORMAT_DIMENSIONS: Record<PosterFormat, { width: number; height: number; l
 };
 
 const FORMAT_KEYS = Object.keys(FORMAT_DIMENSIONS) as PosterFormat[];
+const PREMIUM_THEMES: OfferTheme[] = ["luxury-sale", "wedding-collection"];
 
 function wrap(ctx: CanvasRenderingContext2D, text: string, maxWidth: number, maxLines = 3) {
   const words = text.split(/\s+/).filter(Boolean);
@@ -55,6 +58,18 @@ function wrap(ctx: CanvasRenderingContext2D, text: string, maxWidth: number, max
   return lines.slice(0, maxLines);
 }
 
+function fillTextWithLetterSpacing(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, letterSpacing: number) {
+  if (!letterSpacing) {
+    ctx.fillText(text, x, y);
+    return;
+  }
+  let cursor = x;
+  for (const char of text) {
+    ctx.fillText(char, cursor, y);
+    cursor += ctx.measureText(char).width + letterSpacing;
+  }
+}
+
 function drawTextBlock(ctx: CanvasRenderingContext2D, text: string, width: number, height: number, style: BlockStyle, maxWidth = 0.78, maxLines = 2) {
   if (!style.visible || !text.trim()) return;
   const x = style.x * width;
@@ -62,13 +77,13 @@ function drawTextBlock(ctx: CanvasRenderingContext2D, text: string, width: numbe
   ctx.fillStyle = style.color;
   ctx.font = `${style.weight} ${style.size}px Inter, system-ui, sans-serif`;
   const lines = wrap(ctx, text, width * maxWidth, maxLines);
-  const lh = style.size * 1.2;
+  const lh = style.size * style.lineHeight;
   lines.forEach((line, i) => {
     const m = ctx.measureText(line).width;
     let dx = x;
     if (style.align === "center") dx = x - m / 2;
     if (style.align === "right") dx = x - m;
-    ctx.fillText(line, dx, y + i * lh);
+    fillTextWithLetterSpacing(ctx, line, dx, y + i * lh, style.letterSpacing);
   });
 }
 
@@ -103,14 +118,14 @@ export function OfferPosterGeneratorTool() {
   const [footerText, setFooterText] = useState("Limited period offer");
   const [contactDetails, setContactDetails] = useState("+91 90000 00000 • yourstore.com • Your City");
 
-  const [headlineStyle, setHeadlineStyle] = useState<BlockStyle>({ visible: true, size: 76, color: "#ffffff", align: "left", weight: "800", x: 0.1, y: 0.34 });
-  const [subStyle, setSubStyle] = useState<BlockStyle>({ visible: true, size: 34, color: "#dbeafe", align: "left", weight: "600", x: 0.1, y: 0.5 });
-  const [offerStyle, setOfferStyle] = useState<BlockStyle>({ visible: true, size: 42, color: "#f8fafc", align: "left", weight: "700", x: 0.12, y: 0.66 });
-  const [badgeStyle, setBadgeStyle] = useState<BlockStyle>({ visible: true, size: 27, color: "#111827", align: "left", weight: "700", x: 0.12, y: 0.74 });
-  const [ctaStyle, setCtaStyle] = useState<BlockStyle>({ visible: true, size: 28, color: "#111827", align: "left", weight: "700", x: 0.1, y: 0.83 });
-  const [businessStyle, setBusinessStyle] = useState<BlockStyle>({ visible: true, size: 29, color: "#f8fafc", align: "left", weight: "700", x: 0.24, y: 0.105 });
-  const [footerStyle, setFooterStyle] = useState<BlockStyle>({ visible: true, size: 32, color: "#fef3c7", align: "left", weight: "700", x: 0.1, y: 0.91 });
-  const [contactStyle, setContactStyle] = useState<BlockStyle>({ visible: true, size: 22, color: "#e2e8f0", align: "left", weight: "500", x: 0.1, y: 0.955 });
+  const [headlineStyle, setHeadlineStyle] = useState<BlockStyle>({ visible: true, size: 76, color: "#ffffff", align: "left", weight: "800", letterSpacing: 0, lineHeight: 1.2, x: 0.1, y: 0.34 });
+  const [subStyle, setSubStyle] = useState<BlockStyle>({ visible: true, size: 34, color: "#dbeafe", align: "left", weight: "600", letterSpacing: 0, lineHeight: 1.2, x: 0.1, y: 0.5 });
+  const [offerStyle, setOfferStyle] = useState<BlockStyle>({ visible: true, size: 42, color: "#f8fafc", align: "left", weight: "700", letterSpacing: 0, lineHeight: 1.2, x: 0.12, y: 0.66 });
+  const [badgeStyle, setBadgeStyle] = useState<BlockStyle>({ visible: true, size: 27, color: "#111827", align: "left", weight: "700", letterSpacing: 0, lineHeight: 1.2, x: 0.12, y: 0.74 });
+  const [ctaStyle, setCtaStyle] = useState<BlockStyle>({ visible: true, size: 28, color: "#111827", align: "left", weight: "700", letterSpacing: 0, lineHeight: 1.2, x: 0.1, y: 0.83 });
+  const [businessStyle, setBusinessStyle] = useState<BlockStyle>({ visible: true, size: 29, color: "#f8fafc", align: "left", weight: "700", letterSpacing: 0, lineHeight: 1.2, x: 0.24, y: 0.105 });
+  const [footerStyle, setFooterStyle] = useState<BlockStyle>({ visible: true, size: 32, color: "#fef3c7", align: "left", weight: "700", letterSpacing: 0, lineHeight: 1.2, x: 0.1, y: 0.91 });
+  const [contactStyle, setContactStyle] = useState<BlockStyle>({ visible: true, size: 22, color: "#e2e8f0", align: "left", weight: "500", letterSpacing: 0, lineHeight: 1.2, x: 0.1, y: 0.955 });
 
   const [logoPos, setLogoPos] = useState({ x: 0.12, y: 0.1 });
   const [dragging, setDragging] = useState<DragTarget | null>(null);
@@ -428,6 +443,12 @@ export function OfferPosterGeneratorTool() {
             <option value="500">Medium</option><option value="600">Semi Bold</option><option value="700">Bold</option><option value="800">Extra Bold</option>
           </select>
         </label>
+        <label className="text-xs">Letter spacing
+          <input type="range" min={0} max={8} step={0.5} value={style.letterSpacing} onChange={(e) => setStyle({ ...style, letterSpacing: Number(e.target.value) })} className="w-full" />
+        </label>
+        <label className="text-xs">Line spacing
+          <input type="range" min={1} max={2} step={0.05} value={style.lineHeight} onChange={(e) => setStyle({ ...style, lineHeight: Number(e.target.value) })} className="w-full" />
+        </label>
       </div>
     </div>
   );
@@ -443,13 +464,21 @@ export function OfferPosterGeneratorTool() {
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="text-sm">Theme
-              <select className="select" value={theme} onChange={(e) => setTheme(e.target.value as OfferTheme)}>
-                <option value="luxury-sale">Luxury Sale</option>
+              <select
+                className="select"
+                value={theme}
+                onChange={(e) => {
+                  const next = e.target.value as OfferTheme;
+                  if (PREMIUM_THEMES.includes(next) && !premiumUnlocked) return;
+                  setTheme(next);
+                }}
+              >
+                <option value="luxury-sale" disabled={!premiumUnlocked}>Luxury Sale (Premium)</option>
                 <option value="festive-offer">Festive Offer</option>
-                <option value="premium-fashion">Fashion Retail</option>
+                <option value="premium-fashion">Fashion Promotion</option>
                 <option value="grand-opening">Grand Opening</option>
                 <option value="clearance-sale">Clearance Sale</option>
-                <option value="wedding-collection">Wedding Collection</option>
+                <option value="wedding-collection" disabled={!premiumUnlocked}>Wedding Collection (Premium)</option>
                 <option value="limited-time">Limited-time Promotion</option>
               </select>
             </label>
