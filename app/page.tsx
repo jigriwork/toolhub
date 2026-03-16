@@ -16,14 +16,15 @@ export default function HomePage() {
           <div className="mt-5 grid gap-8 lg:grid-cols-[1.3fr_0.9fr] lg:items-end">
             <div>
               <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">
-                Premium Utility Platform for Everyday Workflows
+                Canva-Lite Business Creative + Utility Suite for Everyday Workflows
               </h1>
               <p
                 className="mt-4 max-w-2xl text-sm sm:text-lg"
                 style={{ color: "var(--muted)" }}
               >
-                Create faster with polished tools for text, image, SEO, developer,
-                and business needs — from quick checks to campaign-ready creatives.
+                Design festive greetings and offer posters with a live mini-editor,
+                drag controls, format presets, and real high-resolution exports — plus
+                fast utility tools for daily work.
               </p>
               <div className="mt-5 flex flex-wrap gap-3">
                 <Link href="/tools/festival-post-generator" className="btn btn-primary">
@@ -35,11 +36,11 @@ export default function HomePage() {
               </div>
             </div>
             <div className="card space-y-3 p-4 sm:p-5">
-              <p className="text-sm font-semibold">This week on ToolHub</p>
+              <p className="text-sm font-semibold">Now live in Creative Suite</p>
               <div className="space-y-2 text-sm" style={{ color: "var(--muted)" }}>
-                <p>• Premium festive post composer with festival-aware design moods</p>
-                <p>• Retail-ready offer posters with stronger campaign hierarchy</p>
-                <p>• Faster discovery with cleaner categories and featured sections</p>
+                <p>• Canva-like Festival Post editor: drag blocks, customize styles, export in post/story/flyer sizes</p>
+                <p>• Offer Poster editor: premium retail templates with movable logo/headline/offer/CTA</p>
+                <p>• No-login unlocks: PWA install rewards, share unlocks, and watermark control</p>
               </div>
             </div>
           </div>

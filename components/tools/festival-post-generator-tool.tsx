@@ -1,528 +1,561 @@
 "use client";
 
-import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import { ChangeEvent, PointerEvent, useEffect, useMemo, useRef, useState } from "react";
+import { useCreativeUnlocks } from "@/lib/use-creative-unlocks";
 
-type FestivalKey =
-  | "diwali"
-  | "holi"
-  | "eid"
-  | "christmas"
-  | "new-year"
-  | "independence-day"
-  | "republic-day";
-
+type FestivalKey = "diwali" | "holi" | "eid" | "christmas" | "new-year" | "independence-day" | "republic-day";
 type OccasionMode = "preset" | "custom";
 type PostIntent = "greeting-only" | "greeting-branding" | "greeting-offer";
-type LayoutKey =
-  | "classic-greeting"
-  | "premium-festive-brand"
-  | "elegant-ceremonial"
-  | "modern-celebration"
-  | "decorative-traditional";
-type FormatKey = "instagram-post" | "instagram-story" | "flyer-portrait";
+type LayoutKey = "classic" | "premium" | "mandala" | "night" | "minimal";
+type FormatKey = "instagram-post" | "instagram-story" | "flyer-portrait" | "landscape";
+type BackgroundMode = "template" | "upload" | "plain" | "gradient";
+type Align = "left" | "center" | "right";
+
+type BlockStyle = {
+  visible: boolean;
+  size: number;
+  color: string;
+  align: Align;
+  weight: "400" | "500" | "600" | "700" | "800";
+  x: number;
+  y: number;
+};
 
 type FestivalPalette = {
   title: string;
   greeting: string;
-  motif: "diwali" | "eid" | "holi" | "christmas" | "patriotic" | "generic";
   colors: [string, string, string];
   accent: string;
-  ornament: string;
 };
 
 const FESTIVALS: Record<FestivalKey, FestivalPalette> = {
-  diwali: {
-    title: "Diwali",
-    greeting: "Wishing you prosperity, joy, and a radiant Diwali.",
-    motif: "diwali",
-    colors: ["#2b1040", "#6b1d7f", "#f59e0b"],
-    accent: "#fcd34d",
-    ornament: "#fde68a",
-  },
-  holi: {
-    title: "Holi",
-    greeting: "May your days be filled with color, joy, and celebration.",
-    motif: "holi",
-    colors: ["#7e22ce", "#ec4899", "#22c55e"],
-    accent: "#67e8f9",
-    ornament: "#fde047",
-  },
-  eid: {
-    title: "Eid",
-    greeting: "Eid Mubarak. May peace, blessings, and happiness stay with you.",
-    motif: "eid",
-    colors: ["#033c37", "#0f766e", "#164e63"],
-    accent: "#fef08a",
-    ornament: "#99f6e4",
-  },
-  christmas: {
-    title: "Christmas",
-    greeting: "Merry Christmas and warm wishes for a joyful season.",
-    motif: "christmas",
-    colors: ["#14532d", "#b91c1c", "#991b1b"],
-    accent: "#facc15",
-    ornament: "#dcfce7",
-  },
-  "new-year": {
-    title: "New Year",
-    greeting: "Cheers to new beginnings, growth, and success this year.",
-    motif: "generic",
-    colors: ["#0f172a", "#1d4ed8", "#0ea5e9"],
-    accent: "#93c5fd",
-    ornament: "#e0f2fe",
-  },
-  "independence-day": {
-    title: "Independence Day",
-    greeting: "Celebrating freedom, unity, and the spirit of our nation.",
-    motif: "patriotic",
-    colors: ["#ea580c", "#f8fafc", "#15803d"],
-    accent: "#2563eb",
-    ornament: "#fed7aa",
-  },
-  "republic-day": {
-    title: "Republic Day",
-    greeting: "Honoring our constitution and the pride of our republic.",
-    motif: "patriotic",
-    colors: ["#f97316", "#f1f5f9", "#22c55e"],
-    accent: "#1d4ed8",
-    ornament: "#bfdbfe",
-  },
+  diwali: { title: "Diwali", greeting: "Wishing you prosperity and light this Diwali.", colors: ["#2b1040", "#6b1d7f", "#f59e0b"], accent: "#fde68a" },
+  holi: { title: "Holi", greeting: "May your business and life bloom in colors.", colors: ["#7e22ce", "#ec4899", "#22c55e"], accent: "#67e8f9" },
+  eid: { title: "Eid", greeting: "Eid Mubarak. Peace and prosperity to your family.", colors: ["#033c37", "#0f766e", "#164e63"], accent: "#fef08a" },
+  christmas: { title: "Christmas", greeting: "Merry Christmas and joyful holiday wishes.", colors: ["#14532d", "#b91c1c", "#991b1b"], accent: "#dcfce7" },
+  "new-year": { title: "New Year", greeting: "Cheers to growth and success this year.", colors: ["#0f172a", "#1d4ed8", "#0ea5e9"], accent: "#dbeafe" },
+  "independence-day": { title: "Independence Day", greeting: "Celebrating freedom and enterprise spirit.", colors: ["#ea580c", "#f8fafc", "#15803d"], accent: "#bfdbfe" },
+  "republic-day": { title: "Republic Day", greeting: "Proudly celebrating our republic values.", colors: ["#f97316", "#f1f5f9", "#22c55e"], accent: "#93c5fd" },
 };
 
 const FORMAT_DIMENSIONS: Record<FormatKey, { width: number; height: number; label: string; ratio: string }> = {
   "instagram-post": { width: 1080, height: 1080, label: "Instagram Post (1:1)", ratio: "1 / 1" },
   "instagram-story": { width: 1080, height: 1920, label: "Instagram Story (9:16)", ratio: "9 / 16" },
-  "flyer-portrait": { width: 1240, height: 1754, label: "Flyer Portrait", ratio: "1240 / 1754" },
-};
-
-const LAYOUTS: Record<LayoutKey, { title: string; panelOpacity: number; headingFont: string; ctaDark: boolean }> = {
-  "classic-greeting": { title: "Classic Greeting Layout", panelOpacity: 0.16, headingFont: "700", ctaDark: true },
-  "premium-festive-brand": { title: "Premium Festive Brand Layout", panelOpacity: 0.26, headingFont: "800", ctaDark: false },
-  "elegant-ceremonial": { title: "Elegant Ceremonial Layout", panelOpacity: 0.32, headingFont: "700", ctaDark: true },
-  "modern-celebration": { title: "Modern Celebration Layout", panelOpacity: 0.22, headingFont: "800", ctaDark: false },
-  "decorative-traditional": { title: "Decorative Traditional Layout", panelOpacity: 0.28, headingFont: "700", ctaDark: true },
+  "flyer-portrait": { width: 1240, height: 1754, label: "Poster/Flyer Portrait", ratio: "1240 / 1754" },
+  landscape: { width: 1920, height: 1080, label: "Landscape (16:9)", ratio: "16 / 9" },
 };
 
 const FESTIVAL_KEYS = Object.keys(FESTIVALS) as FestivalKey[];
 const FORMAT_KEYS = Object.keys(FORMAT_DIMENSIONS) as FormatKey[];
 
-function inferCustomFestival(name: string): FestivalPalette {
-  const lower = name.toLowerCase();
-  if (/diwali|deepawali/.test(lower)) return { ...FESTIVALS.diwali, title: name };
-  if (/eid|ramadan|ramzan/.test(lower)) return { ...FESTIVALS.eid, title: name };
-  if (/holi|color/.test(lower)) return { ...FESTIVALS.holi, title: name };
-  if (/christmas|xmas/.test(lower)) return { ...FESTIVALS.christmas, title: name };
-  if (/independence|republic|nation|tricolor/.test(lower)) return { ...FESTIVALS["independence-day"], title: name };
+const layoutOptions: Record<LayoutKey, { title: string; panelOpacity: number; decorative: "mandala" | "ornament" | "minimal" }> = {
+  classic: { title: "Classic Greeting", panelOpacity: 0.14, decorative: "ornament" },
+  premium: { title: "Premium Festive", panelOpacity: 0.24, decorative: "ornament" },
+  mandala: { title: "Mandala Greeting", panelOpacity: 0.2, decorative: "mandala" },
+  night: { title: "Celebration Night", panelOpacity: 0.32, decorative: "ornament" },
+  minimal: { title: "Minimal Premium", panelOpacity: 0.1, decorative: "minimal" },
+};
 
-  return {
-    title: name || "Custom Occasion",
-    greeting: `Warm wishes for ${name || "your special occasion"}.`,
-    motif: "generic",
-    colors: ["#0f172a", "#334155", "#4338ca"],
-    accent: "#c4b5fd",
-    ornament: "#dbeafe",
-  };
+function customFestival(name: string): FestivalPalette {
+  const n = name.toLowerCase();
+  if (/diwali|deepawali/.test(n)) return { ...FESTIVALS.diwali, title: name };
+  if (/eid|ramadan|ramzan/.test(n)) return { ...FESTIVALS.eid, title: name };
+  if (/holi/.test(n)) return { ...FESTIVALS.holi, title: name };
+  return { title: name || "Special Occasion", greeting: `Warm wishes for ${name || "your special day"}.`, colors: ["#0f172a", "#334155", "#4338ca"], accent: "#c4b5fd" };
 }
 
-function wrapText(
-  ctx: CanvasRenderingContext2D,
-  text: string,
-  x: number,
-  y: number,
-  maxWidth: number,
-  lineHeight: number,
-  maxLines = 3,
-) {
+function wrap(ctx: CanvasRenderingContext2D, text: string, maxWidth: number, maxLines = 3) {
   const words = text.split(/\s+/).filter(Boolean);
-  if (words.length === 0) return 0;
+  if (!words.length) return [""];
   const lines: string[] = [];
-  let line = words[0] ?? "";
+  let line = words[0] || "";
   for (let i = 1; i < words.length; i += 1) {
-    const test = `${line} ${words[i]}`;
-    if (ctx.measureText(test).width <= maxWidth) line = test;
+    const t = `${line} ${words[i]}`;
+    if (ctx.measureText(t).width <= maxWidth) line = t;
     else {
       lines.push(line);
-      line = words[i] ?? "";
+      line = words[i] || "";
     }
   }
   lines.push(line);
-  const finalLines = lines.slice(0, maxLines);
-  if (lines.length > maxLines && finalLines.length > 0) {
-    finalLines[finalLines.length - 1] = `${finalLines[finalLines.length - 1]}...`;
-  }
-  finalLines.forEach((item, index) => ctx.fillText(item, x, y + index * lineHeight));
-  return finalLines.length * lineHeight;
+  return lines.slice(0, maxLines);
 }
 
-function drawMotifs(ctx: CanvasRenderingContext2D, width: number, height: number, palette: FestivalPalette) {
-  ctx.save();
-  if (palette.motif === "diwali") {
-    for (const x of [width * 0.16, width * 0.5, width * 0.84]) {
-      ctx.fillStyle = "rgba(254,240,138,0.85)";
-      ctx.beginPath();
-      ctx.ellipse(x, height * 0.14, width * 0.035, height * 0.018, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "rgba(251,191,36,0.98)";
-      ctx.beginPath();
-      ctx.moveTo(x, height * 0.095);
-      ctx.quadraticCurveTo(x - 10, height * 0.125, x, height * 0.135);
-      ctx.quadraticCurveTo(x + 10, height * 0.125, x, height * 0.095);
-      ctx.fill();
-    }
-    ctx.strokeStyle = "rgba(251,191,36,0.45)";
-    ctx.lineWidth = 2;
-    for (let i = 0; i < 8; i += 1) {
-      ctx.beginPath();
-      ctx.arc(width * 0.5, height * 0.9, 38 + i * 22, Math.PI, Math.PI * 2);
-      ctx.stroke();
-    }
-  } else if (palette.motif === "eid") {
-    ctx.strokeStyle = "rgba(153,246,228,0.9)";
-    ctx.lineWidth = 6;
-    ctx.beginPath();
-    ctx.arc(width * 0.82, height * 0.16, width * 0.07, 0.6, Math.PI * 1.8);
-    ctx.stroke();
-    ctx.fillStyle = "rgba(254,240,138,0.9)";
-    for (const point of [
-      [width * 0.75, height * 0.1],
-      [width * 0.79, height * 0.085],
-      [width * 0.73, height * 0.145],
-    ]) {
-      ctx.beginPath();
-      ctx.arc(point[0], point[1], 5, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  } else if (palette.motif === "holi") {
-    for (let i = 0; i < 16; i += 1) {
-      ctx.fillStyle = i % 2 ? "rgba(103,232,249,0.45)" : "rgba(244,114,182,0.45)";
-      ctx.beginPath();
-      ctx.arc(width * (0.05 + (i % 8) * 0.12), height * (0.1 + Math.floor(i / 8) * 0.8), 16 + (i % 3) * 8, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  } else if (palette.motif === "christmas") {
-    ctx.strokeStyle = "rgba(220,252,231,0.9)";
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    ctx.moveTo(width * 0.1, height * 0.12);
-    ctx.lineTo(width * 0.9, height * 0.12);
-    ctx.stroke();
-    for (let i = 0; i < 10; i += 1) {
-      ctx.fillStyle = i % 2 ? "#facc15" : "#dcfce7";
-      ctx.beginPath();
-      ctx.arc(width * (0.12 + i * 0.085), height * 0.12, 8, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  } else if (palette.motif === "patriotic") {
-    ctx.fillStyle = "rgba(255,255,255,0.26)";
-    ctx.fillRect(width * 0.08, height * 0.1, width * 0.84, 28);
-    ctx.fillStyle = "#f97316";
-    ctx.fillRect(width * 0.08, height * 0.1, width * 0.84, 9);
-    ctx.fillStyle = "#22c55e";
-    ctx.fillRect(width * 0.08, height * 0.119, width * 0.84, 9);
-    ctx.strokeStyle = "#2563eb";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(width * 0.5, height * 0.114, 8, 0, Math.PI * 2);
-    ctx.stroke();
-  }
-  ctx.restore();
+function drawTextBlock(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  width: number,
+  height: number,
+  style: BlockStyle,
+  maxWidthFactor = 0.8,
+  maxLines = 2,
+) {
+  if (!style.visible || !text.trim()) return;
+  const x = width * style.x;
+  const y = height * style.y;
+  ctx.fillStyle = style.color;
+  ctx.font = `${style.weight} ${style.size}px Inter, system-ui, sans-serif`;
+  const lines = wrap(ctx, text, width * maxWidthFactor, maxLines);
+  const lh = style.size * 1.2;
+  lines.forEach((line, i) => {
+    const measured = ctx.measureText(line).width;
+    let dx = x;
+    if (style.align === "center") dx = x - measured / 2;
+    if (style.align === "right") dx = x - measured;
+    ctx.fillText(line, dx, y + i * lh);
+  });
 }
+
+type DragTarget = "logo" | "headline" | "subheadline" | "greeting" | "offer" | "cta";
 
 export function FestivalPostGeneratorTool() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const previewWrapRef = useRef<HTMLDivElement | null>(null);
   const logoRef = useRef<HTMLImageElement | null>(null);
 
   const [occasionMode, setOccasionMode] = useState<OccasionMode>("preset");
   const [festival, setFestival] = useState<FestivalKey>("diwali");
   const [customOccasionName, setCustomOccasionName] = useState("Store Anniversary");
-  const [layout, setLayout] = useState<LayoutKey>("premium-festive-brand");
+  const [layout, setLayout] = useState<LayoutKey>("premium");
   const [postIntent, setPostIntent] = useState<PostIntent>("greeting-branding");
   const [format, setFormat] = useState<FormatKey>("instagram-post");
+  const [backgroundMode, setBackgroundMode] = useState<BackgroundMode>("template");
 
   const [businessName, setBusinessName] = useState("Your Business Name");
-  const [phone, setPhone] = useState("+91 90000 00000");
-  const [website, setWebsite] = useState("@yourbrand • yourstore.com");
-  const [tagline, setTagline] = useState("Celebrating moments with quality and trust");
+  const [contactLine, setContactLine] = useState("@yourbrand • yourstore.com • +91 90000 00000");
   const [headline, setHeadline] = useState("Warm Festive Greetings");
-  const [greetingMessage, setGreetingMessage] = useState("");
-  const [ctaLine, setCtaLine] = useState("Visit us today");
-  const [offerLine, setOfferLine] = useState("");
-  const [footerLine, setFooterLine] = useState("Wishing your family joy, prosperity, and peace.");
+  const [subheadline, setSubheadline] = useState("From our family to yours");
+  const [greetingText, setGreetingText] = useState("");
+  const [offerText, setOfferText] = useState("Festive offer up to 40% OFF");
+  const [ctaText, setCtaText] = useState("Visit us today");
+  const [footerText, setFooterText] = useState("Wishing joy, health, and prosperity.");
+
   const [logoDataUrl, setLogoDataUrl] = useState("");
+  const [uploadedBg, setUploadedBg] = useState("");
+  const bgImageRef = useRef<HTMLImageElement | null>(null);
+  const [plainColor, setPlainColor] = useState("#111827");
+  const [gradientA, setGradientA] = useState("#1d4ed8");
+  const [gradientB, setGradientB] = useState("#a855f7");
+  const [overlayOpacity, setOverlayOpacity] = useState(22);
+
+  const [logoSize, setLogoSize] = useState(112);
+  const [logoVisible, setLogoVisible] = useState(true);
+
+  const [headlineStyle, setHeadlineStyle] = useState<BlockStyle>({ visible: true, size: 64, color: "#ffffff", align: "left", weight: "800", x: 0.12, y: 0.3 });
+  const [subheadlineStyle, setSubheadlineStyle] = useState<BlockStyle>({ visible: true, size: 36, color: "#e2e8f0", align: "left", weight: "600", x: 0.12, y: 0.42 });
+  const [greetingStyle, setGreetingStyle] = useState<BlockStyle>({ visible: true, size: 32, color: "#f8fafc", align: "left", weight: "500", x: 0.12, y: 0.52 });
+  const [offerStyle, setOfferStyle] = useState<BlockStyle>({ visible: true, size: 34, color: "#fde68a", align: "left", weight: "700", x: 0.12, y: 0.65 });
+  const [ctaStyle, setCtaStyle] = useState<BlockStyle>({ visible: true, size: 30, color: "#111827", align: "left", weight: "700", x: 0.12, y: 0.76 });
+
+  const [logoPos, setLogoPos] = useState({ x: 0.84, y: 0.14 });
+  const [dragging, setDragging] = useState<DragTarget | null>(null);
+  const [status, setStatus] = useState("");
+
+  const {
+    premiumUnlocked,
+    hdUnlocked,
+    watermarkEnabled,
+    watermarkRemovable,
+    pwaInstalled,
+    shareCount,
+    referralVisits,
+    handleShare,
+    toggleWatermarkDisabled,
+  } = useCreativeUnlocks();
 
   const palette = useMemo(
-    () => (occasionMode === "custom" ? inferCustomFestival(customOccasionName.trim()) : FESTIVALS[festival]),
+    () => (occasionMode === "custom" ? customFestival(customOccasionName.trim()) : FESTIVALS[festival]),
     [occasionMode, customOccasionName, festival],
   );
+  const layoutStyle = layoutOptions[layout];
+  const occasionName = occasionMode === "custom" ? customOccasionName || "Special Occasion" : palette.title;
+  const greeting = greetingText.trim() || palette.greeting;
 
-  const occasionName = useMemo(
-    () => (occasionMode === "custom" ? customOccasionName.trim() || "Custom Occasion" : palette.title),
-    [occasionMode, customOccasionName, palette.title],
-  );
-
-  const greeting = useMemo(() => greetingMessage.trim() || palette.greeting, [greetingMessage, palette.greeting]);
-  const style = LAYOUTS[layout];
-  const showBrandBlock = postIntent !== "greeting-only";
-  const showOffer = postIntent === "greeting-offer" && offerLine.trim().length > 0;
+  const setPosFromPointer = (event: PointerEvent<HTMLDivElement>, target: DragTarget) => {
+    const rect = previewWrapRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const x = Math.max(0.05, Math.min(0.95, (event.clientX - rect.left) / rect.width));
+    const y = Math.max(0.06, Math.min(0.94, (event.clientY - rect.top) / rect.height));
+    if (target === "logo") setLogoPos({ x, y });
+    if (target === "headline") setHeadlineStyle((s) => ({ ...s, x, y }));
+    if (target === "subheadline") setSubheadlineStyle((s) => ({ ...s, x, y }));
+    if (target === "greeting") setGreetingStyle((s) => ({ ...s, x, y }));
+    if (target === "offer") setOfferStyle((s) => ({ ...s, x, y }));
+    if (target === "cta") setCtaStyle((s) => ({ ...s, x, y }));
+  };
 
   useEffect(() => {
     if (!logoDataUrl) {
       logoRef.current = null;
       return;
     }
-    const image = new Image();
-    image.onload = () => {
-      logoRef.current = image;
-      drawPreview();
+    const img = new Image();
+    img.onload = () => {
+      logoRef.current = img;
+      draw();
     };
-    image.src = logoDataUrl;
+    img.src = logoDataUrl;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logoDataUrl]);
 
-  const drawPreview = () => {
+  useEffect(() => {
+    if (!uploadedBg) {
+      bgImageRef.current = null;
+      return;
+    }
+    const img = new Image();
+    img.onload = () => {
+      bgImageRef.current = img;
+      draw();
+    };
+    img.src = uploadedBg;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uploadedBg]);
+
+  const draw = (forExport = false) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const { width, height } = FORMAT_DIMENSIONS[format];
-    const scale = 3;
+    const scale = forExport ? (hdUnlocked ? 3 : 2) : 1;
     canvas.width = width * scale;
     canvas.height = height * scale;
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.scale(scale, scale);
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
 
-    const bg = ctx.createLinearGradient(0, 0, width, height);
-    bg.addColorStop(0, palette.colors[0]);
-    bg.addColorStop(0.52, palette.colors[1]);
-    bg.addColorStop(1, palette.colors[2]);
-    ctx.fillStyle = bg;
+    if (backgroundMode === "upload" && bgImageRef.current) {
+      ctx.drawImage(bgImageRef.current, 0, 0, width, height);
+    } else if (backgroundMode === "plain") {
+      ctx.fillStyle = plainColor;
+      ctx.fillRect(0, 0, width, height);
+    } else if (backgroundMode === "gradient") {
+      const g = ctx.createLinearGradient(0, 0, width, height);
+      g.addColorStop(0, gradientA);
+      g.addColorStop(1, gradientB);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, width, height);
+    } else {
+      const g = ctx.createLinearGradient(0, 0, width, height);
+      g.addColorStop(0, palette.colors[0]);
+      g.addColorStop(0.5, palette.colors[1]);
+      g.addColorStop(1, palette.colors[2]);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, width, height);
+    }
+
+    ctx.fillStyle = `rgba(8,12,24,${overlayOpacity / 100})`;
     ctx.fillRect(0, 0, width, height);
 
-    ctx.fillStyle = "rgba(10, 10, 18, 0.22)";
-    ctx.fillRect(0, 0, width, height);
-
-    ctx.globalAlpha = 0.24;
-    ctx.fillStyle = palette.ornament;
-    ctx.beginPath();
-    ctx.arc(width * 0.14, height * 0.2, width * 0.14, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(width * 0.89, height * 0.36, width * 0.16, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(width * 0.18, height * 0.88, width * 0.18, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalAlpha = 1;
-
-    drawMotifs(ctx, width, height, palette);
-
-    const panelX = width * 0.07;
-    const panelY = format === "instagram-story" ? height * 0.15 : height * 0.17;
-    const panelWidth = width * 0.86;
-    const panelHeight = format === "instagram-story" ? height * 0.72 : height * 0.72;
-
-    ctx.fillStyle = `rgba(15, 23, 42, ${style.panelOpacity})`;
-    ctx.beginPath();
-    ctx.roundRect(panelX, panelY, panelWidth, panelHeight, 36);
-    ctx.fill();
-
-    ctx.strokeStyle = "rgba(255,255,255,0.32)";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(panelX + 18, panelY + 18, panelWidth - 36, panelHeight - 36);
-
-    const textX = panelX + 52;
-    const textWidth = panelWidth - 104;
-    let y = panelY + 82;
-
-    ctx.fillStyle = palette.ornament;
-    ctx.font = "600 30px Inter, system-ui, sans-serif";
-    ctx.fillText(occasionName, textX, y);
-
-    y += 62;
-    ctx.fillStyle = "#ffffff";
-    ctx.font = `${style.headingFont} 64px Inter, system-ui, sans-serif`;
-    y += wrapText(ctx, headline, textX, y, textWidth, 70, 2);
-
-    y += 18;
-    ctx.fillStyle = "#e2e8f0";
-    ctx.font = "500 34px Inter, system-ui, sans-serif";
-    y += wrapText(ctx, greeting, textX, y, textWidth, 44, 4);
-
-    if (showOffer) {
-      y += 22;
-      ctx.fillStyle = "rgba(15,23,42,0.66)";
-      ctx.beginPath();
-      ctx.roundRect(textX, y, textWidth, 74, 16);
-      ctx.fill();
+    if (layoutStyle.decorative !== "minimal") {
+      ctx.globalAlpha = 0.15;
       ctx.fillStyle = palette.accent;
-      ctx.font = "700 36px Inter, system-ui, sans-serif";
-      wrapText(ctx, offerLine, textX + 20, y + 48, textWidth - 30, 42, 2);
-      y += 86;
-    }
-
-    if (ctaLine.trim()) {
-      y += 14;
-      ctx.fillStyle = style.ctaDark ? "rgba(15,23,42,0.82)" : "rgba(251,191,36,0.95)";
-      const ctaWidth = Math.min(textWidth, ctx.measureText(ctaLine).width + 54);
       ctx.beginPath();
-      ctx.roundRect(textX, y, ctaWidth, 56, 999);
+      ctx.arc(width * 0.12, height * 0.17, width * 0.14, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillStyle = style.ctaDark ? "#f8fafc" : "#111827";
-      ctx.font = "600 27px Inter, system-ui, sans-serif";
-      ctx.fillText(ctaLine, textX + 20, y + 36);
+      ctx.beginPath();
+      ctx.arc(width * 0.9, height * 0.3, width * 0.16, 0, Math.PI * 2);
+      ctx.fill();
+      if (layoutStyle.decorative === "mandala") {
+        ctx.strokeStyle = `${palette.accent}99`;
+        ctx.lineWidth = 2;
+        for (let i = 1; i < 8; i += 1) {
+          ctx.beginPath();
+          ctx.arc(width * 0.86, height * 0.8, i * 22, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      }
+      ctx.globalAlpha = 1;
     }
 
-    if (showBrandBlock) {
-      const brandY = panelY + panelHeight - 148;
-      ctx.fillStyle = "rgba(255,255,255,0.24)";
-      ctx.fillRect(panelX + 40, brandY, panelWidth - 80, 2);
+    ctx.fillStyle = `rgba(15,23,42,${layoutStyle.panelOpacity})`;
+    ctx.beginPath();
+    ctx.roundRect(width * 0.06, height * 0.08, width * 0.88, height * 0.84, 28);
+    ctx.fill();
 
+    const showOffer = postIntent === "greeting-offer";
+    drawTextBlock(ctx, occasionName, width, height, { ...subheadlineStyle, size: Math.max(24, subheadlineStyle.size - 6), color: palette.accent, y: subheadlineStyle.y - 0.1 }, 0.5, 1);
+    drawTextBlock(ctx, headline, width, height, headlineStyle, 0.76, 2);
+    drawTextBlock(ctx, subheadline, width, height, subheadlineStyle, 0.76, 2);
+    drawTextBlock(ctx, greeting, width, height, greetingStyle, 0.76, 3);
+
+    if (showOffer && offerStyle.visible && offerText.trim()) {
+      const ox = width * (offerStyle.align === "center" ? offerStyle.x - 0.22 : offerStyle.align === "right" ? offerStyle.x - 0.44 : offerStyle.x);
+      const oy = height * offerStyle.y;
+      ctx.fillStyle = "rgba(15,23,42,0.7)";
+      ctx.beginPath();
+      ctx.roundRect(ox, oy - 36, width * 0.44, 74, 18);
+      ctx.fill();
+      drawTextBlock(ctx, offerText, width, height, offerStyle, 0.4, 2);
+    }
+
+    if (ctaStyle.visible && ctaText.trim()) {
+      const ctaX = width * (ctaStyle.align === "center" ? ctaStyle.x - 0.12 : ctaStyle.align === "right" ? ctaStyle.x - 0.24 : ctaStyle.x);
+      const ctaY = height * ctaStyle.y;
+      ctx.fillStyle = "rgba(251,191,36,0.95)";
+      ctx.beginPath();
+      ctx.roundRect(ctaX, ctaY - 34, width * 0.24, 58, 999);
+      ctx.fill();
+      drawTextBlock(ctx, ctaText, width, height, ctaStyle, 0.2, 1);
+    }
+
+    if (postIntent !== "greeting-only") {
+      ctx.fillStyle = "rgba(255,255,255,0.35)";
+      ctx.fillRect(width * 0.1, height * 0.86, width * 0.8, 2);
       ctx.fillStyle = "#ffffff";
-      ctx.font = "700 34px Inter, system-ui, sans-serif";
-      ctx.fillText(businessName || "Your Business", textX, brandY + 50);
-
+      ctx.font = "700 30px Inter, system-ui, sans-serif";
+      ctx.fillText(businessName, width * 0.1, height * 0.9);
       ctx.fillStyle = "#dbeafe";
-      ctx.font = "500 22px Inter, system-ui, sans-serif";
-      const details = [phone, website, tagline].filter((value) => value.trim());
-      wrapText(ctx, details.join(" • "), textX, brandY + 88, textWidth, 30, 2);
+      ctx.font = "500 21px Inter, system-ui, sans-serif";
+      ctx.fillText(contactLine, width * 0.1, height * 0.935);
     }
 
-    if (footerLine.trim()) {
-      ctx.fillStyle = "rgba(255,255,255,0.88)";
-      ctx.font = "500 19px Inter, system-ui, sans-serif";
-      wrapText(ctx, footerLine, panelX + 44, panelY + panelHeight + 34, panelWidth - 88, 26, 2);
+    if (footerText.trim()) {
+      ctx.fillStyle = "rgba(255,255,255,0.9)";
+      ctx.font = "500 20px Inter, system-ui, sans-serif";
+      ctx.fillText(footerText, width * 0.08, height * 0.975);
     }
 
-    const logo = logoRef.current;
-    if (logo && showBrandBlock) {
-      const logoSize = 120;
-      const logoX = panelX + panelWidth - logoSize - 44;
-      const logoY = panelY + 34;
-      ctx.fillStyle = "rgba(255,255,255,0.95)";
+    if (logoVisible && logoRef.current) {
+      const size = logoSize;
+      const lx = width * logoPos.x - size / 2;
+      const ly = height * logoPos.y - size / 2;
+      ctx.fillStyle = "rgba(255,255,255,0.96)";
       ctx.beginPath();
-      ctx.roundRect(logoX, logoY, logoSize, logoSize, 18);
+      ctx.roundRect(lx, ly, size, size, 14);
       ctx.fill();
+      const ratio = logoRef.current.width / logoRef.current.height;
+      let dw = size - 20;
+      let dh = size - 20;
+      if (ratio > 1) dh = dw / ratio;
+      else dw = dh * ratio;
+      ctx.drawImage(logoRef.current, lx + (size - dw) / 2, ly + (size - dh) / 2, dw, dh);
+    }
 
-      const ratio = logo.width / logo.height;
-      let drawW = logoSize - 22;
-      let drawH = logoSize - 22;
-      if (ratio > 1) drawH = drawW / ratio;
-      else drawW = drawH * ratio;
-      ctx.drawImage(logo, logoX + (logoSize - drawW) / 2, logoY + (logoSize - drawH) / 2, drawW, drawH);
+    if (watermarkEnabled) {
+      ctx.fillStyle = "rgba(255,255,255,0.72)";
+      ctx.font = "500 17px Inter, system-ui, sans-serif";
+      ctx.textAlign = "right";
+      ctx.fillText("Made with ToolHubsite.in", width - 24, height - 20);
+      ctx.textAlign = "left";
     }
   };
 
   useEffect(() => {
-    drawPreview();
+    draw(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [palette, layout, postIntent, format, occasionName, headline, greeting, offerLine, ctaLine, footerLine, businessName, phone, website, tagline]);
+  }, [palette, layout, postIntent, format, backgroundMode, plainColor, gradientA, gradientB, overlayOpacity, businessName, contactLine, headline, subheadline, greeting, offerText, ctaText, footerText, logoSize, logoVisible, logoPos, headlineStyle, subheadlineStyle, greetingStyle, offerStyle, ctaStyle, watermarkEnabled]);
 
-  const onUploadLogo = (event: ChangeEvent<HTMLInputElement>) => {
+  const uploadImage = (event: ChangeEvent<HTMLInputElement>, setter: (v: string) => void) => {
     const file = event.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => setLogoDataUrl(String(reader.result ?? ""));
+    reader.onload = () => setter(String(reader.result || ""));
     reader.readAsDataURL(file);
   };
 
   const download = () => {
+    draw(true);
     const canvas = canvasRef.current;
     if (!canvas) return;
     const link = document.createElement("a");
     link.href = canvas.toDataURL("image/png", 1);
     link.download = `toolhub-festival-${occasionName.replace(/\s+/g, "-").toLowerCase()}-${format}.png`;
     link.click();
+    draw(false);
   };
+
+  const Control = ({ label, style, setStyle }: { label: string; style: BlockStyle; setStyle: (next: BlockStyle) => void }) => (
+    <div className="rounded-xl border p-3" style={{ borderColor: "var(--border)" }}>
+      <div className="mb-2 flex items-center justify-between">
+        <p className="text-sm font-semibold">{label}</p>
+        <label className="text-xs muted"><input type="checkbox" checked={style.visible} onChange={(e) => setStyle({ ...style, visible: e.target.checked })} /> Show</label>
+      </div>
+      <div className="grid gap-2 sm:grid-cols-2">
+        <label className="text-xs">Size <input type="range" min={18} max={86} value={style.size} onChange={(e) => setStyle({ ...style, size: Number(e.target.value) })} className="w-full" /></label>
+        <label className="text-xs">Color <input type="color" value={style.color} onChange={(e) => setStyle({ ...style, color: e.target.value })} className="h-9 w-full rounded" /></label>
+        <label className="text-xs">Align
+          <select className="select" value={style.align} onChange={(e) => setStyle({ ...style, align: e.target.value as Align })}>
+            <option value="left">Left</option><option value="center">Center</option><option value="right">Right</option>
+          </select>
+        </label>
+        <label className="text-xs">Weight
+          <select className="select" value={style.weight} onChange={(e) => setStyle({ ...style, weight: e.target.value as BlockStyle["weight"] })}>
+            <option value="400">Regular</option><option value="500">Medium</option><option value="600">Semi Bold</option><option value="700">Bold</option><option value="800">Extra Bold</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  );
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 lg:grid-cols-[1.06fr_1fr]">
-        <section className="premium-card card space-y-4 rounded-2xl p-4 sm:p-5">
-          <h3 className="text-base font-semibold">Festive post setup</h3>
-
-          <div className="rounded-xl border p-3 text-sm" style={{ borderColor: "var(--border)" }}>
-            <p className="font-medium">Post purpose</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              <button type="button" className={`btn ${postIntent === "greeting-only" ? "btn-primary" : "btn-secondary"}`} onClick={() => setPostIntent("greeting-only")}>Greeting only</button>
-              <button type="button" className={`btn ${postIntent === "greeting-branding" ? "btn-primary" : "btn-secondary"}`} onClick={() => setPostIntent("greeting-branding")}>Greeting + brand</button>
-              <button type="button" className={`btn ${postIntent === "greeting-offer" ? "btn-primary" : "btn-secondary"}`} onClick={() => setPostIntent("greeting-offer")}>Greeting + optional offer</button>
-            </div>
+      <div className="grid gap-4 xl:grid-cols-[1.05fr_1fr]">
+        <section className="space-y-4 rounded-2xl border p-4" style={{ borderColor: "var(--border)" }}>
+          <h3 className="text-base font-semibold">Festival editor controls</h3>
+          <div className="flex flex-wrap gap-2">
+            <button className={`btn ${postIntent === "greeting-only" ? "btn-primary" : "btn-secondary"}`} onClick={() => setPostIntent("greeting-only")}>Greeting only</button>
+            <button className={`btn ${postIntent === "greeting-branding" ? "btn-primary" : "btn-secondary"}`} onClick={() => setPostIntent("greeting-branding")}>Greeting + branding</button>
+            <button className={`btn ${postIntent === "greeting-offer" ? "btn-primary" : "btn-secondary"}`} onClick={() => setPostIntent("greeting-offer")}>Greeting + optional offer</button>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <label className="space-y-1 text-sm">
-              <span className="muted">Occasion mode</span>
+            <label className="text-sm">Occasion
               <select className="select" value={occasionMode} onChange={(e) => setOccasionMode(e.target.value as OccasionMode)}>
-                <option value="preset">Preset festival</option>
-                <option value="custom">Custom occasion</option>
+                <option value="preset">Preset Festival</option>
+                <option value="custom">Custom Occasion</option>
               </select>
             </label>
-
             {occasionMode === "preset" ? (
-              <label className="space-y-1 text-sm">
-                <span className="muted">Festival</span>
+              <label className="text-sm">Festival
                 <select className="select" value={festival} onChange={(e) => setFestival(e.target.value as FestivalKey)}>
-                  {FESTIVAL_KEYS.map((key) => (
-                    <option key={key} value={key}>{FESTIVALS[key].title}</option>
-                  ))}
+                  {FESTIVAL_KEYS.map((k) => <option key={k} value={k}>{FESTIVALS[k].title}</option>)}
                 </select>
               </label>
             ) : (
-              <label className="space-y-1 text-sm">
-                <span className="muted">Custom occasion name</span>
-                <input className="field" value={customOccasionName} onChange={(e) => setCustomOccasionName(e.target.value)} placeholder="Store Anniversary / Wedding Season / Local Event" />
-              </label>
+              <label className="text-sm">Occasion name<input className="field" value={customOccasionName} onChange={(e) => setCustomOccasionName(e.target.value)} /></label>
             )}
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            <label className="space-y-1 text-sm">
-              <span className="muted">Template style</span>
+            <label className="text-sm">Layout
               <select className="select" value={layout} onChange={(e) => setLayout(e.target.value as LayoutKey)}>
-                {(Object.keys(LAYOUTS) as LayoutKey[]).map((key) => (
-                  <option key={key} value={key}>{LAYOUTS[key].title}</option>
-                ))}
+                {(Object.keys(layoutOptions) as LayoutKey[]).map((k) => <option key={k} value={k}>{layoutOptions[k].title}</option>)}
               </select>
             </label>
-            <label className="space-y-1 text-sm">
-              <span className="muted">Post format</span>
+            <label className="text-sm">Format
               <select className="select" value={format} onChange={(e) => setFormat(e.target.value as FormatKey)}>
-                {FORMAT_KEYS.map((key) => (
-                  <option key={key} value={key}>{FORMAT_DIMENSIONS[key].label}</option>
-                ))}
+                {FORMAT_KEYS.map((k) => <option key={k} value={k}>{FORMAT_DIMENSIONS[k].label}</option>)}
               </select>
             </label>
+          </div>
+
+          <div className="rounded-xl border p-3" style={{ borderColor: "var(--border)" }}>
+            <p className="mb-2 text-sm font-semibold">Background customization</p>
+            <div className="grid gap-2 sm:grid-cols-2">
+              <select className="select" value={backgroundMode} onChange={(e) => setBackgroundMode(e.target.value as BackgroundMode)}>
+                <option value="template">Festive template background</option>
+                <option value="upload">Upload background</option>
+                <option value="plain">Plain color</option>
+                <option value="gradient">Custom gradient</option>
+              </select>
+              {backgroundMode === "upload" && <input type="file" accept="image/*" onChange={(e) => uploadImage(e, setUploadedBg)} className="field" />}
+              {backgroundMode === "plain" && <input type="color" value={plainColor} onChange={(e) => setPlainColor(e.target.value)} className="h-11 w-full rounded" />}
+              {backgroundMode === "gradient" && (
+                <>
+                  <label className="text-xs">Color A <input type="color" value={gradientA} onChange={(e) => setGradientA(e.target.value)} className="h-10 w-full rounded" /></label>
+                  <label className="text-xs">Color B <input type="color" value={gradientB} onChange={(e) => setGradientB(e.target.value)} className="h-10 w-full rounded" /></label>
+                </>
+              )}
+            </div>
+            <label className="mt-2 block text-xs">Overlay tint/opacity ({overlayOpacity}%)
+              <input type="range" min={0} max={60} value={overlayOpacity} onChange={(e) => setOverlayOpacity(Number(e.target.value))} className="w-full" />
+            </label>
+          </div>
+
+          <div className="grid gap-2">
+            <input className="field" value={headline} onChange={(e) => setHeadline(e.target.value)} placeholder="Headline" />
+            <input className="field" value={subheadline} onChange={(e) => setSubheadline(e.target.value)} placeholder="Subheadline" />
+            <textarea className="textarea" value={greetingText} onChange={(e) => setGreetingText(e.target.value)} placeholder="Greeting text" />
+            <input className="field" value={offerText} onChange={(e) => setOfferText(e.target.value)} placeholder="Optional offer" />
+            <input className="field" value={ctaText} onChange={(e) => setCtaText(e.target.value)} placeholder="CTA" />
+            <input className="field" value={footerText} onChange={(e) => setFooterText(e.target.value)} placeholder="Footer text" />
+            <input className="field" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder="Business/store name" />
+            <input className="field" value={contactLine} onChange={(e) => setContactLine(e.target.value)} placeholder="Handle/website/phone/tagline" />
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <input className="field" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder="Business/store name" />
-            <input className="field" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone" />
-            <input className="field" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="Website / handle" />
-            <input className="field" value={tagline} onChange={(e) => setTagline(e.target.value)} placeholder="Tagline" />
+            <Control label="Headline style" style={headlineStyle} setStyle={setHeadlineStyle} />
+            <Control label="Subheadline style" style={subheadlineStyle} setStyle={setSubheadlineStyle} />
+            <Control label="Greeting style" style={greetingStyle} setStyle={setGreetingStyle} />
+            <Control label="Offer style" style={offerStyle} setStyle={setOfferStyle} />
+            <Control label="CTA style" style={ctaStyle} setStyle={setCtaStyle} />
           </div>
 
-          <input className="field" value={headline} onChange={(e) => setHeadline(e.target.value)} placeholder="Greeting headline" />
-          <textarea className="textarea" value={greetingMessage} onChange={(e) => setGreetingMessage(e.target.value)} placeholder="Greeting message" />
-          <input className="field" value={ctaLine} onChange={(e) => setCtaLine(e.target.value)} placeholder="Optional CTA" />
-          <input className="field" value={offerLine} onChange={(e) => setOfferLine(e.target.value)} placeholder="Optional offer line (shown only in greeting + offer mode)" />
-          <input className="field" value={footerLine} onChange={(e) => setFooterLine(e.target.value)} placeholder="Optional footer line" />
-
-          <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto] sm:items-end">
-            <input type="file" accept="image/*" onChange={onUploadLogo} className="w-full rounded-xl border p-3 text-sm" style={{ borderColor: "var(--border)" }} />
-            <button type="button" className="btn btn-secondary" onClick={() => setLogoDataUrl("")}>Remove logo</button>
-            <button type="button" className="btn btn-primary" onClick={download}>Download PNG</button>
+          <div className="rounded-xl border p-3" style={{ borderColor: "var(--border)" }}>
+            <p className="text-sm font-semibold">Logo controls</p>
+            <div className="mt-2 grid gap-2 sm:grid-cols-2">
+              <input type="file" accept="image/*" onChange={(e) => uploadImage(e, setLogoDataUrl)} className="field" />
+              <label className="text-xs">Logo size ({logoSize}px)
+                <input type="range" min={64} max={180} value={logoSize} onChange={(e) => setLogoSize(Number(e.target.value))} className="w-full" />
+              </label>
+              <label className="text-xs"><input type="checkbox" checked={logoVisible} onChange={(e) => setLogoVisible(e.target.checked)} /> Show logo</label>
+              <div className="flex gap-2 text-xs">
+                <button className="btn btn-secondary" onClick={() => setLogoPos({ x: 0.14, y: 0.14 })}>Top Left</button>
+                <button className="btn btn-secondary" onClick={() => setLogoPos({ x: 0.5, y: 0.14 })}>Top Center</button>
+                <button className="btn btn-secondary" onClick={() => setLogoPos({ x: 0.86, y: 0.86 })}>Bottom Right</button>
+              </div>
+            </div>
           </div>
+
+          <div className="rounded-xl border p-3 text-sm" style={{ borderColor: "var(--border)" }}>
+            <p className="font-semibold">Unlocks (no login)</p>
+            <p className="muted text-xs">Install PWA or share to unlock premium templates, HD export, and watermark controls.</p>
+            <p className="mt-1 text-xs">PWA: {pwaInstalled ? "Installed ✅" : "Not installed"} · Shares: {shareCount} · Ref visits: {referralVisits}</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <button className="btn btn-secondary" onClick={async () => {
+                const result = await handleShare();
+                setStatus(result.message);
+              }}>Share & unlock</button>
+              <label className="text-xs"><input type="checkbox" disabled={!watermarkRemovable} checked={!watermarkEnabled} onChange={(e) => toggleWatermarkDisabled(e.target.checked)} /> Remove watermark (unlock)</label>
+              <span className="text-xs muted">Premium templates: {premiumUnlocked ? "Unlocked" : "Locked"} · HD export: {hdUnlocked ? "Unlocked" : "Locked"}</span>
+            </div>
+            {status ? <p className="mt-1 text-xs">{status}</p> : null}
+          </div>
+
+          <button className="btn btn-primary w-full" onClick={download}>Download PNG</button>
         </section>
 
         <section className="space-y-3">
-          <p className="text-sm font-medium">Live preview</p>
-          <div className="card premium-card rounded-2xl border p-2 sm:p-3" style={{ borderColor: "var(--border)" }}>
-            <canvas
-              ref={canvasRef}
-              className="mx-auto block h-auto w-full rounded-xl"
-              style={{ aspectRatio: FORMAT_DIMENSIONS[format].ratio, maxHeight: "78vh", background: "#0f172a" }}
-            />
+          <p className="text-sm font-medium">Live canvas editor (drag headline/subheadline/greeting/offer/cta/logo)</p>
+          <div className="rounded-2xl border p-2" style={{ borderColor: "var(--border)" }}>
+            <div
+              ref={previewWrapRef}
+              className="relative mx-auto w-full max-w-2xl overflow-hidden rounded-xl bg-slate-950"
+              style={{ aspectRatio: FORMAT_DIMENSIONS[format].ratio }}
+              onPointerMove={(e) => {
+                if (!dragging) return;
+                setPosFromPointer(e, dragging);
+              }}
+              onPointerUp={() => setDragging(null)}
+              onPointerLeave={() => setDragging(null)}
+            >
+              <canvas ref={canvasRef} className="block h-full w-full" style={{ aspectRatio: FORMAT_DIMENSIONS[format].ratio }} />
+              {([
+                ["headline", headlineStyle],
+                ["subheadline", subheadlineStyle],
+                ["greeting", greetingStyle],
+                ["offer", offerStyle],
+                ["cta", ctaStyle],
+              ] as [DragTarget, BlockStyle][]).map(([key, style]) => (
+                style.visible ? (
+                  <button
+                    key={key}
+                    type="button"
+                    className="absolute h-7 w-7 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/70 bg-black/50 text-[10px] text-white"
+                    style={{ left: `${style.x * 100}%`, top: `${style.y * 100}%` }}
+                    onPointerDown={(e) => {
+                      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+                      setDragging(key);
+                    }}
+                    title={`Drag ${key}`}
+                  >
+                    {key[0].toUpperCase()}
+                  </button>
+                ) : null
+              ))}
+              {logoVisible ? (
+                <button
+                  type="button"
+                  className="absolute h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-300 bg-black/60 text-[10px] text-amber-200"
+                  style={{ left: `${logoPos.x * 100}%`, top: `${logoPos.y * 100}%` }}
+                  onPointerDown={(e) => {
+                    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+                    setDragging("logo");
+                  }}
+                  title="Drag logo"
+                >
+                  LOGO
+                </button>
+              ) : null}
+            </div>
           </div>
         </section>
       </div>

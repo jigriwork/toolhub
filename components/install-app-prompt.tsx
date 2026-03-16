@@ -9,6 +9,12 @@ type DeferredPrompt = Event & {
 
 export function InstallAppPrompt() {
   const [promptEvent, setPromptEvent] = useState<DeferredPrompt | null>(null);
+  const [installed, setInstalled] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const standalone = window.matchMedia("(display-mode: standalone)").matches;
+    const stored = window.localStorage.getItem("toolhub:pwa-installed") === "1";
+    return standalone || stored;
+  });
 
   useEffect(() => {
     const handler = (event: Event) => {
@@ -20,7 +26,7 @@ export function InstallAppPrompt() {
     return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
 
-  if (!promptEvent) return null;
+  if (!promptEvent || installed) return null;
 
   return (
     <div className="card mt-4 flex flex-wrap items-center justify-between gap-3 p-4 sm:p-5">
@@ -33,7 +39,14 @@ export function InstallAppPrompt() {
         onClick={async () => {
           await promptEvent.prompt();
           const choice = await promptEvent.userChoice;
-          if (choice.outcome === "accepted") setPromptEvent(null);
+          if (choice.outcome === "accepted") {
+            if (typeof window !== "undefined") {
+              window.localStorage.setItem("toolhub:pwa-installed", "1");
+              window.dispatchEvent(new CustomEvent("toolhub:pwa-installed"));
+            }
+            setInstalled(true);
+            setPromptEvent(null);
+          }
         }}
       >
         Install App
