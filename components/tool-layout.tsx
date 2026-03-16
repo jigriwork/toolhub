@@ -43,7 +43,7 @@ export function ToolLayout({
         </p>
       </header>
 
-      <div className="card p-4 sm:p-6">{children}</div>
+      <div className="card premium-card p-4 sm:p-6">{children}</div>
 
       {relatedTools.length > 0 && (
         <section className="mt-8">
@@ -91,7 +91,7 @@ export function ToolLayout({
       )}
 
       {tool && tool.faqs.length > 0 && (
-        <section className="mt-8 card p-4 sm:p-6">
+        <section className="mt-8 card premium-card p-4 sm:p-6">
           <h2 className="text-xl font-semibold">Frequently Asked Questions</h2>
           <div className="mt-4 space-y-4">
             {tool.faqs.map((faq) => (

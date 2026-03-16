@@ -5,7 +5,7 @@ export function Footer() {
   const featured = tools.filter((tool) => tool.featured).slice(0, 6);
 
   return (
-    <footer className="mt-14 border-t" style={{ borderColor: "var(--border)" }}>
+    <footer className="mt-14 border-t" style={{ borderColor: "var(--border)", background: "color-mix(in oklab, var(--card) 66%, transparent)" }}>
       <div className="container py-8 sm:py-10">
         <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
           <div>
@@ -14,6 +14,10 @@ export function Footer() {
               Fast, modern, and practical online tools for creators, students,
               and professionals at www.toolhubsite.in.
             </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <span className="chip">Privacy-first</span>
+              <span className="chip">No signup required</span>
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-x-3 gap-y-2 text-sm sm:max-w-xs">
             <Link href="/about" className="rounded-md py-1 hover:underline">About</Link>
@@ -27,7 +31,7 @@ export function Footer() {
             <h3 className="text-sm font-semibold">Popular Tools</h3>
             <div className="mt-2 flex flex-wrap gap-2 text-xs" style={{ color: "var(--muted)" }}>
               {featured.map((tool) => (
-                <Link key={tool.slug} href={`/tools/${tool.slug}`} className="rounded-full border px-2.5 py-1.5" style={{ borderColor: "var(--border)" }}>
+                <Link key={tool.slug} href={`/tools/${tool.slug}`} className="rounded-full border px-2.5 py-1.5 transition hover:-translate-y-0.5" style={{ borderColor: "var(--border)", background: "color-mix(in oklab, var(--card) 76%, transparent)" }}>
                   {tool.name}
                 </Link>
               ))}

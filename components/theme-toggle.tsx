@@ -19,7 +19,7 @@ export function ThemeToggle() {
     return (
       <button
         type="button"
-        className="btn btn-secondary h-10 w-10"
+        className="btn btn-secondary h-10 w-10 rounded-xl"
         aria-label="Toggle theme"
         title="Toggle theme"
       />
@@ -32,11 +32,12 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="btn btn-secondary h-10 w-10"
+      className="btn btn-secondary h-10 gap-2 rounded-xl px-3 sm:w-auto"
       aria-label="Toggle theme"
       title="Toggle theme"
     >
-      {isDark ? "☀️" : "🌙"}
+      <span aria-hidden>{isDark ? "☀️" : "🌙"}</span>
+      <span className="hidden text-xs font-semibold sm:inline">{isDark ? "Light" : "Dark"}</span>
     </button>
   );
 }

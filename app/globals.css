@@ -1,26 +1,36 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #111827;
-  --muted: #6b7280;
-  --card: #f9fafb;
-  --border: #e5e7eb;
+  --background: #f7f9fc;
+  --foreground: #0f172a;
+  --muted: #5b6475;
+  --card: #ffffff;
+  --border: #dbe3f0;
   --surface: #ffffff;
   --primary: #2563eb;
   --primary-hover: #1d4ed8;
+  --ring: #60a5fa;
+  --hero-from: #dbeafe;
+  --hero-via: #eef2ff;
+  --hero-to: #f5f3ff;
+  --premium-shadow: 0 14px 40px color-mix(in oklab, #2563eb 14%, transparent);
   --radius-lg: 1rem;
 }
 
 .dark {
-  --background: #030712;
+  --background: #020617;
   --foreground: #f3f4f6;
-  --muted: #9ca3af;
-  --card: #111827;
-  --border: #1f2937;
-  --surface: #0b1220;
+  --muted: #9aa6bd;
+  --card: #0b1220;
+  --border: #1e2a3f;
+  --surface: #081123;
   --primary: #3b82f6;
   --primary-hover: #60a5fa;
+  --ring: #93c5fd;
+  --hero-from: #0f172a;
+  --hero-via: #111827;
+  --hero-to: #1e1b4b;
+  --premium-shadow: 0 18px 46px color-mix(in oklab, #060b16 65%, transparent);
 }
 
 * {
@@ -51,6 +61,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
+  background-image: radial-gradient(circle at 20% -10%, color-mix(in oklab, var(--primary) 14%, transparent), transparent 48%);
 }
 
 input,
@@ -98,11 +109,36 @@ button {
 
 .card {
   border: 1px solid var(--border);
-  background: color-mix(in oklab, var(--card) 82%, var(--surface));
+  background: color-mix(in oklab, var(--card) 88%, var(--surface));
   border-radius: var(--radius-lg);
   transition: border-color 0.2s ease, box-shadow 0.2s ease,
     transform 0.2s ease;
-  box-shadow: 0 1px 2px color-mix(in oklab, #000 8%, transparent);
+  box-shadow: 0 3px 12px color-mix(in oklab, #020617 9%, transparent);
+}
+
+.premium-card {
+  border: 1px solid color-mix(in oklab, var(--border) 84%, var(--primary));
+  background: linear-gradient(150deg, color-mix(in oklab, var(--card) 96%, transparent), color-mix(in oklab, var(--card) 78%, var(--surface)));
+  box-shadow: var(--premium-shadow);
+}
+
+.hero-surface {
+  border: 1px solid color-mix(in oklab, var(--border) 76%, var(--primary));
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(circle at 15% 20%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 40%),
+    linear-gradient(135deg, var(--hero-from), var(--hero-via), var(--hero-to));
+}
+
+.chip {
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+  background: color-mix(in oklab, var(--card) 86%, transparent);
 }
 
 .btn {
@@ -124,7 +160,7 @@ textarea:focus-visible,
 select:focus-visible,
 button:focus-visible,
 a:focus-visible {
-  outline: 2px solid #2563eb;
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 
@@ -141,6 +177,17 @@ a:focus-visible {
   border: 1px solid var(--border);
   color: var(--foreground);
   background: color-mix(in oklab, var(--card) 70%, transparent);
+}
+
+.btn-ghost {
+  border: 1px solid transparent;
+  color: var(--muted);
+}
+
+.btn-ghost:hover {
+  border-color: var(--border);
+  color: var(--foreground);
+  background: color-mix(in oklab, var(--foreground) 6%, transparent);
 }
 
 .btn-secondary:hover {

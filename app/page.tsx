@@ -7,17 +7,42 @@ export default function HomePage() {
   return (
     <main>
       <section className="container section-y">
-        <div className="mx-auto max-w-3xl text-center">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">
-            All Essential Online Tools in One Premium Hub
-          </h1>
-          <p
-            className="mx-auto mt-4 max-w-2xl text-sm sm:text-lg"
-            style={{ color: "var(--muted)" }}
-          >
-            toolhubsite helps you work faster with practical, accurate, and
-            lightweight tools designed for everyday productivity.
-          </p>
+        <div className="hero-surface premium-card mx-auto max-w-6xl p-6 sm:p-10">
+          <div className="flex flex-wrap gap-2">
+            <span className="chip">Fast browser tools</span>
+            <span className="chip">Business creative suite</span>
+            <span className="chip">Mobile-first experience</span>
+          </div>
+          <div className="mt-5 grid gap-8 lg:grid-cols-[1.3fr_0.9fr] lg:items-end">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">
+                Premium Utility Platform for Everyday Workflows
+              </h1>
+              <p
+                className="mt-4 max-w-2xl text-sm sm:text-lg"
+                style={{ color: "var(--muted)" }}
+              >
+                Create faster with polished tools for text, image, SEO, developer,
+                and business needs — from quick checks to campaign-ready creatives.
+              </p>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Link href="/tools/festival-post-generator" className="btn btn-primary">
+                  Start Creating
+                </Link>
+                <Link href="/tools/offer-poster-generator" className="btn btn-secondary">
+                  Explore Business Suite
+                </Link>
+              </div>
+            </div>
+            <div className="card space-y-3 p-4 sm:p-5">
+              <p className="text-sm font-semibold">This week on ToolHub</p>
+              <div className="space-y-2 text-sm" style={{ color: "var(--muted)" }}>
+                <p>• Premium festive post composer with festival-aware design moods</p>
+                <p>• Retail-ready offer posters with stronger campaign hierarchy</p>
+                <p>• Faster discovery with cleaner categories and featured sections</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -31,7 +56,7 @@ export default function HomePage() {
       </section>
 
       <section className="container py-6 sm:py-8">
-        <div className="card p-4 sm:p-8">
+        <div className="card premium-card p-4 sm:p-8">
           <h2 className="text-2xl font-semibold">Why toolhubsite?</h2>
           <ul
             className="mt-4 grid gap-3 text-sm sm:grid-cols-2"
@@ -48,7 +73,7 @@ export default function HomePage() {
       </section>
 
       <section className="container py-2 sm:py-4">
-        <div className="card p-4 sm:p-6">
+        <div className="card premium-card p-4 sm:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h2 className="text-xl font-semibold">Business Creative Suite</h2>
@@ -87,7 +112,7 @@ export default function HomePage() {
       </section>
 
       <section className="container py-4">
-        <div className="card flex flex-wrap items-center justify-between gap-4 p-4 sm:p-6">
+        <div className="card premium-card flex flex-wrap items-center justify-between gap-4 p-4 sm:p-6">
           <div className="max-w-xl">
             <h2 className="text-xl font-semibold">Help us grow toolhubsite</h2>
             <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>

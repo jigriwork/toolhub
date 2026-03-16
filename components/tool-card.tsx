@@ -12,8 +12,9 @@ export function ToolCard({
   const isBusiness = tool.category === "Business";
 
   return (
-    <article className="card group relative overflow-hidden p-4 sm:p-5 transition duration-200 hover:-translate-y-0.5 hover:shadow-lg">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-violet-500 opacity-70" />
+    <article className="card group premium-card relative overflow-hidden p-4 sm:p-5 transition duration-200 hover:-translate-y-1 hover:shadow-xl">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-blue-500 via-cyan-400 to-violet-500 opacity-80" />
+      <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-blue-500/10 blur-2xl" />
       <div className="mb-3 flex items-start justify-between gap-3">
         <span
           className="rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide"
@@ -36,7 +37,7 @@ export function ToolCard({
         <p className="mt-2 text-sm leading-6" style={{ color: "var(--muted)" }}>
           {tool.description}
         </p>
-        <span className="mt-4 inline-block text-sm font-semibold text-blue-600 transition group-hover:translate-x-0.5">
+        <span className="mt-4 inline-block text-sm font-semibold text-blue-600 transition group-hover:translate-x-0.5 dark:text-blue-400">
           Open Tool →
         </span>
       </Link>

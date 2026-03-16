@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 
 type OfferTheme =
   | "luxury-sale"
@@ -20,16 +20,17 @@ const THEME_STYLES: Record<
     panelOpacity: number;
     titleCase: "upper" | "normal";
     accent: string;
-    decorative: "ornament" | "burst" | "frame";
+    deco: "frame" | "burst" | "ornament";
+    eyebrow: string;
   }
 > = {
-  "luxury-sale": { title: "Luxury Sale", panelOpacity: 0.28, titleCase: "upper", accent: "#fbbf24", decorative: "frame" },
-  "festive-offer": { title: "Festive Offer", panelOpacity: 0.24, titleCase: "normal", accent: "#f472b6", decorative: "ornament" },
-  "premium-fashion": { title: "Premium Fashion", panelOpacity: 0.26, titleCase: "normal", accent: "#22d3ee", decorative: "frame" },
-  "grand-opening": { title: "Grand Opening", panelOpacity: 0.22, titleCase: "upper", accent: "#f59e0b", decorative: "burst" },
-  "clearance-sale": { title: "Clearance Sale", panelOpacity: 0.18, titleCase: "upper", accent: "#fb7185", decorative: "burst" },
-  "wedding-collection": { title: "Wedding Collection", panelOpacity: 0.3, titleCase: "normal", accent: "#f9a8d4", decorative: "ornament" },
-  "limited-time": { title: "Limited Time Offer", panelOpacity: 0.2, titleCase: "upper", accent: "#60a5fa", decorative: "burst" },
+  "luxury-sale": { title: "Luxury Sale", panelOpacity: 0.3, titleCase: "upper", accent: "#fbbf24", deco: "frame", eyebrow: "Exclusive Edit" },
+  "festive-offer": { title: "Festive Offer", panelOpacity: 0.22, titleCase: "normal", accent: "#f472b6", deco: "ornament", eyebrow: "Season Special" },
+  "premium-fashion": { title: "Premium Fashion", panelOpacity: 0.25, titleCase: "normal", accent: "#22d3ee", deco: "frame", eyebrow: "New Arrival Campaign" },
+  "grand-opening": { title: "Grand Opening", panelOpacity: 0.2, titleCase: "upper", accent: "#f59e0b", deco: "burst", eyebrow: "Launch Week" },
+  "clearance-sale": { title: "Clearance Sale", panelOpacity: 0.18, titleCase: "upper", accent: "#fb7185", deco: "burst", eyebrow: "Final Days" },
+  "wedding-collection": { title: "Wedding Collection", panelOpacity: 0.3, titleCase: "normal", accent: "#f9a8d4", deco: "ornament", eyebrow: "Bridal Season" },
+  "limited-time": { title: "Limited Time Promotion", panelOpacity: 0.2, titleCase: "upper", accent: "#60a5fa", deco: "burst", eyebrow: "Ends Soon" },
 };
 
 const COLOR_STYLES: Record<ColorStyle, [string, string, string]> = {
@@ -37,7 +38,7 @@ const COLOR_STYLES: Record<ColorStyle, [string, string, string]> = {
   sunset: ["#7f1d1d", "#f97316", "#fb7185"],
   ocean: ["#0f172a", "#0e7490", "#38bdf8"],
   royal: ["#1e1b4b", "#4338ca", "#a855f7"],
-  mono: ["#111827", "#374151", "#9ca3af"],
+  mono: ["#0f172a", "#374151", "#9ca3af"],
 };
 
 const FORMAT_DIMENSIONS: Record<PosterFormat, { width: number; height: number; label: string; ratio: string }> = {
@@ -48,23 +49,20 @@ const FORMAT_DIMENSIONS: Record<PosterFormat, { width: number; height: number; l
 
 const FORMAT_KEYS = Object.keys(FORMAT_DIMENSIONS) as PosterFormat[];
 
-function wrapLines(ctx: CanvasRenderingContext2D, text: string, maxWidth: number, maxLines = 3) {
+function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number, maxLines = 3) {
   const words = text.split(/\s+/).filter(Boolean);
   if (words.length === 0) return [""];
   const lines: string[] = [];
   let line = words[0] ?? "";
-
   for (let i = 1; i < words.length; i += 1) {
     const test = `${line} ${words[i]}`;
-    if (ctx.measureText(test).width <= maxWidth) {
-      line = test;
-    } else {
+    if (ctx.measureText(test).width <= maxWidth) line = test;
+    else {
       lines.push(line);
       line = words[i] ?? "";
     }
   }
   lines.push(line);
-
   const finalLines = lines.slice(0, maxLines);
   if (lines.length > maxLines && finalLines.length > 0) {
     finalLines[finalLines.length - 1] = `${finalLines[finalLines.length - 1]}...`;
@@ -81,12 +79,15 @@ export function OfferPosterGeneratorTool() {
   const [headline, setHeadline] = useState("Mega Festive Sale");
   const [subheadline, setSubheadline] = useState("Premium styles. Better prices.");
   const [offerText, setOfferText] = useState("Flat 40% OFF + Extra 10% on selected collection");
+  const [priceHighlight, setPriceHighlight] = useState("Starting ₹499");
   const [footerText, setFooterText] = useState("Limited period offer");
   const [ctaText, setCtaText] = useState("Shop now • Visit store today");
   const [contactInfo, setContactInfo] = useState("+91 90000 00000  •  www.yourstore.com  •  Your City");
   const [theme, setTheme] = useState<OfferTheme>("luxury-sale");
   const [colorStyle, setColorStyle] = useState<ColorStyle>("gold");
   const [format, setFormat] = useState<PosterFormat>("poster-portrait");
+
+  const style = useMemo(() => THEME_STYLES[theme], [theme]);
 
   useEffect(() => {
     if (!logoDataUrl) {
@@ -109,61 +110,58 @@ export function OfferPosterGeneratorTool() {
     if (!ctx) return;
 
     const { width, height } = FORMAT_DIMENSIONS[format];
-    const scale = 2;
+    const scale = 3;
     canvas.width = width * scale;
     canvas.height = height * scale;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(scale, scale);
 
-    const gradientColors = COLOR_STYLES[colorStyle];
-    const themeStyle = THEME_STYLES[theme];
-
+    const [c1, c2, c3] = COLOR_STYLES[colorStyle];
     const bg = ctx.createLinearGradient(0, 0, width, height);
-    bg.addColorStop(0, gradientColors[0]);
-    bg.addColorStop(0.5, gradientColors[1]);
-    bg.addColorStop(1, gradientColors[2]);
+    bg.addColorStop(0, c1);
+    bg.addColorStop(0.55, c2);
+    bg.addColorStop(1, c3);
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, width, height);
 
-    ctx.globalAlpha = 0.18;
+    ctx.globalAlpha = 0.2;
     ctx.fillStyle = "#ffffff";
     ctx.beginPath();
-    ctx.arc(150, 180, 180, 0, Math.PI * 2);
+    ctx.arc(width * 0.15, height * 0.18, 170, 0, Math.PI * 2);
     ctx.fill();
     ctx.beginPath();
-    ctx.arc(width - 120, 420, 220, 0, Math.PI * 2);
+    ctx.arc(width * 0.9, height * 0.38, 230, 0, Math.PI * 2);
     ctx.fill();
     ctx.globalAlpha = 1;
 
-    ctx.fillStyle = `rgba(15, 23, 42, ${themeStyle.panelOpacity})`;
+    ctx.fillStyle = `rgba(15, 23, 42, ${style.panelOpacity})`;
     ctx.beginPath();
-    ctx.roundRect(70, 80, width - 140, height - 160, 40);
+    ctx.roundRect(62, 70, width - 124, height - 140, 44);
     ctx.fill();
 
-    if (themeStyle.decorative === "frame") {
-      ctx.strokeStyle = `${themeStyle.accent}99`;
+    if (style.deco === "frame") {
+      ctx.strokeStyle = `${style.accent}bb`;
       ctx.lineWidth = 4;
-      ctx.strokeRect(90, 98, width - 180, height - 196);
-    } else if (themeStyle.decorative === "burst") {
-      ctx.globalAlpha = 0.24;
-      ctx.fillStyle = themeStyle.accent;
+      ctx.strokeRect(84, 92, width - 168, height - 184);
+    } else if (style.deco === "burst") {
+      ctx.globalAlpha = 0.25;
+      ctx.fillStyle = style.accent;
       ctx.beginPath();
-      ctx.arc(width - 130, 180, 120, 0, Math.PI * 2);
+      ctx.arc(width - 120, 180, 118, 0, Math.PI * 2);
       ctx.fill();
       ctx.beginPath();
-      ctx.arc(140, height - 200, 100, 0, Math.PI * 2);
+      ctx.arc(124, height - 190, 102, 0, Math.PI * 2);
       ctx.fill();
       ctx.globalAlpha = 1;
     } else {
       ctx.globalAlpha = 0.2;
-      ctx.strokeStyle = themeStyle.accent;
+      ctx.strokeStyle = style.accent;
       ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.arc(width * 0.2, 140, 52, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(width * 0.84, 190, 34, 0, Math.PI * 2);
-      ctx.stroke();
+      for (const y of [140, 190, 240]) {
+        ctx.beginPath();
+        ctx.arc(width * 0.83, y, 24 + (y % 20), 0, Math.PI * 2);
+        ctx.stroke();
+      }
       ctx.globalAlpha = 1;
     }
 
@@ -171,94 +169,102 @@ export function OfferPosterGeneratorTool() {
     if (logo) {
       ctx.fillStyle = "rgba(255,255,255,0.95)";
       ctx.beginPath();
-      ctx.roundRect(90, 100, 112, 112, 20);
+      ctx.roundRect(90, 100, 112, 112, 18);
       ctx.fill();
 
       const ratio = logo.width / logo.height;
       let drawW = 84;
       let drawH = 84;
-      if (ratio > 1) {
-        drawH = drawW / ratio;
-      } else {
-        drawW = drawH * ratio;
-      }
+      if (ratio > 1) drawH = drawW / ratio;
+      else drawW = drawH * ratio;
       ctx.drawImage(logo, 146 - drawW / 2, 156 - drawH / 2, drawW, drawH);
     }
 
     ctx.fillStyle = "#f8fafc";
     ctx.font = "700 30px Inter, system-ui, sans-serif";
-    ctx.fillText(themeStyle.titleCase === "upper" ? businessName.toUpperCase() : businessName, 226, 158);
+    ctx.fillText(style.titleCase === "upper" ? businessName.toUpperCase() : businessName, 226, 154);
 
-    ctx.font = "500 20px Inter, system-ui, sans-serif";
-    ctx.fillStyle = themeStyle.accent;
-    ctx.fillText(`${THEME_STYLES[theme].title} Collection`, 226, 192);
+    ctx.fillStyle = style.accent;
+    ctx.font = "600 20px Inter, system-ui, sans-serif";
+    ctx.fillText(`${style.title} • ${style.eyebrow}`, 226, 186);
 
-    const contentX = 110;
-    const contentWidth = width - 220;
+    const contentX = 108;
+    const contentW = width - 216;
 
     ctx.fillStyle = "#ffffff";
-    ctx.font = "800 88px Inter, system-ui, sans-serif";
-    const headlineLines = wrapLines(ctx, headline, contentWidth, 2);
+    ctx.font = "800 84px Inter, system-ui, sans-serif";
+    const headlineLines = wrapText(ctx, headline, contentW, 2);
     headlineLines.forEach((line, index) => {
-      ctx.fillText(themeStyle.titleCase === "upper" ? line.toUpperCase() : line, contentX, 390 + index * 94);
+      ctx.fillText(style.titleCase === "upper" ? line.toUpperCase() : line, contentX, 382 + index * 92);
     });
 
     ctx.fillStyle = "#dbeafe";
-    ctx.font = "500 34px Inter, system-ui, sans-serif";
-    const subLines = wrapLines(ctx, subheadline, contentWidth, 2);
+    ctx.font = "500 33px Inter, system-ui, sans-serif";
+    const subLines = wrapText(ctx, subheadline, contentW, 2);
     subLines.forEach((line, index) => {
-      ctx.fillText(line, contentX, 520 + headlineLines.length * 66 + index * 42);
+      ctx.fillText(line, contentX, 516 + headlineLines.length * 60 + index * 40);
     });
 
-    const offerY = 610 + headlineLines.length * 64 + subLines.length * 32;
-    ctx.fillStyle = "rgba(15,23,42,0.8)";
+    const offerY = 610 + headlineLines.length * 68 + subLines.length * 36;
+    ctx.fillStyle = "rgba(15,23,42,0.82)";
     ctx.beginPath();
-    ctx.roundRect(contentX, offerY, contentWidth, 200, 24);
+    ctx.roundRect(contentX, offerY, contentW, 220, 24);
     ctx.fill();
 
-    ctx.fillStyle = "#fbbf24";
-    ctx.font = "800 30px Inter, system-ui, sans-serif";
-    ctx.fillText("EXCLUSIVE OFFER", contentX + 34, offerY + 52);
+    ctx.fillStyle = style.accent;
+    ctx.font = "800 28px Inter, system-ui, sans-serif";
+    ctx.fillText("LIMITED TIME OFFER", contentX + 30, offerY + 48);
 
     ctx.fillStyle = "#f8fafc";
     ctx.font = "700 44px Inter, system-ui, sans-serif";
-    const offerLines = wrapLines(ctx, offerText, contentWidth - 68, 3);
-    offerLines.forEach((line, index) => {
-      ctx.fillText(line, contentX + 34, offerY + 112 + index * 50);
+    wrapText(ctx, offerText, contentW - 56, 3).forEach((line, index) => {
+      ctx.fillText(line, contentX + 30, offerY + 104 + index * 48);
     });
 
-    const ctaY = height - 320;
-    if (ctaText.trim()) {
-      ctx.fillStyle = `${themeStyle.accent}dd`;
+    if (priceHighlight.trim()) {
+      const badgeW = Math.min(contentW * 0.66, ctx.measureText(priceHighlight).width + 54);
+      ctx.fillStyle = `${style.accent}dd`;
       ctx.beginPath();
-      ctx.roundRect(contentX, ctaY, contentWidth, 62, 16);
+      ctx.roundRect(contentX, offerY + 162, badgeW, 44, 999);
       ctx.fill();
       ctx.fillStyle = "#0f172a";
-      ctx.font = "700 28px Inter, system-ui, sans-serif";
-      ctx.fillText(ctaText, contentX + 24, ctaY + 40);
+      ctx.font = "700 24px Inter, system-ui, sans-serif";
+      ctx.fillText(priceHighlight, contentX + 20, offerY + 191);
     }
 
-    const footerY = height - 222;
+    const ctaY = height - 300;
+    if (ctaText.trim()) {
+      ctx.fillStyle = `${style.accent}e0`;
+      ctx.beginPath();
+      ctx.roundRect(contentX, ctaY, contentW, 62, 16);
+      ctx.fill();
+      ctx.fillStyle = "#111827";
+      ctx.font = "700 28px Inter, system-ui, sans-serif";
+      wrapText(ctx, ctaText, contentW - 40, 1).forEach((line) => {
+        ctx.fillText(line, contentX + 20, ctaY + 40);
+      });
+    }
+
     if (footerText.trim()) {
       ctx.fillStyle = "#fef3c7";
-      ctx.font = "700 36px Inter, system-ui, sans-serif";
-      ctx.fillText(footerText, contentX, footerY);
+      ctx.font = "700 34px Inter, system-ui, sans-serif";
+      ctx.fillText(footerText, contentX, height - 212);
     }
 
     ctx.fillStyle = "rgba(255,255,255,0.3)";
-    ctx.fillRect(contentX, footerY + 28, contentWidth, 2);
+    ctx.fillRect(contentX, height - 188, contentW, 2);
 
     ctx.fillStyle = "#e2e8f0";
-    ctx.font = "500 24px Inter, system-ui, sans-serif";
-    wrapLines(ctx, contactInfo, contentWidth, 2).forEach((line, index) => {
-      ctx.fillText(line, contentX, footerY + 68 + index * 30);
+    ctx.font = "500 22px Inter, system-ui, sans-serif";
+    wrapText(ctx, contactInfo, contentW, 2).forEach((line, index) => {
+      ctx.fillText(line, contentX, height - 152 + index * 30);
     });
   };
 
   useEffect(() => {
     drawPoster();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [businessName, headline, subheadline, offerText, footerText, ctaText, contactInfo, theme, colorStyle, format]);
+  }, [businessName, headline, subheadline, offerText, priceHighlight, footerText, ctaText, contactInfo, theme, colorStyle, format]);
 
   const onUploadLogo = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -268,10 +274,9 @@ export function OfferPosterGeneratorTool() {
     reader.readAsDataURL(file);
   };
 
-  const downloadPoster = () => {
+  const download = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const link = document.createElement("a");
     link.href = canvas.toDataURL("image/png", 1);
     link.download = `toolhub-offer-poster-${theme}-${format}.png`;
@@ -281,23 +286,21 @@ export function OfferPosterGeneratorTool() {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 lg:grid-cols-[1.05fr_1fr]">
-        <section className="space-y-4 rounded-2xl border p-4 sm:p-5" style={{ borderColor: "var(--border)" }}>
-          <h3 className="text-base font-semibold">Poster details</h3>
+        <section className="premium-card card space-y-4 rounded-2xl p-4 sm:p-5">
+          <h3 className="text-base font-semibold">Retail poster setup</h3>
 
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="space-y-1 text-sm">
               <span className="muted">Poster format</span>
               <select className="select" value={format} onChange={(e) => setFormat(e.target.value as PosterFormat)}>
                 {FORMAT_KEYS.map((key) => (
-                  <option key={key} value={key}>
-                    {FORMAT_DIMENSIONS[key].label}
-                  </option>
+                  <option key={key} value={key}>{FORMAT_DIMENSIONS[key].label}</option>
                 ))}
               </select>
             </label>
 
             <label className="space-y-1 text-sm">
-              <span className="muted">Theme</span>
+              <span className="muted">Theme pack</span>
               <select className="select" value={theme} onChange={(e) => setTheme(e.target.value as OfferTheme)}>
                 <option value="luxury-sale">Luxury Sale</option>
                 <option value="festive-offer">Festive Offer</option>
@@ -305,7 +308,7 @@ export function OfferPosterGeneratorTool() {
                 <option value="grand-opening">Grand Opening</option>
                 <option value="clearance-sale">Clearance Sale</option>
                 <option value="wedding-collection">Wedding Collection</option>
-                <option value="limited-time">Limited Time Offer</option>
+                <option value="limited-time">Limited-time Promotion</option>
               </select>
             </label>
 
@@ -322,31 +325,28 @@ export function OfferPosterGeneratorTool() {
           </div>
 
           <input className="field" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder="Business/store name" />
-          <input className="field" value={headline} onChange={(e) => setHeadline(e.target.value)} placeholder="Main headline" />
+          <input className="field" value={headline} onChange={(e) => setHeadline(e.target.value)} placeholder="Main campaign headline" />
           <input className="field" value={subheadline} onChange={(e) => setSubheadline(e.target.value)} placeholder="Subheadline" />
-          <textarea className="textarea" value={offerText} onChange={(e) => setOfferText(e.target.value)} placeholder="Offer text" />
+          <textarea className="textarea" value={offerText} onChange={(e) => setOfferText(e.target.value)} placeholder="Offer block" />
+          <input className="field" value={priceHighlight} onChange={(e) => setPriceHighlight(e.target.value)} placeholder="Price highlight (e.g. Starting ₹499)" />
           <input className="field" value={ctaText} onChange={(e) => setCtaText(e.target.value)} placeholder="CTA line" />
-          <input className="field" value={footerText} onChange={(e) => setFooterText(e.target.value)} placeholder="Optional footer text" />
+          <input className="field" value={footerText} onChange={(e) => setFooterText(e.target.value)} placeholder="Footer line" />
           <textarea className="textarea" value={contactInfo} onChange={(e) => setContactInfo(e.target.value)} placeholder="Phone / website / address" />
 
           <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto] sm:items-end">
             <input type="file" accept="image/*" onChange={onUploadLogo} className="w-full rounded-xl border p-3 text-sm" style={{ borderColor: "var(--border)" }} />
-            <button type="button" className="btn btn-secondary" onClick={() => setLogoDataUrl("")}>
-              Remove logo
-            </button>
-            <button type="button" className="btn btn-primary" onClick={downloadPoster}>
-              Download Poster
-            </button>
+            <button type="button" className="btn btn-secondary" onClick={() => setLogoDataUrl("")}>Remove logo</button>
+            <button type="button" className="btn btn-primary" onClick={download}>Download Poster</button>
           </div>
         </section>
 
         <section className="space-y-3">
           <p className="text-sm font-medium">Live poster preview</p>
-          <div className="rounded-2xl border p-2 sm:p-3" style={{ borderColor: "var(--border)" }}>
+          <div className="card premium-card rounded-2xl border p-2 sm:p-3" style={{ borderColor: "var(--border)" }}>
             <canvas
               ref={canvasRef}
               className="mx-auto block h-auto w-full rounded-xl"
-              style={{ aspectRatio: FORMAT_DIMENSIONS[format].ratio, maxHeight: "78vh", background: "#111827" }}
+              style={{ aspectRatio: FORMAT_DIMENSIONS[format].ratio, maxHeight: "78vh", background: "#0f172a" }}
             />
           </div>
         </section>

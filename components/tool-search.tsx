@@ -93,11 +93,15 @@ export function ToolSearch() {
 
   return (
     <section className="space-y-8 sm:space-y-10">
-      <div className="mb-4 space-y-4">
+      <div className="premium-card card mb-4 space-y-4 p-4 sm:p-5">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-sm font-semibold">Find the perfect tool in seconds</p>
+          <span className="chip">{tools.length} tools</span>
+        </div>
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search tools..."
+          placeholder="Search tools, use-cases, categories..."
           className="field outline-none focus:ring-2 focus:ring-blue-500"
           style={{ borderColor: "var(--border)" }}
         />
@@ -128,7 +132,7 @@ export function ToolSearch() {
         </div>
       </div>
 
-      <div>
+      <div className="space-y-2">
         <h2 className="mb-4 text-lg font-semibold sm:text-xl">Business Suite</h2>
         <p className="mb-4 text-sm" style={{ color: "var(--muted)" }}>
           Discover business-ready tools for invoices, festive creatives, offer posters, and marketing captions.
@@ -144,7 +148,7 @@ export function ToolSearch() {
         </div>
       </div>
 
-      <div>
+      <div className="space-y-2">
         <h2 className="mb-4 text-lg font-semibold sm:text-xl">All Tools</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filteredTools.map((tool) => (
