@@ -342,11 +342,18 @@ export function OfferPosterGeneratorTool() {
 
         <section className="space-y-3">
           <p className="text-sm font-medium">Live poster preview</p>
-          <div className="card premium-card rounded-2xl border p-2 sm:p-3" style={{ borderColor: "var(--border)" }}>
+          <div
+            className="card premium-card rounded-2xl border p-2 sm:p-3"
+            style={{ borderColor: "var(--border)" }}
+          >
             <canvas
               ref={canvasRef}
               className="mx-auto block h-auto w-full rounded-xl"
-              style={{ aspectRatio: FORMAT_DIMENSIONS[format].ratio, maxHeight: "78vh", background: "#0f172a" }}
+              style={{
+                aspectRatio: FORMAT_DIMENSIONS[format].ratio,
+                maxHeight: "78vh",
+                background: "#0f172a",
+              }}
             />
           </div>
         </section>
