@@ -15,7 +15,7 @@ export default function FestivalPostGeneratorPage() {
     <ToolLayout
       slug="festival-post-generator"
       title="Festival Post Generator"
-      description="Create Canva-style festive business creatives with custom occasions, richer design styles, brand fields, and high-resolution export for posts, stories, and portrait flyers."
+      description="Create festive business creatives with custom occasions, richer design styles, brand fields, and high-resolution export for posts, stories, and portrait flyers."
     >
       <FestivalPostGeneratorTool />
     </ToolLayout>

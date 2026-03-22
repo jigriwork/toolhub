@@ -16,7 +16,7 @@ export default function HomePage() {
           <div className="mt-5 grid gap-8 lg:grid-cols-[1.3fr_0.9fr] lg:items-end">
             <div>
               <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">
-                Canva-Lite Business Creative + Utility Suite for Everyday Workflows
+                Business Creative + Utility Suite for Everyday Workflows
               </h1>
               <p
                 className="mt-4 max-w-2xl text-sm sm:text-lg"
@@ -38,7 +38,7 @@ export default function HomePage() {
             <div className="card space-y-3 p-4 sm:p-5">
               <p className="text-sm font-semibold">Now live in Creative Suite</p>
               <div className="space-y-2 text-sm" style={{ color: "var(--muted)" }}>
-                <p>• Canva-like Festival Post editor: drag blocks, customize styles, export in post/story/flyer sizes</p>
+                <p>• Festival Post editor: drag blocks, customize styles, export in post/story/flyer sizes</p>
                 <p>• Offer Poster editor: premium retail templates with movable logo/headline/offer/CTA</p>
                 <p>• No-login unlocks: PWA install rewards, share unlocks, and watermark control</p>
               </div>

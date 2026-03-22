@@ -38,9 +38,9 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.webmanifest",
   icons: {
-    icon: "/icons/favicon.svg",
-    shortcut: "/icons/favicon.svg",
-    apple: "/icons/favicon.svg",
+    icon: "/icons/TH%20FAVICON.png",
+    shortcut: "/icons/TH%20FAVICON.png",
+    apple: "/icons/TH%20App%20icon.png",
   },
   openGraph: {
     type: "website",

@@ -612,6 +612,216 @@ export const tools: Tool[] = [
     ],
   },
   {
+    name: "Quotation Generator",
+    slug: "quotation-generator",
+    description:
+      "Create professional quotations/estimates with tax, discount, itemized pricing, and PDF/print export.",
+    seoDescription:
+      "Business quotation generator to create branded estimates with customer details, item table, GST, discount, and instant PDF download.",
+    category: "Business",
+    featured: true,
+    related: ["invoice-generator", "offer-poster-generator", "instagram-caption-generator"],
+    faqs: [
+      {
+        question: "Can I convert quotation to invoice later?",
+        answer:
+          "Yes. Use the Convert to Invoice action to prefill invoice details and continue billing quickly.",
+      },
+      {
+        question: "Does this support GST and discounts together?",
+        answer:
+          "Yes. You can apply percentage or flat discount, then apply GST on the taxable amount.",
+      },
+      {
+        question: "Can I print quotation for customer approval?",
+        answer:
+          "Yes. You can open print-ready view and print directly or download as PDF.",
+      },
+    ],
+  },
+  {
+    name: "Receipt Generator",
+    slug: "receipt-generator",
+    description:
+      "Create payment receipts for cash, UPI, and bank transfer with A4/thermal print support.",
+    seoDescription:
+      "Business receipt generator with auto receipt number, payment mode selection, and print-ready A4 or thermal layout.",
+    category: "Business",
+    featured: true,
+    related: ["quotation-generator", "invoice-generator", "gst-billing-helper"],
+    faqs: [
+      {
+        question: "Can I generate receipts for UPI and bank transfer?",
+        answer:
+          "Yes. You can choose cash, UPI, bank transfer, or mixed mode and print instantly.",
+      },
+      {
+        question: "Does it support thermal print?",
+        answer:
+          "Yes. Use the thermal paper option for 80mm-style print layout.",
+      },
+    ],
+  },
+  {
+    name: "Profit & Pricing Calculator",
+    slug: "profit-pricing-calculator",
+    description:
+      "Calculate selling price from cost price using margin/markup with GST and discount simulation.",
+    seoDescription:
+      "Profit margin and pricing calculator with markup, GST-inclusive/exclusive modes, and discount planning simulation.",
+    category: "Business",
+    related: ["quotation-generator", "gst-billing-helper", "discount-calculator"],
+    faqs: [
+      {
+        question: "Can I calculate selling price from target margin?",
+        answer:
+          "Yes. Enter cost and margin or markup to instantly get recommended selling price.",
+      },
+      {
+        question: "Can I test discounts before running offers?",
+        answer:
+          "Yes. Discount simulation shows post-discount revenue and estimated profit impact.",
+      },
+    ],
+  },
+  {
+    name: "WhatsApp Template Builder",
+    slug: "whatsapp-template-builder",
+    description:
+      "Build business WhatsApp messages with variables for offers, follow-ups, reminders, and greetings.",
+    seoDescription:
+      "WhatsApp business template builder with ready scripts and dynamic variable placeholders for faster customer messaging.",
+    category: "Business",
+    related: ["quotation-generator", "offer-poster-generator", "instagram-caption-generator"],
+    faqs: [
+      {
+        question: "Can I insert customer name and amount automatically?",
+        answer:
+          "Yes. Variables like name, amount, due date, and links are merged into the message instantly.",
+      },
+      {
+        question: "Can I open WhatsApp directly with the generated message?",
+        answer:
+          "Yes. One click opens WhatsApp with your prefilled template text.",
+      },
+    ],
+  },
+  {
+    name: "Proforma Invoice Generator",
+    slug: "proforma-invoice-generator",
+    description:
+      "Generate pre-sales proforma invoices with clear status, customer details, and itemized totals.",
+    seoDescription:
+      "Proforma invoice generator for pre-sales documentation with editable items, taxes, and print/PDF-ready format.",
+    category: "Business",
+    related: ["quotation-generator", "invoice-generator", "purchase-order-generator"],
+    faqs: [
+      {
+        question: "How is proforma different from invoice?",
+        answer:
+          "A proforma is a pre-sales quote-style billing document and is clearly marked as PROFORMA.",
+      },
+      {
+        question: "Can I export proforma as PDF?",
+        answer: "Yes. Download as PDF or open print view for customer sharing.",
+      },
+    ],
+  },
+  {
+    name: "Purchase Order Generator",
+    slug: "purchase-order-generator",
+    description:
+      "Create supplier purchase orders with delivery expectations and draft/sent/received status tracking.",
+    seoDescription:
+      "Purchase order generator for businesses with supplier info, item list, expected delivery date, and PO status controls.",
+    category: "Business",
+    related: ["proforma-invoice-generator", "gst-billing-helper", "pos-mvp"],
+    faqs: [
+      {
+        question: "Can I track PO status?",
+        answer:
+          "Yes. Set PO status as Draft, Sent, or Received and include this in generated output.",
+      },
+      {
+        question: "Can I print purchase order for supplier approval?",
+        answer: "Yes. A print-ready PO document is included.",
+      },
+    ],
+  },
+  {
+    name: "GST Billing Helper",
+    slug: "gst-billing-helper",
+    description:
+      "Split GST into CGST/SGST/IGST, suggest HSN/SAC, and generate clear tax summaries for billing.",
+    seoDescription:
+      "GST billing helper for India with intrastate/interstate tax logic, HSN/SAC support, and compliance-style tax summary.",
+    category: "Business",
+    featured: true,
+    related: ["gst-calculator", "invoice-generator", "proforma-invoice-generator"],
+    faqs: [
+      {
+        question: "Does it support CGST/SGST and IGST modes?",
+        answer:
+          "Yes. Switch between intrastate and interstate sale modes for automatic split.",
+      },
+      {
+        question: "Can it suggest HSN/SAC codes?",
+        answer:
+          "Yes. It includes practical suggestions by item/service type.",
+      },
+    ],
+  },
+  {
+    name: "POS",
+    slug: "pos-mvp",
+    description:
+      "Complete POS for billing, inventory add/manage, returns, split payments, cashier role, and print.",
+    seoDescription:
+      "All-in-one POS tool with inventory management, GST billing, split payments, returns, day-close report, and print-ready bill.",
+    category: "Business",
+    featured: true,
+    related: ["gst-billing-helper", "purchase-order-generator", "cloud-sync-multi-store"],
+    faqs: [
+      {
+        question: "Can I add inventory items inside this POS?",
+        answer:
+          "Yes. Use Inventory Management to add products with name, SKU, price, GST %, and stock from the same screen.",
+      },
+      {
+        question: "Can I do full billing with customer details and payment split?",
+        answer:
+          "Yes. Add cart items, customer details, returns (if any), split by cash/UPI/card, then checkout and print bill.",
+      },
+      {
+        question: "Does this POS work without backend?",
+        answer:
+          "Yes. It works in browser with local storage for single-store daily operations.",
+      },
+    ],
+  },
+  {
+    name: "Cloud Sync & Multi-store",
+    slug: "cloud-sync-multi-store",
+    description:
+      "Plan optional cloud sync, manage stores/branches, and view simple multi-outlet summary.",
+    seoDescription:
+      "Optional cloud sync and multi-store planner for POS expansion with branch management and centralized dashboard preview.",
+    category: "Business",
+    related: ["pos-mvp", "purchase-order-generator", "gst-billing-helper"],
+    faqs: [
+      {
+        question: "Is cloud sync mandatory to use POS tools?",
+        answer:
+          "No. Cloud sync is optional and suitable when moving beyond single-device usage.",
+      },
+      {
+        question: "Can I manage multiple stores?",
+        answer:
+          "Yes. Add branches/stores and view a centralized summary in one place.",
+      },
+    ],
+  },
+  {
     name: "Invoice Generator",
     slug: "invoice-generator",
     description:
@@ -620,7 +830,7 @@ export const tools: Tool[] = [
       "Business invoice generator for India. Add logo, GST/tax setup, customer details, editable items, and download professional invoice PDFs.",
     category: "Business",
     featured: true,
-    related: ["festival-post-generator", "offer-poster-generator", "instagram-caption-generator"],
+    related: ["quotation-generator", "festival-post-generator", "offer-poster-generator", "instagram-caption-generator"],
     faqs: [
       {
         question: "Can I generate an invoice with GST?",
@@ -643,12 +853,12 @@ export const tools: Tool[] = [
     name: "Festival Post Generator",
     slug: "festival-post-generator",
     description:
-      "Create Canva-style festive business creatives with custom occasions, rich themes, logo branding, and high-resolution export.",
+      "Create festive business creatives with custom occasions, rich themes, logo branding, and high-resolution export.",
     seoDescription:
       "Advanced festival post generator for business marketing creatives. Supports preset festivals, custom occasions, multiple styles, branding fields, and export formats.",
     category: "Business",
     featured: true,
-    related: ["offer-poster-generator", "instagram-caption-generator", "invoice-generator"],
+    related: ["offer-poster-generator", "instagram-caption-generator", "invoice-generator", "quotation-generator"],
     faqs: [
       {
         question: "Can I create festival creatives for different occasions?",
@@ -676,7 +886,7 @@ export const tools: Tool[] = [
       "Offer poster generator for fashion stores and local brands. Create luxury sale, festive offer, grand opening, and wedding collection posters with business branding.",
     category: "Business",
     featured: true,
-    related: ["festival-post-generator", "instagram-caption-generator", "invoice-generator"],
+    related: ["festival-post-generator", "instagram-caption-generator", "invoice-generator", "quotation-generator"],
     faqs: [
       {
         question: "What kind of businesses can use this offer poster tool?",
@@ -704,7 +914,7 @@ export const tools: Tool[] = [
       "Instagram caption generator for brands, local stores, and marketers. Generate sales, festive, launch, and engagement captions with hashtag suggestions.",
     category: "Business",
     featured: true,
-    related: ["festival-post-generator", "offer-poster-generator", "invoice-generator"],
+    related: ["festival-post-generator", "offer-poster-generator", "invoice-generator", "quotation-generator"],
     faqs: [
       {
         question: "Can I generate captions for different campaign goals?",
