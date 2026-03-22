@@ -8,7 +8,7 @@ import {
   getFavoriteTools,
   getRecentTools,
   onToolStorageUpdate,
-} from "@/lib/tool-storage";
+} from "../lib/tool-storage";
 import { trackSearch, getStats, onStatsUpdate, type ToolhubStats } from "@/lib/analytics";
 
 const emptyStats: ToolhubStats = {

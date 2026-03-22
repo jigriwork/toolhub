@@ -64,7 +64,7 @@ async function seedInitialContentIfNeeded() {
           ${article.excerpt},
           ${article.publishedAt},
           ${JSON.stringify(article.toolSlugs)},
-          ${JSON.stringify(article.content)}
+          ${JSON.stringify(article.sections)}
         )
       `;
     }
