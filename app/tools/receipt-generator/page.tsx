@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
 import { ToolLayout } from "@/components/tool-layout";
 import { ReceiptGeneratorTool } from "@/components/tools/receipt-generator-tool";
-import { getToolBySlug } from "@/data/tools";
+import { buildToolMetadata } from "@/lib/tool-metadata";
 
-const tool = getToolBySlug("receipt-generator");
-
-export const metadata: Metadata = {
-  title: tool?.name,
-  description: tool?.seoDescription,
-};
+export const metadata: Metadata = buildToolMetadata("receipt-generator");
 
 export default function ReceiptGeneratorPage() {
   return (

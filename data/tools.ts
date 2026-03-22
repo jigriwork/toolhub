@@ -25,7 +25,7 @@ export type Tool = {
   related: string[];
 };
 
-export const tools: Tool[] = [
+const allTools: Tool[] = [
   {
     name: "Word Counter",
     slug: "word-counter",
@@ -620,7 +620,7 @@ export const tools: Tool[] = [
       "Business quotation generator to create branded estimates with customer details, item table, GST, discount, and instant PDF download.",
     category: "Business",
     featured: true,
-    related: ["invoice-generator", "offer-poster-generator", "instagram-caption-generator"],
+    related: ["invoice-generator", "offer-poster-generator", "whatsapp-template-builder"],
     faqs: [
       {
         question: "Can I convert quotation to invoice later?",
@@ -692,7 +692,7 @@ export const tools: Tool[] = [
     seoDescription:
       "WhatsApp business template builder with ready scripts and dynamic variable placeholders for faster customer messaging.",
     category: "Business",
-    related: ["quotation-generator", "offer-poster-generator", "instagram-caption-generator"],
+    related: ["quotation-generator", "offer-poster-generator", "festival-post-generator"],
     faqs: [
       {
         question: "Can I insert customer name and amount automatically?",
@@ -830,7 +830,7 @@ export const tools: Tool[] = [
       "Business invoice generator for India. Add logo, GST/tax setup, customer details, editable items, and download professional invoice PDFs.",
     category: "Business",
     featured: true,
-    related: ["quotation-generator", "festival-post-generator", "offer-poster-generator", "instagram-caption-generator"],
+    related: ["quotation-generator", "festival-post-generator", "offer-poster-generator", "whatsapp-template-builder"],
     faqs: [
       {
         question: "Can I generate an invoice with GST?",
@@ -858,7 +858,7 @@ export const tools: Tool[] = [
       "Advanced festival post generator for business marketing creatives. Supports preset festivals, custom occasions, multiple styles, branding fields, and export formats.",
     category: "Business",
     featured: true,
-    related: ["offer-poster-generator", "instagram-caption-generator", "invoice-generator", "quotation-generator"],
+    related: ["offer-poster-generator", "whatsapp-template-builder", "invoice-generator", "quotation-generator"],
     faqs: [
       {
         question: "Can I create festival creatives for different occasions?",
@@ -886,7 +886,7 @@ export const tools: Tool[] = [
       "Offer poster generator for fashion stores and local brands. Create luxury sale, festive offer, grand opening, and wedding collection posters with business branding.",
     category: "Business",
     featured: true,
-    related: ["festival-post-generator", "instagram-caption-generator", "invoice-generator", "quotation-generator"],
+    related: ["festival-post-generator", "whatsapp-template-builder", "invoice-generator", "quotation-generator"],
     faqs: [
       {
         question: "What kind of businesses can use this offer poster tool?",
@@ -952,6 +952,25 @@ export const tools: Tool[] = [
     ],
   },
 ];
+
+const PUBLIC_TOOL_SLUGS = [
+  "invoice-generator",
+  "offer-poster-generator",
+  "festival-post-generator",
+  "quotation-generator",
+  "receipt-generator",
+  "profit-pricing-calculator",
+  "proforma-invoice-generator",
+  "purchase-order-generator",
+  "gst-billing-helper",
+  "pos-mvp",
+  "cloud-sync-multi-store",
+  "whatsapp-template-builder",
+] as const;
+
+export const tools: Tool[] = allTools.filter((tool) =>
+  PUBLIC_TOOL_SLUGS.includes(tool.slug as (typeof PUBLIC_TOOL_SLUGS)[number]),
+);
 
 export const getToolBySlug = (slug: string) =>
   tools.find((tool) => tool.slug === slug);

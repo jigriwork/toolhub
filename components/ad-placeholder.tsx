@@ -1,5 +1,5 @@
 export function AdPlaceholder({
-  label = "Advertisement",
+  label = "Sponsored",
 }: {
   label?: string;
 }) {
@@ -12,7 +12,7 @@ export function AdPlaceholder({
         {label}
       </p>
       <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
-        AdSense-ready ad slot placeholder
+        Reserved ad placement
       </p>
       <div
         className="mx-auto mt-4 h-24 w-full max-w-3xl rounded-lg border border-dashed sm:h-28"

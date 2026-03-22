@@ -10,8 +10,49 @@ const POS_SUMMARY_KEY = "toolhub-pos-summary";
 
 const inr = (v: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(v || 0);
 
+function loadProducts(): Product[] {
+  if (typeof window === "undefined") return [];
+  const rawProducts = localStorage.getItem(POS_PRODUCTS_KEY);
+  if (!rawProducts) return [];
+
+  try {
+    const parsed = JSON.parse(rawProducts) as Product[];
+    if (!Array.isArray(parsed)) return [];
+
+    return parsed.filter(
+      (p) =>
+        typeof p?.id === "string" &&
+        typeof p?.name === "string" &&
+        typeof p?.sku === "string" &&
+        typeof p?.price === "number" &&
+        typeof p?.tax === "number" &&
+        typeof p?.stock === "number",
+    );
+  } catch {
+    return [];
+  }
+}
+
+function loadSummary() {
+  if (typeof window === "undefined") return { salesTotal: 0, salesCount: 0 };
+  const rawSummary = localStorage.getItem(POS_SUMMARY_KEY);
+  if (!rawSummary) return { salesTotal: 0, salesCount: 0 };
+
+  try {
+    const parsed = JSON.parse(rawSummary) as { salesTotal?: number; salesCount?: number };
+    return {
+      salesTotal: typeof parsed.salesTotal === "number" ? parsed.salesTotal : 0,
+      salesCount: typeof parsed.salesCount === "number" ? parsed.salesCount : 0,
+    };
+  } catch {
+    return { salesTotal: 0, salesCount: 0 };
+  }
+}
+
+const initialSummary = loadSummary();
+
 export function PosMvpTool() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>(loadProducts);
 
   const [newName, setNewName] = useState("");
   const [newSku, setNewSku] = useState("");
@@ -20,8 +61,8 @@ export function PosMvpTool() {
   const [newStock, setNewStock] = useState(1);
 
   const [cart, setCart] = useState<CartLine[]>([]);
-  const [salesTotal, setSalesTotal] = useState(0);
-  const [salesCount, setSalesCount] = useState(0);
+  const [salesTotal, setSalesTotal] = useState(initialSummary.salesTotal);
+  const [salesCount, setSalesCount] = useState(initialSummary.salesCount);
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [cashierRole, setCashierRole] = useState<"owner" | "cashier">("owner");
@@ -32,41 +73,6 @@ export function PosMvpTool() {
   const [openingCash, setOpeningCash] = useState(0);
   const [closingCash, setClosingCash] = useState(0);
   const [lastBill, setLastBill] = useState<{ no: string; date: string; customer: string; lines: CartLine[]; grand: number } | null>(null);
-
-  useEffect(() => {
-    const rawProducts = localStorage.getItem(POS_PRODUCTS_KEY);
-    if (rawProducts) {
-      try {
-        const parsed = JSON.parse(rawProducts) as Product[];
-        if (Array.isArray(parsed)) {
-          setProducts(
-            parsed.filter(
-              (p) =>
-                typeof p?.id === "string" &&
-                typeof p?.name === "string" &&
-                typeof p?.sku === "string" &&
-                typeof p?.price === "number" &&
-                typeof p?.tax === "number" &&
-                typeof p?.stock === "number",
-            ),
-          );
-        }
-      } catch {
-        // keep clean empty state for production safety
-      }
-    }
-
-    const rawSummary = localStorage.getItem(POS_SUMMARY_KEY);
-    if (rawSummary) {
-      try {
-        const parsed = JSON.parse(rawSummary) as { salesTotal?: number; salesCount?: number };
-        if (typeof parsed.salesTotal === "number") setSalesTotal(parsed.salesTotal);
-        if (typeof parsed.salesCount === "number") setSalesCount(parsed.salesCount);
-      } catch {
-        // ignore invalid summary
-      }
-    }
-  }, []);
 
   useEffect(() => {
     localStorage.setItem(POS_PRODUCTS_KEY, JSON.stringify(products));

@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
 import { ToolLayout } from "@/components/tool-layout";
 import { QuotationGeneratorTool } from "@/components/tools/quotation-generator-tool";
-import { getToolBySlug } from "@/data/tools";
+import { buildToolMetadata } from "@/lib/tool-metadata";
 
-const tool = getToolBySlug("quotation-generator");
-
-export const metadata: Metadata = {
-  title: tool?.name,
-  description: tool?.seoDescription,
-};
+export const metadata: Metadata = buildToolMetadata("quotation-generator");
 
 export default function QuotationGeneratorPage() {
   return (

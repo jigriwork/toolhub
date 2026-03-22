@@ -1,21 +1,16 @@
 import type { Metadata } from "next";
 import { ToolLayout } from "@/components/tool-layout";
 import { OfferPosterGeneratorTool } from "@/components/tools/offer-poster-generator-tool";
-import { getToolBySlug } from "@/data/tools";
+import { buildToolMetadata } from "@/lib/tool-metadata";
 
-const tool = getToolBySlug("offer-poster-generator");
-
-export const metadata: Metadata = {
-  title: tool?.name,
-  description: tool?.seoDescription,
-};
+export const metadata: Metadata = buildToolMetadata("offer-poster-generator");
 
 export default function OfferPosterGeneratorPage() {
   return (
     <ToolLayout
       slug="offer-poster-generator"
       title="Offer Poster Generator"
-      description="Build premium promotional posters for retail and local business campaigns with stronger visual hierarchy, campaign-ready themes, logo branding, and crisp exports."
+      description="Design premium retail offer posters with stronger hierarchy, brand-ready layouts, modern themes, and sharper export."
     >
       <OfferPosterGeneratorTool />
     </ToolLayout>

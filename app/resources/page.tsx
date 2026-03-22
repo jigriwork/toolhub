@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { resources } from "@/data/resources";
+import {
+  resources,
+  type ResourceArticle,
+} from "../../data/resources";
 import { getToolBySlug } from "@/data/tools";
 
 export const metadata: Metadata = {
   title: "Resources",
   description:
-    "toolhubsite resources with practical guides on SEO, text formatting, image optimization, and developer workflows.",
+    "Actionable business guides for invoicing, quotations, GST billing, festival creatives, and daily operations on toolhubsite.",
+  alternates: {
+    canonical: "/resources",
+  },
 };
 
 export default function ResourcesPage() {
@@ -18,7 +24,7 @@ export default function ResourcesPage() {
       </p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {resources.map((article) => (
+        {resources.map((article: ResourceArticle) => (
           <article key={article.slug} className="card p-4 sm:p-5">
             <p className="text-xs" style={{ color: "var(--muted)" }}>
               {new Date(article.publishedAt).toLocaleDateString()}
@@ -28,7 +34,7 @@ export default function ResourcesPage() {
               {article.excerpt}
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
-              {article.toolSlugs.slice(0, 3).map((slug) => {
+              {article.toolSlugs.slice(0, 3).map((slug: string) => {
                 const tool = getToolBySlug(slug);
                 if (!tool) return null;
                 return (

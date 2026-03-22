@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
 import { ToolLayout } from "@/components/tool-layout";
 import { GstBillingHelperTool } from "@/components/tools/gst-billing-helper-tool";
-import { getToolBySlug } from "@/data/tools";
+import { buildToolMetadata } from "@/lib/tool-metadata";
 
-const tool = getToolBySlug("gst-billing-helper");
-
-export const metadata: Metadata = {
-  title: tool?.name,
-  description: tool?.seoDescription,
-};
+export const metadata: Metadata = buildToolMetadata("gst-billing-helper");
 
 export default function GstBillingHelperPage() {
   return (

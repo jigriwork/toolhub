@@ -1,21 +1,16 @@
 import type { Metadata } from "next";
 import { ToolLayout } from "@/components/tool-layout";
 import { InvoiceGeneratorTool } from "@/components/tools/invoice-generator-tool";
-import { getToolBySlug } from "@/data/tools";
+import { buildToolMetadata } from "@/lib/tool-metadata";
 
-const tool = getToolBySlug("invoice-generator");
-
-export const metadata: Metadata = {
-  title: tool?.name,
-  description: tool?.seoDescription,
-};
+export const metadata: Metadata = buildToolMetadata("invoice-generator");
 
 export default function InvoiceGeneratorPage() {
   return (
     <ToolLayout
       slug="invoice-generator"
       title="Invoice Generator"
-      description="Create clean professional invoices with business details, customer details, editable items, GST, and instant PDF download."
+      description="Create polished GST-ready invoices with logo branding, tax controls, line items, and clean PDF export."
     >
       <InvoiceGeneratorTool />
     </ToolLayout>

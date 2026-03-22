@@ -9,36 +9,36 @@ const CLOUD_FLAG_KEY = "toolhub-pos-cloud-sync-enabled";
 
 const inr = (v: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(v || 0);
 
+function loadSyncEnabled() {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem(CLOUD_FLAG_KEY) === "1";
+}
+
+function loadStores(): Store[] {
+  if (typeof window === "undefined") return [];
+  const rawStores = localStorage.getItem(STORES_KEY);
+  if (!rawStores) return [];
+
+  try {
+    const parsed = JSON.parse(rawStores) as Store[];
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(
+      (s) =>
+        typeof s?.id === "string" &&
+        typeof s?.name === "string" &&
+        typeof s?.city === "string" &&
+        typeof s?.todaySales === "number",
+    );
+  } catch {
+    return [];
+  }
+}
+
 export function CloudSyncMultiStoreTool() {
-  const [syncEnabled, setSyncEnabled] = useState(false);
-  const [stores, setStores] = useState<Store[]>([]);
+  const [syncEnabled, setSyncEnabled] = useState(loadSyncEnabled);
+  const [stores, setStores] = useState<Store[]>(loadStores);
   const [newName, setNewName] = useState("");
   const [newCity, setNewCity] = useState("");
-
-  useEffect(() => {
-    const cloudEnabled = localStorage.getItem(CLOUD_FLAG_KEY);
-    if (cloudEnabled === "1") setSyncEnabled(true);
-
-    const rawStores = localStorage.getItem(STORES_KEY);
-    if (!rawStores) return;
-
-    try {
-      const parsed = JSON.parse(rawStores) as Store[];
-      if (Array.isArray(parsed)) {
-        setStores(
-          parsed.filter(
-            (s) =>
-              typeof s?.id === "string" &&
-              typeof s?.name === "string" &&
-              typeof s?.city === "string" &&
-              typeof s?.todaySales === "number",
-          ),
-        );
-      }
-    } catch {
-      // keep empty state if malformed
-    }
-  }, []);
 
   useEffect(() => {
     localStorage.setItem(CLOUD_FLAG_KEY, syncEnabled ? "1" : "0");

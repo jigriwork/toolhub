@@ -86,7 +86,7 @@ export default function HomePage() {
               <Link href="/tools/invoice-generator" className="btn btn-secondary">Invoice</Link>
               <Link href="/tools/festival-post-generator" className="btn btn-secondary">Festival Post</Link>
               <Link href="/tools/offer-poster-generator" className="btn btn-secondary">Offer Poster</Link>
-              <Link href="/tools/instagram-caption-generator" className="btn btn-secondary">Captions</Link>
+              <Link href="/tools/whatsapp-template-builder" className="btn btn-secondary">WhatsApp</Link>
             </div>
           </div>
         </div>

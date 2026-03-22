@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getResourceBySlug, resources } from "@/data/resources";
+import {
+  getResourceBySlug,
+  resources,
+  type ResourceArticle,
+} from "../../../data/resources";
 import { getToolBySlug } from "@/data/tools";
 
 export async function generateStaticParams() {
-  return resources.map((resource) => ({ slug: resource.slug }));
+  return resources.map((resource: ResourceArticle) => ({ slug: resource.slug }));
 }
 
 export async function generateMetadata({
@@ -19,6 +23,15 @@ export async function generateMetadata({
   return {
     title: article.title,
     description: article.description,
+    alternates: {
+      canonical: `/resources/${article.slug}`,
+    },
+    openGraph: {
+      title: `${article.title} | toolhubsite`,
+      description: article.description,
+      url: `https://www.toolhubsite.in/resources/${article.slug}`,
+      type: "article",
+    },
   };
 }
 
@@ -34,7 +47,9 @@ export default async function ResourceArticlePage({
     notFound();
   }
 
-  const relatedArticles = resources.filter((item) => item.slug !== article.slug).slice(0, 3);
+  const relatedArticles = resources
+    .filter((item: ResourceArticle) => item.slug !== article.slug)
+    .slice(0, 3);
 
   return (
     <main className="container section-y">
@@ -48,7 +63,7 @@ export default async function ResourceArticlePage({
         </p>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {article.toolSlugs.map((slugValue) => {
+          {article.toolSlugs.map((slugValue: string) => {
             const tool = getToolBySlug(slugValue);
             if (!tool) return null;
             return (
@@ -64,9 +79,14 @@ export default async function ResourceArticlePage({
           })}
         </div>
 
-        <div className="mt-8 space-y-4 text-[15px] leading-7 sm:text-base">
-          {article.content.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
+        <div className="mt-8 space-y-8 text-[15px] leading-7 sm:text-base">
+          {article.sections.map((section: ResourceArticle["sections"][number]) => (
+            <section key={section.heading} className="space-y-3">
+              <h2 className="text-lg font-semibold sm:text-xl">{section.heading}</h2>
+              {section.paragraphs.map((paragraph: string) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </section>
           ))}
         </div>
       </article>
@@ -74,7 +94,7 @@ export default async function ResourceArticlePage({
       <section className="mx-auto mt-10 max-w-3xl">
         <h2 className="text-xl font-semibold">Related resources</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {relatedArticles.map((related) => (
+          {relatedArticles.map((related: ResourceArticle) => (
             <Link
               key={related.slug}
               href={`/resources/${related.slug}`}

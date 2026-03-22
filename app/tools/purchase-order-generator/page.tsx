@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
 import { ToolLayout } from "@/components/tool-layout";
 import { PurchaseOrderGeneratorTool } from "@/components/tools/purchase-order-generator-tool";
-import { getToolBySlug } from "@/data/tools";
+import { buildToolMetadata } from "@/lib/tool-metadata";
 
-const tool = getToolBySlug("purchase-order-generator");
-
-export const metadata: Metadata = {
-  title: tool?.name,
-  description: tool?.seoDescription,
-};
+export const metadata: Metadata = buildToolMetadata("purchase-order-generator");
 
 export default function PurchaseOrderGeneratorPage() {
   return (

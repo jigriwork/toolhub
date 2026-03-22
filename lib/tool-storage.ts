@@ -2,16 +2,18 @@
 
 import { trackFavoriteInteraction, trackRecentInteraction } from "@/lib/analytics";
 
-const RECENT_KEY = "toolhub_recent_tools";
 const FAVORITES_KEY = "toolhub_favorite_tools";
-const MAX_RECENT = 8;
-const STORAGE_EVENT = "toolhub-storage-update";
+const RECENT_KEY = "toolhub_recent_tools";
+const STORAGE_EVENT = "toolhub-tool-storage-update";
+const MAX_RECENT = 10;
 
-function parseStringArray(value: string | null) {
-  if (!value) return [] as string[];
+function readList(key: string): string[] {
+  if (typeof window === "undefined") return [];
 
   try {
-    const parsed = JSON.parse(value) as unknown;
+    const raw = window.localStorage.getItem(key);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as unknown;
     if (!Array.isArray(parsed)) return [];
     return parsed.filter((item): item is string => typeof item === "string");
   } catch {
@@ -19,23 +21,14 @@ function parseStringArray(value: string | null) {
   }
 }
 
-export function getRecentTools() {
-  if (typeof window === "undefined") return [] as string[];
-  return parseStringArray(window.localStorage.getItem(RECENT_KEY));
-}
-
-export function addRecentTool(slug: string) {
+function writeList(key: string, value: string[]) {
   if (typeof window === "undefined") return;
-  const current = getRecentTools();
-  const next = [slug, ...current.filter((item) => item !== slug)].slice(0, MAX_RECENT);
-  window.localStorage.setItem(RECENT_KEY, JSON.stringify(next));
-  trackRecentInteraction();
+  window.localStorage.setItem(key, JSON.stringify(value));
   window.dispatchEvent(new CustomEvent(STORAGE_EVENT));
 }
 
 export function getFavoriteTools() {
-  if (typeof window === "undefined") return [] as string[];
-  return parseStringArray(window.localStorage.getItem(FAVORITES_KEY));
+  return readList(FAVORITES_KEY);
 }
 
 export function isFavoriteTool(slug: string) {
@@ -43,25 +36,31 @@ export function isFavoriteTool(slug: string) {
 }
 
 export function toggleFavoriteTool(slug: string) {
-  if (typeof window === "undefined") return false;
   const current = getFavoriteTools();
   const exists = current.includes(slug);
-  const next = exists
-    ? current.filter((item) => item !== slug)
-    : [slug, ...current.filter((item) => item !== slug)];
-  window.localStorage.setItem(FAVORITES_KEY, JSON.stringify(next));
+  const next = exists ? current.filter((item) => item !== slug) : [...current, slug];
+  writeList(FAVORITES_KEY, next);
   trackFavoriteInteraction();
-  window.dispatchEvent(new CustomEvent(STORAGE_EVENT));
   return !exists;
+}
+
+export function getRecentTools() {
+  return readList(RECENT_KEY);
+}
+
+export function addRecentTool(slug: string) {
+  const current = getRecentTools();
+  const next = [slug, ...current.filter((item) => item !== slug)].slice(0, MAX_RECENT);
+  writeList(RECENT_KEY, next);
+  trackRecentInteraction();
 }
 
 export function onToolStorageUpdate(handler: () => void) {
   if (typeof window === "undefined") return () => {};
-  const listener = () => handler();
-  window.addEventListener(STORAGE_EVENT, listener);
-  window.addEventListener("storage", listener);
+  window.addEventListener(STORAGE_EVENT, handler);
+  window.addEventListener("storage", handler);
   return () => {
-    window.removeEventListener(STORAGE_EVENT, listener);
-    window.removeEventListener("storage", listener);
+    window.removeEventListener(STORAGE_EVENT, handler);
+    window.removeEventListener("storage", handler);
   };
 }

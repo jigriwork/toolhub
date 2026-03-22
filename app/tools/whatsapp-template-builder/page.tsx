@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
 import { ToolLayout } from "@/components/tool-layout";
 import { WhatsappTemplateBuilderTool } from "@/components/tools/whatsapp-template-builder-tool";
-import { getToolBySlug } from "@/data/tools";
+import { buildToolMetadata } from "@/lib/tool-metadata";
 
-const tool = getToolBySlug("whatsapp-template-builder");
-
-export const metadata: Metadata = {
-  title: tool?.name,
-  description: tool?.seoDescription,
-};
+export const metadata: Metadata = buildToolMetadata("whatsapp-template-builder");
 
 export default function WhatsappTemplateBuilderPage() {
   return (

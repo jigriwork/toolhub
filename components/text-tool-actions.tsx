@@ -1,32 +1,27 @@
+"use client";
+
 type TextToolActionsProps = {
   onSample?: () => void;
-  onCopy?: () => void;
   onClear?: () => void;
   onReset?: () => void;
-  copiedLabel?: string;
-  copyLabel?: string;
+  onCopy?: () => void;
   copied?: boolean;
+  copyLabel?: string;
 };
 
 export function TextToolActions({
   onSample,
-  onCopy,
   onClear,
   onReset,
-  copiedLabel = "Copied!",
+  onCopy,
+  copied = false,
   copyLabel = "Copy",
-  copied,
 }: TextToolActionsProps) {
   return (
     <div className="flex flex-wrap gap-2">
       {onSample ? (
         <button type="button" className="btn btn-secondary" onClick={onSample}>
           Sample
-        </button>
-      ) : null}
-      {onCopy ? (
-        <button type="button" className="btn btn-primary" onClick={onCopy}>
-          {copied ? copiedLabel : copyLabel}
         </button>
       ) : null}
       {onClear ? (
@@ -37,6 +32,11 @@ export function TextToolActions({
       {onReset ? (
         <button type="button" className="btn btn-secondary" onClick={onReset}>
           Reset
+        </button>
+      ) : null}
+      {onCopy ? (
+        <button type="button" className="btn btn-secondary" onClick={onCopy}>
+          {copied ? "Copied!" : copyLabel}
         </button>
       ) : null}
     </div>
