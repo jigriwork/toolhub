@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -42,11 +43,15 @@ export function Navbar() {
           className="inline-flex items-center gap-2 text-lg font-bold tracking-tight sm:text-xl"
           onClick={closeMenu}
         >
-          <span
-            aria-hidden
-            className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-sm font-extrabold text-white shadow-sm"
-          >
-            TH
+          <span className="inline-flex h-9 w-9 overflow-hidden rounded-xl border border-blue-600/20 shadow-sm">
+            <Image
+              src="/icons/TH LOGO.png"
+              alt="ToolHub logo"
+              width={36}
+              height={36}
+              className="h-full w-full object-cover"
+              priority
+            />
           </span>
           <span className="leading-none">
             toolhubsite

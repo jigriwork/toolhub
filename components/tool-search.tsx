@@ -68,6 +68,11 @@ export function ToolSearch() {
     [favorites],
   );
 
+  const businessTools = useMemo(
+    () => tools.filter((tool) => tool.category === "Business"),
+    [],
+  );
+
   const filteredTools = useMemo(() => {
     const q = query.trim().toLowerCase();
 
@@ -164,6 +169,22 @@ export function ToolSearch() {
             >
               {category} ({categoryCounts[category]})
             </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="text-lg font-semibold sm:text-xl">Business Tools</h2>
+          <span className="chip">Priority Suite</span>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {businessTools.slice(0, 6).map((tool) => (
+            <ToolCard
+              key={`business-${tool.slug}`}
+              tool={tool}
+              rightSlot={<FavoriteToolButton slug={tool.slug} />}
+            />
           ))}
         </div>
       </div>
