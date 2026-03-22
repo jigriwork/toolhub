@@ -19,15 +19,11 @@ const emptyStats: ToolhubStats = {
 };
 
 export function ToolSearch() {
-  const HIDDEN_CANVA_SLUGS = new Set(["festival-post-generator", "offer-poster-generator"]);
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<ToolCategory | "All">("All");
   const [recent, setRecent] = useState<string[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [stats, setStats] = useState<ToolhubStats>(emptyStats);
-
-  const isDiscoverable = (slug: string) =>
-    !HIDDEN_CANVA_SLUGS.has(slug) || favorites.includes(slug);
 
   useEffect(() => {
     const handle = window.setTimeout(() => {
@@ -51,21 +47,17 @@ export function ToolSearch() {
     return onStatsUpdate(syncStats);
   }, []);
 
-  const featuredTools = useMemo(
-    () => tools.filter((tool) => tool.featured && isDiscoverable(tool.slug)),
-    [favorites],
-  );
+  const featuredTools = useMemo(() => tools.filter((tool) => tool.featured), []);
   const businessTools = useMemo(
-    () => tools.filter((tool) => tool.category === "Business" && isDiscoverable(tool.slug)),
-    [favorites],
+    () => tools.filter((tool) => tool.category === "Business"),
+    [],
   );
   const recentTools = useMemo(
     () =>
       recent
         .map((slug) => tools.find((tool) => tool.slug === slug))
-        .filter((tool): tool is (typeof tools)[number] => Boolean(tool))
-        .filter((tool) => isDiscoverable(tool.slug)),
-    [recent, favorites],
+        .filter((tool): tool is (typeof tools)[number] => Boolean(tool)),
+    [recent],
   );
   const favoriteTools = useMemo(
     () =>
@@ -77,32 +69,27 @@ export function ToolSearch() {
 
   const trendingTools = useMemo(() => {
     return [...tools]
-      .filter((tool) => isDiscoverable(tool.slug))
       .sort(
         (a, b) =>
           (stats.toolVisits[b.slug] ?? 0) - (stats.toolVisits[a.slug] ?? 0) ||
           a.name.localeCompare(b.name),
       )
       .slice(0, 6);
-  }, [favorites, stats]);
+  }, [stats]);
 
-  const newestTools = useMemo(
-    () => [...tools].filter((tool) => isDiscoverable(tool.slug)).slice(-6).reverse(),
-    [favorites],
-  );
+  const newestTools = useMemo(() => [...tools].slice(-6).reverse(), []);
 
   const filteredTools = useMemo(() => {
     const q = query.trim().toLowerCase();
 
     return tools.filter((tool) => {
-      if (!isDiscoverable(tool.slug)) return false;
       const categoryMatch =
         activeCategory === "All" ? true : tool.category === activeCategory;
       const queryMatch =
         !q || `${tool.name} ${tool.description} ${tool.seoDescription}`.toLowerCase().includes(q);
       return categoryMatch && queryMatch;
     });
-  }, [query, activeCategory, favorites]);
+  }, [query, activeCategory]);
 
   return (
     <section className="space-y-8 sm:space-y-10">
