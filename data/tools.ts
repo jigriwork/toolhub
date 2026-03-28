@@ -953,24 +953,7 @@ const allTools: Tool[] = [
   },
 ];
 
-const PUBLIC_TOOL_SLUGS = [
-  "invoice-generator",
-  "offer-poster-generator",
-  "festival-post-generator",
-  "quotation-generator",
-  "receipt-generator",
-  "profit-pricing-calculator",
-  "proforma-invoice-generator",
-  "purchase-order-generator",
-  "gst-billing-helper",
-  "pos-mvp",
-  "cloud-sync-multi-store",
-  "whatsapp-template-builder",
-] as const;
-
-export const tools: Tool[] = allTools.filter((tool) =>
-  PUBLIC_TOOL_SLUGS.includes(tool.slug as (typeof PUBLIC_TOOL_SLUGS)[number]),
-);
+export const tools: Tool[] = allTools;
 
 export const getToolBySlug = (slug: string) =>
   tools.find((tool) => tool.slug === slug);
