@@ -10,7 +10,7 @@ export default function PosMvpPage() {
     <ToolLayout
       slug="pos-mvp"
       title="POS"
-      description="All-in-one POS with inventory add/manage, billing, returns, split payments, cashier roles, close report, and print."
+      description="Advanced Tool · Runs locally in your browser (no cloud). Manage inventory, bill customers, process returns, split payments, and print invoices from one POS workspace."
     >
       <PosMvpTool />
     </ToolLayout>

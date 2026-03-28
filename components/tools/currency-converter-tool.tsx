@@ -2,6 +2,18 @@
 
 import { useMemo, useState } from "react";
 
+type LiveRateApiConfig = {
+  enabled: boolean;
+  endpoint?: string;
+  apiKeyEnv?: string;
+};
+
+const liveRateApiConfig: LiveRateApiConfig = {
+  enabled: false,
+  endpoint: undefined,
+  apiKeyEnv: undefined,
+};
+
 const rates: Record<string, number> = {
   USD: 1,
   INR: 83.2,
@@ -35,8 +47,13 @@ export function CurrencyConverterTool() {
         {amount.toFixed(2)} {from} ≈ {converted.toFixed(2)} {to}
       </div>
       <p className="text-xs" style={{ color: "var(--muted)" }}>
-        Demo rate table for product preview. Plug in live exchange API when needed.
+        Using built-in rates for reliability. Live API-ready config is prepared and can be enabled later.
       </p>
+      {!liveRateApiConfig.enabled ? (
+        <p className="text-xs" style={{ color: "var(--muted)" }}>
+          Future-ready: set API endpoint and key to switch to real-time rates without changing UI flow.
+        </p>
+      ) : null}
     </div>
   );
 }

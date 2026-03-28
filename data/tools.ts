@@ -1,10 +1,8 @@
 export const toolCategories = [
-  "Text",
-  "Image",
-  "Utility",
   "Business",
-  "SEO",
-  "Developer",
+  "Creative",
+  "Image & PDF",
+  "Essentials",
 ] as const;
 
 export type ToolCategory = (typeof toolCategories)[number];
@@ -27,929 +25,355 @@ export type Tool = {
 
 const allTools: Tool[] = [
   {
-    name: "Word Counter",
-    slug: "word-counter",
-    description:
-      "Count words, characters, sentences, paragraphs, and reading time instantly.",
-    seoDescription:
-      "Free online word counter to measure words, characters, paragraphs, sentence count, and reading time in real time.",
-    category: "Text",
+    name: "Invoice Generator",
+    slug: "invoice-generator",
+    description: "Create GST-ready invoices with logo, customer details, and PDF export.",
+    seoDescription: "Business invoice generator with tax controls, item rows, and clean downloadable PDF output.",
+    category: "Business",
     featured: true,
-    related: ["character-counter", "remove-extra-spaces", "text-case-converter"],
-    faqs: [
-      {
-        question: "How is reading time calculated?",
-        answer:
-          "Reading time is estimated using an average speed of around 200 words per minute.",
-      },
-      {
-        question: "Does this word counter work offline?",
-        answer:
-          "Yes. The calculation happens in your browser, so the tool remains fast and private.",
-      },
-    ],
-  },
-  {
-    name: "Character Counter",
-    slug: "character-counter",
-    description: "Count characters with and without spaces for copywriting and SEO.",
-    seoDescription:
-      "Online character counter tool for social posts, meta titles, descriptions, and content length checks.",
-    category: "SEO",
-    featured: true,
-    related: ["word-counter", "remove-extra-spaces", "text-repeater"],
-    faqs: [
-      {
-        question: "Can I count characters without spaces?",
-        answer:
-          "Yes. This tool provides both total characters and characters excluding spaces.",
-      },
-      {
-        question: "Who uses a character counter?",
-        answer:
-          "Writers, SEO professionals, social media managers, and developers commonly use it.",
-      },
-    ],
-  },
-  {
-    name: "Remove Extra Spaces",
-    slug: "remove-extra-spaces",
-    description: "Clean extra spaces, line gaps, and messy text formatting in one click.",
-    seoDescription:
-      "Remove unwanted spaces and normalize text formatting for cleaner documents, forms, and content editing.",
-    category: "SEO",
-    related: ["text-case-converter", "word-counter", "text-repeater"],
-    faqs: [
-      {
-        question: "What kind of spaces does it remove?",
-        answer:
-          "It trims extra spaces between words and around lines while keeping text readable.",
-      },
-      {
-        question: "Can I reset the cleaned output?",
-        answer: "Yes. Use Reset to restore original input or Clear to start fresh.",
-      },
-    ],
-  },
-  {
-    name: "Text Repeater",
-    slug: "text-repeater",
-    description: "Repeat words or full text lines any number of times instantly.",
-    seoDescription:
-      "Text repeater tool to duplicate strings, words, or lines with custom repeat count and separators.",
-    category: "Text",
-    related: ["text-case-converter", "remove-extra-spaces", "character-counter"],
-    faqs: [
-      {
-        question: "Can I add line breaks between repeats?",
-        answer:
-          "Yes. You can choose a separator such as space, comma, or new line between repetitions.",
-      },
-      {
-        question: "Is there a limit to repeat count?",
-        answer:
-          "A safe upper limit is applied to keep the tool responsive on mobile and desktop.",
-      },
-    ],
-  },
-  {
-    name: "Text Case Converter",
-    slug: "text-case-converter",
-    description:
-      "Convert text to lowercase, uppercase, sentence case, or capitalize words.",
-    seoDescription:
-      "Convert text case instantly with lowercase, uppercase, sentence case, and title-style capitalization.",
-    category: "Text",
-    featured: true,
-    related: ["remove-extra-spaces", "word-counter", "text-repeater"],
-    faqs: [
-      {
-        question: "Does this tool support large text blocks?",
-        answer:
-          "Yes, it works with long content and updates in real time directly in your browser.",
-      },
-      {
-        question: "Can I copy the converted text quickly?",
-        answer: "Yes, use the Copy button to place output directly into clipboard.",
-      },
-    ],
-  },
-  {
-    name: "Password Generator",
-    slug: "password-generator",
-    description:
-      "Create secure passwords with length and character type controls.",
-    seoDescription:
-      "Secure password generator with customizable length, symbols, numbers, uppercase and lowercase options.",
-    category: "Developer",
-    featured: true,
-    related: ["qr-code-generator", "age-calculator", "percentage-calculator"],
-    faqs: [
-      {
-        question: "Are generated passwords random?",
-        answer:
-          "Yes. The tool uses browser crypto APIs for stronger random generation.",
-      },
-      {
-        question: "Is the password stored anywhere?",
-        answer:
-          "No, passwords are generated on your device and are not sent to a server.",
-      },
-    ],
-  },
-  {
-    name: "Age Calculator",
-    slug: "age-calculator",
-    description: "Calculate exact age in years, months, and days.",
-    seoDescription:
-      "Simple age calculator to find exact age by date of birth in years, months, and days.",
-    category: "Utility",
-    featured: true,
-    related: ["bmi-calculator", "percentage-calculator", "password-generator"],
-    faqs: [
-      {
-        question: "Can I calculate age for future dates?",
-        answer: "No. This tool only accepts valid dates in the past.",
-      },
-      {
-        question: "Is leap year handled?",
-        answer: "Yes. Native date operations account for leap years automatically.",
-      },
-    ],
-  },
-  {
-    name: "Percentage Calculator",
-    slug: "percentage-calculator",
-    description: "Calculate percentages, increase/decrease values, and compare changes.",
-    seoDescription:
-      "Percentage calculator for finding X% of Y, percentage change, and increase/decrease quickly.",
-    category: "Utility",
-    related: ["bmi-calculator", "age-calculator", "word-counter"],
-    faqs: [
-      {
-        question: "What percentage formulas are available?",
-        answer:
-          "You can calculate percentage of a number and percentage increase/decrease between values.",
-      },
-      {
-        question: "Can I reset all fields quickly?",
-        answer: "Yes. Use the Reset button to restore sample values instantly.",
-      },
-    ],
-  },
-  {
-    name: "BMI Calculator",
-    slug: "bmi-calculator",
-    description: "Calculate body mass index using height and weight with category result.",
-    seoDescription:
-      "BMI calculator with instant body mass index result, category classification, and healthy range guidance.",
-    category: "Utility",
-    related: ["age-calculator", "percentage-calculator", "word-counter"],
-    faqs: [
-      {
-        question: "What units are supported?",
-        answer:
-          "This version uses kilograms for weight and centimeters for height.",
-      },
-      {
-        question: "Is BMI a medical diagnosis?",
-        answer:
-          "No. BMI is a screening estimate and should be interpreted with professional guidance.",
-      },
-    ],
-  },
-  {
-    name: "QR Code Generator",
-    slug: "qr-code-generator",
-    description: "Generate and download QR codes for text and URLs.",
-    seoDescription:
-      "Generate high quality QR codes online for links, text, and contact details, then download as PNG.",
-    category: "Utility",
-    related: ["password-generator", "text-case-converter", "word-counter"],
-    faqs: [
-      {
-        question: "Can I generate QR for website links?",
-        answer: "Yes. Paste any URL and generate a downloadable QR image instantly.",
-      },
-      {
-        question: "Does ToolHub store QR data?",
-        answer: "No, generation happens in browser without server-side storage.",
-      },
-    ],
-  },
-  {
-    name: "Image Compressor",
-    slug: "image-compressor",
-    description:
-      "Compress images directly in browser and download optimized results.",
-    seoDescription:
-      "Free image compressor to reduce image size online while maintaining visual quality, directly in browser.",
-    category: "Image",
-    featured: true,
-    related: ["image-resizer", "jpg-to-png-converter", "png-to-jpg-converter"],
-    faqs: [
-      {
-        question: "Will image quality be reduced?",
-        answer:
-          "Compression may reduce quality depending on the selected level. You can adjust quality before downloading.",
-      },
-      {
-        question: "Are images uploaded to a server?",
-        answer: "No. Compression runs locally in your browser for better privacy.",
-      },
-    ],
-  },
-  {
-    name: "Image Resizer",
-    slug: "image-resizer",
-    description: "Resize images to custom width and height and download instantly.",
-    seoDescription:
-      "Image resizer tool to quickly change image dimensions online with custom width and height settings.",
-    category: "Image",
-    related: ["image-compressor", "jpg-to-png-converter", "png-to-jpg-converter"],
-    faqs: [
-      {
-        question: "Can I maintain aspect ratio while resizing?",
-        answer:
-          "Yes. Enable the aspect ratio lock to auto-adjust height with width changes.",
-      },
-      {
-        question: "Which formats are accepted?",
-        answer:
-          "Common image formats like JPG, PNG, and WebP are supported by modern browsers.",
-      },
-    ],
-  },
-  {
-    name: "JPG to PNG Converter",
-    slug: "jpg-to-png-converter",
-    description: "Convert JPG/JPEG images to transparent-friendly PNG format.",
-    seoDescription:
-      "Convert JPG to PNG online free, fast, and private with in-browser processing and instant download.",
-    category: "Image",
-    related: ["png-to-jpg-converter", "image-resizer", "image-compressor"],
-    faqs: [
-      {
-        question: "Will image resolution change?",
-        answer:
-          "No. The converter keeps original pixel dimensions unless edited in another tool.",
-      },
-      {
-        question: "Is file conversion private?",
-        answer: "Yes. Conversion happens in browser without cloud upload.",
-      },
-    ],
-  },
-  {
-    name: "PNG to JPG Converter",
-    slug: "png-to-jpg-converter",
-    description: "Convert PNG images to lightweight JPG format for web sharing.",
-    seoDescription:
-      "Convert PNG to JPG online with adjustable quality settings and direct browser processing.",
-    category: "Image",
-    related: ["jpg-to-png-converter", "image-compressor", "image-resizer"],
-    faqs: [
-      {
-        question: "What happens to PNG transparency?",
-        answer:
-          "Transparent pixels are flattened against a white background when converted to JPG.",
-      },
-      {
-        question: "Can I control JPG quality?",
-        answer: "Yes. You can set output quality before downloading the converted image.",
-      },
-    ],
-  },
-  {
-    name: "GST Calculator",
-    slug: "gst-calculator",
-    description: "Calculate GST inclusive and exclusive amounts instantly.",
-    seoDescription:
-      "GST calculator to compute tax amount, net price, and gross total for common GST slabs.",
-    category: "Utility",
-    featured: true,
-    related: ["discount-calculator", "emi-calculator", "loan-calculator"],
-    faqs: [
-      {
-        question: "Can I calculate GST from inclusive amount?",
-        answer:
-          "Yes. Enter the gross amount and GST rate to split taxable value and GST component.",
-      },
-      {
-        question: "Which GST rates can I use?",
-        answer: "You can enter any rate manually, including 5%, 12%, 18%, or 28%.",
-      },
-    ],
-  },
-  {
-    name: "EMI Calculator",
-    slug: "emi-calculator",
-    description: "Calculate monthly EMI, total interest, and total payable amount.",
-    seoDescription:
-      "EMI calculator for home, car, and personal loans with monthly payment and total interest breakdown.",
-    category: "Utility",
-    featured: true,
-    related: ["loan-calculator", "gst-calculator", "percentage-calculator"],
-    faqs: [
-      {
-        question: "What inputs are required for EMI?",
-        answer:
-          "You need principal amount, annual interest rate, and loan tenure in months.",
-      },
-      {
-        question: "Is EMI formula accurate?",
-        answer:
-          "Yes. The standard reducing-balance EMI formula is used for accurate results.",
-      },
-    ],
-  },
-  {
-    name: "Loan Calculator",
-    slug: "loan-calculator",
-    description:
-      "Estimate monthly payment, interest cost, and total payment for loans.",
-    seoDescription:
-      "Loan calculator to estimate monthly payment, total interest, and payoff cost quickly.",
-    category: "Utility",
-    related: ["emi-calculator", "percentage-calculator", "discount-calculator"],
-    faqs: [
-      {
-        question: "What is the difference between EMI and loan calculator?",
-        answer:
-          "This tool focuses on broad payment insights, while EMI calculator emphasizes monthly installment details.",
-      },
-      {
-        question: "Can I test different interest rates?",
-        answer: "Yes. Update rate and tenure values to compare loan scenarios instantly.",
-      },
-    ],
-  },
-  {
-    name: "Discount Calculator",
-    slug: "discount-calculator",
-    description: "Calculate discount amount, final price, and savings in one click.",
-    seoDescription:
-      "Discount calculator for sale price, savings amount, and final payable after percentage discount.",
-    category: "Utility",
-    related: ["gst-calculator", "percentage-calculator", "currency-converter"],
-    faqs: [
-      {
-        question: "Can I calculate savings from a percentage offer?",
-        answer:
-          "Yes. Enter original price and discount percent to get exact savings and final amount.",
-      },
-      {
-        question: "Does this support decimal values?",
-        answer: "Yes. Decimal prices and percentages are supported.",
-      },
-    ],
-  },
-  {
-    name: "Unit Converter",
-    slug: "unit-converter",
-    description: "Convert length, weight, and temperature units quickly.",
-    seoDescription:
-      "Unit converter tool for length, weight, and temperature with instant conversion results.",
-    category: "Utility",
-    related: ["currency-converter", "percentage-calculator", "age-calculator"],
-    faqs: [
-      {
-        question: "Which unit types are supported?",
-        answer: "Length, weight, and temperature conversions are available in this version.",
-      },
-      {
-        question: "Is conversion instant?",
-        answer: "Yes. Values update in real time as inputs change.",
-      },
-    ],
-  },
-  {
-    name: "Currency Converter",
-    slug: "currency-converter",
-    description: "Convert major currencies with quick estimated exchange rates.",
-    seoDescription:
-      "Currency converter for major global currencies with quick estimated conversion values.",
-    category: "Utility",
-    related: ["unit-converter", "discount-calculator", "gst-calculator"],
-    faqs: [
-      {
-        question: "Are these live market exchange rates?",
-        answer:
-          "This version uses a static demo rate table for product preview. Integrate live APIs anytime later.",
-      },
-      {
-        question: "Can I convert between non-USD pairs?",
-        answer: "Yes. The converter calculates via normalized base rates.",
-      },
-    ],
-  },
-  {
-    name: "JSON Formatter",
-    slug: "json-formatter",
-    description: "Format, validate, and minify JSON for cleaner debugging.",
-    seoDescription:
-      "JSON formatter and validator to pretty print, minify, and check invalid JSON syntax online.",
-    category: "Developer",
-    featured: true,
-    related: ["uuid-generator", "slug-generator", "password-generator"],
-    faqs: [
-      {
-        question: "Can this tool validate invalid JSON?",
-        answer: "Yes. It shows a clear parsing error if syntax is invalid.",
-      },
-      {
-        question: "Can I also minify JSON?",
-        answer: "Yes. Use the Minify action to reduce JSON size.",
-      },
-    ],
-  },
-  {
-    name: "UUID Generator",
-    slug: "uuid-generator",
-    description: "Generate UUID v4 values for IDs, APIs, and database records.",
-    seoDescription:
-      "UUID generator for random v4 IDs with bulk generation and one-click copy support.",
-    category: "Developer",
-    related: ["json-formatter", "password-generator", "slug-generator"],
-    faqs: [
-      {
-        question: "Which UUID version is generated?",
-        answer: "This tool generates random UUID v4 values.",
-      },
-      {
-        question: "Can I generate multiple UUIDs at once?",
-        answer: "Yes. Set the required count and generate in bulk.",
-      },
-    ],
-  },
-  {
-    name: "Slug Generator",
-    slug: "slug-generator",
-    description: "Convert text to SEO-friendly URL slugs instantly.",
-    seoDescription:
-      "Slug generator to create clean, lowercase, hyphenated URL slugs for SEO-friendly pages.",
-    category: "SEO",
-    related: ["json-formatter", "text-case-converter", "character-counter"],
-    faqs: [
-      {
-        question: "Does slug generator remove special characters?",
-        answer: "Yes. It removes non-alphanumeric symbols and normalizes separators.",
-      },
-      {
-        question: "Can I copy slug directly?",
-        answer: "Yes. Use copy action to paste into CMS or codebase quickly.",
-      },
-    ],
-  },
-  {
-    name: "WebP Converter",
-    slug: "webp-converter",
-    description: "Convert image files to WebP format for faster web delivery.",
-    seoDescription:
-      "WebP converter for modern image optimization with adjustable quality and instant download.",
-    category: "Image",
-    related: ["image-compressor", "image-resizer", "png-to-jpg-converter"],
-    faqs: [
-      {
-        question: "Why convert images to WebP?",
-        answer: "WebP often delivers smaller file sizes while maintaining good visual quality.",
-      },
-      {
-        question: "Can I control WebP quality?",
-        answer: "Yes. Use quality slider before converting.",
-      },
-    ],
-  },
-  {
-    name: "AI Background Remover",
-    slug: "ai-background-remover",
-    description:
-      "Remove image backgrounds automatically with AI and export transparent PNG.",
-    seoDescription:
-      "Free AI background remover to erase photo backgrounds online, preview before/after, and download transparent PNG instantly.",
-    category: "Image",
-    featured: true,
-    related: ["image-cropper", "jpg-to-png-converter", "webp-converter"],
-    faqs: [
-      {
-        question: "Does this AI background remover keep transparent output?",
-        answer:
-          "Yes. The main download is a transparent PNG so you can place your cutout on any background.",
-      },
-      {
-        question: "Are my images uploaded to a server?",
-        answer:
-          "Processing is done in-browser whenever possible. Keep the page open until removal completes.",
-      },
-    ],
-  },
-  {
-    name: "Image to PDF Converter",
-    slug: "image-to-pdf-converter",
-    description:
-      "Convert multiple images into one PDF with page reorder and preview.",
-    seoDescription:
-      "Image to PDF converter online free. Upload multiple images, drag reorder pages, merge into one PDF, and download instantly.",
-    category: "Image",
-    featured: true,
-    related: ["compress-pdf", "image-cropper", "image-compressor"],
-    faqs: [
-      {
-        question: "Can I combine multiple images into a single PDF?",
-        answer:
-          "Yes. Upload multiple images, reorder them, then generate one merged PDF file.",
-      },
-      {
-        question: "Do I need to install anything?",
-        answer:
-          "No. Conversion runs directly in your browser on desktop and mobile.",
-      },
-    ],
-  },
-  {
-    name: "Compress PDF",
-    slug: "compress-pdf",
-    description:
-      "Reduce PDF file size online and compare original vs compressed size.",
-    seoDescription:
-      "Compress PDF online free to reduce file size, keep documents shareable, and download optimized PDF in seconds.",
-    category: "Utility",
-    featured: true,
-    related: ["image-to-pdf-converter", "image-compressor", "webp-converter"],
-    faqs: [
-      {
-        question: "Will compressing PDF change quality?",
-        answer:
-          "Compression level can affect quality. Start with medium and test if readability is preserved.",
-      },
-      {
-        question: "Can I see size reduction before downloading?",
-        answer:
-          "Yes. The tool displays original size, compressed size, and reduction percentage.",
-      },
-    ],
-  },
-  {
-    name: "Image Cropper",
-    slug: "image-cropper",
-    description:
-      "Crop images with drag handles, preset ratios, and instant download.",
-    seoDescription:
-      "Online image cropper tool with drag crop area, preset aspect ratios, and one-click cropped image download.",
-    category: "Image",
-    related: ["ai-background-remover", "image-resizer", "image-compressor"],
-    faqs: [
-      {
-        question: "Can I crop for social media aspect ratios?",
-        answer:
-          "Yes. You can choose preset ratios like 1:1, 4:3, and 16:9.",
-      },
-      {
-        question: "Does cropping reduce privacy?",
-        answer:
-          "No. Cropping is done in your browser and does not require uploading to cloud storage.",
-      },
-    ],
+    related: ["quotation-generator", "receipt-generator", "gst-billing-helper"],
+    faqs: [],
   },
   {
     name: "Quotation Generator",
     slug: "quotation-generator",
-    description:
-      "Create professional quotations/estimates with tax, discount, itemized pricing, and PDF/print export.",
-    seoDescription:
-      "Business quotation generator to create branded estimates with customer details, item table, GST, discount, and instant PDF download.",
+    description: "Build professional quotations and estimates with tax and discount support.",
+    seoDescription: "Quotation generator for businesses with line-item pricing and print/PDF export.",
     category: "Business",
     featured: true,
-    related: ["invoice-generator", "offer-poster-generator", "whatsapp-template-builder"],
-    faqs: [
-      {
-        question: "Can I convert quotation to invoice later?",
-        answer:
-          "Yes. Use the Convert to Invoice action to prefill invoice details and continue billing quickly.",
-      },
-      {
-        question: "Does this support GST and discounts together?",
-        answer:
-          "Yes. You can apply percentage or flat discount, then apply GST on the taxable amount.",
-      },
-      {
-        question: "Can I print quotation for customer approval?",
-        answer:
-          "Yes. You can open print-ready view and print directly or download as PDF.",
-      },
-    ],
+    related: ["invoice-generator", "receipt-generator", "proforma-invoice-generator"],
+    faqs: [],
   },
   {
     name: "Receipt Generator",
     slug: "receipt-generator",
-    description:
-      "Create payment receipts for cash, UPI, and bank transfer with A4/thermal print support.",
-    seoDescription:
-      "Business receipt generator with auto receipt number, payment mode selection, and print-ready A4 or thermal layout.",
+    description: "Generate payment receipts for cash, UPI, and bank transfer with print support.",
+    seoDescription: "Receipt generator with payment mode selection and A4/thermal print-ready layout.",
     category: "Business",
     featured: true,
-    related: ["quotation-generator", "invoice-generator", "gst-billing-helper"],
-    faqs: [
-      {
-        question: "Can I generate receipts for UPI and bank transfer?",
-        answer:
-          "Yes. You can choose cash, UPI, bank transfer, or mixed mode and print instantly.",
-      },
-      {
-        question: "Does it support thermal print?",
-        answer:
-          "Yes. Use the thermal paper option for 80mm-style print layout.",
-      },
-    ],
+    related: ["invoice-generator", "quotation-generator", "gst-billing-helper"],
+    faqs: [],
   },
   {
-    name: "Profit & Pricing Calculator",
-    slug: "profit-pricing-calculator",
-    description:
-      "Calculate selling price from cost price using margin/markup with GST and discount simulation.",
-    seoDescription:
-      "Profit margin and pricing calculator with markup, GST-inclusive/exclusive modes, and discount planning simulation.",
+    name: "POS",
+    slug: "pos-mvp",
+    description: "Advanced local POS for billing, inventory, returns, split payments, and bill print.",
+    seoDescription: "All-in-one POS running locally in browser with inventory management and print-ready billing.",
     category: "Business",
-    related: ["quotation-generator", "gst-billing-helper", "discount-calculator"],
+    featured: true,
+    related: ["gst-billing-helper", "purchase-order-generator", "invoice-generator"],
     faqs: [
       {
-        question: "Can I calculate selling price from target margin?",
-        answer:
-          "Yes. Enter cost and margin or markup to instantly get recommended selling price.",
-      },
-      {
-        question: "Can I test discounts before running offers?",
-        answer:
-          "Yes. Discount simulation shows post-discount revenue and estimated profit impact.",
-      },
-    ],
-  },
-  {
-    name: "WhatsApp Template Builder",
-    slug: "whatsapp-template-builder",
-    description:
-      "Build business WhatsApp messages with variables for offers, follow-ups, reminders, and greetings.",
-    seoDescription:
-      "WhatsApp business template builder with ready scripts and dynamic variable placeholders for faster customer messaging.",
-    category: "Business",
-    related: ["quotation-generator", "offer-poster-generator", "festival-post-generator"],
-    faqs: [
-      {
-        question: "Can I insert customer name and amount automatically?",
-        answer:
-          "Yes. Variables like name, amount, due date, and links are merged into the message instantly.",
-      },
-      {
-        question: "Can I open WhatsApp directly with the generated message?",
-        answer:
-          "Yes. One click opens WhatsApp with your prefilled template text.",
-      },
-    ],
-  },
-  {
-    name: "Proforma Invoice Generator",
-    slug: "proforma-invoice-generator",
-    description:
-      "Generate pre-sales proforma invoices with clear status, customer details, and itemized totals.",
-    seoDescription:
-      "Proforma invoice generator for pre-sales documentation with editable items, taxes, and print/PDF-ready format.",
-    category: "Business",
-    related: ["quotation-generator", "invoice-generator", "purchase-order-generator"],
-    faqs: [
-      {
-        question: "How is proforma different from invoice?",
-        answer:
-          "A proforma is a pre-sales quote-style billing document and is clearly marked as PROFORMA.",
-      },
-      {
-        question: "Can I export proforma as PDF?",
-        answer: "Yes. Download as PDF or open print view for customer sharing.",
-      },
-    ],
-  },
-  {
-    name: "Purchase Order Generator",
-    slug: "purchase-order-generator",
-    description:
-      "Create supplier purchase orders with delivery expectations and draft/sent/received status tracking.",
-    seoDescription:
-      "Purchase order generator for businesses with supplier info, item list, expected delivery date, and PO status controls.",
-    category: "Business",
-    related: ["proforma-invoice-generator", "gst-billing-helper", "pos-mvp"],
-    faqs: [
-      {
-        question: "Can I track PO status?",
-        answer:
-          "Yes. Set PO status as Draft, Sent, or Received and include this in generated output.",
-      },
-      {
-        question: "Can I print purchase order for supplier approval?",
-        answer: "Yes. A print-ready PO document is included.",
+        question: "Does this POS run with cloud sync?",
+        answer: "No. This POS runs locally in your browser for fast, single-store operations.",
       },
     ],
   },
   {
     name: "GST Billing Helper",
     slug: "gst-billing-helper",
-    description:
-      "Split GST into CGST/SGST/IGST, suggest HSN/SAC, and generate clear tax summaries for billing.",
-    seoDescription:
-      "GST billing helper for India with intrastate/interstate tax logic, HSN/SAC support, and compliance-style tax summary.",
+    description: "Split GST into CGST/SGST/IGST and generate clear billing-ready tax summaries.",
+    seoDescription: "GST billing helper for intrastate/interstate tax split and practical invoice-ready summaries.",
     category: "Business",
     featured: true,
     related: ["gst-calculator", "invoice-generator", "proforma-invoice-generator"],
-    faqs: [
-      {
-        question: "Does it support CGST/SGST and IGST modes?",
-        answer:
-          "Yes. Switch between intrastate and interstate sale modes for automatic split.",
-      },
-      {
-        question: "Can it suggest HSN/SAC codes?",
-        answer:
-          "Yes. It includes practical suggestions by item/service type.",
-      },
-    ],
+    faqs: [],
   },
   {
-    name: "POS",
-    slug: "pos-mvp",
-    description:
-      "Complete POS for billing, inventory add/manage, returns, split payments, cashier role, and print.",
-    seoDescription:
-      "All-in-one POS tool with inventory management, GST billing, split payments, returns, day-close report, and print-ready bill.",
+    name: "Proforma Invoice Generator",
+    slug: "proforma-invoice-generator",
+    description: "Create pre-sales proforma invoices with itemized totals and PDF output.",
+    seoDescription: "Proforma invoice generator for pre-sales documentation with editable rows and tax settings.",
     category: "Business",
-    featured: true,
-    related: ["gst-billing-helper", "purchase-order-generator", "cloud-sync-multi-store"],
-    faqs: [
-      {
-        question: "Can I add inventory items inside this POS?",
-        answer:
-          "Yes. Use Inventory Management to add products with name, SKU, price, GST %, and stock from the same screen.",
-      },
-      {
-        question: "Can I do full billing with customer details and payment split?",
-        answer:
-          "Yes. Add cart items, customer details, returns (if any), split by cash/UPI/card, then checkout and print bill.",
-      },
-      {
-        question: "Does this POS work without backend?",
-        answer:
-          "Yes. It works in browser with local storage for single-store daily operations.",
-      },
-    ],
+    related: ["invoice-generator", "quotation-generator", "purchase-order-generator"],
+    faqs: [],
   },
   {
-    name: "Cloud Sync & Multi-store",
-    slug: "cloud-sync-multi-store",
-    description:
-      "Plan optional cloud sync, manage stores/branches, and view simple multi-outlet summary.",
-    seoDescription:
-      "Optional cloud sync and multi-store planner for POS expansion with branch management and centralized dashboard preview.",
+    name: "Purchase Order Generator",
+    slug: "purchase-order-generator",
+    description: "Generate supplier purchase orders with expected delivery and status tracking.",
+    seoDescription: "Purchase order generator with supplier fields, item table, and printable output.",
     category: "Business",
-    related: ["pos-mvp", "purchase-order-generator", "gst-billing-helper"],
-    faqs: [
-      {
-        question: "Is cloud sync mandatory to use POS tools?",
-        answer:
-          "No. Cloud sync is optional and suitable when moving beyond single-device usage.",
-      },
-      {
-        question: "Can I manage multiple stores?",
-        answer:
-          "Yes. Add branches/stores and view a centralized summary in one place.",
-      },
-    ],
+    related: ["proforma-invoice-generator", "pos-mvp", "gst-billing-helper"],
+    faqs: [],
   },
   {
-    name: "Invoice Generator",
-    slug: "invoice-generator",
-    description:
-      "Create polished GST-ready invoices with logo branding, tax controls, line items, and clean PDF export.",
-    seoDescription:
-      "Business invoice generator for India. Add logo, GST/tax setup, customer details, editable items, and download professional invoice PDFs.",
+    name: "Profit & Pricing Calculator",
+    slug: "profit-pricing-calculator",
+    description: "Compute selling price from cost with margin, markup, GST, and discount simulation.",
+    seoDescription: "Profit and pricing calculator for margin planning and discount impact analysis.",
     category: "Business",
-    featured: true,
-    related: ["quotation-generator", "festival-post-generator", "offer-poster-generator", "whatsapp-template-builder"],
-    faqs: [
-      {
-        question: "Can I generate an invoice with GST?",
-        answer:
-          "Yes. Enable GST, set your tax rate, and the invoice automatically calculates subtotal, GST amount, and grand total.",
-      },
-      {
-        question: "Can I add multiple items and download PDF?",
-        answer:
-          "Yes. Add/edit item rows with quantity and price, preview the invoice, then download it as a clean PDF.",
-      },
-      {
-        question: "Is this suitable for small retail and service businesses?",
-        answer:
-          "Yes. The layout is optimized for local stores, freelancers, and service businesses that need simple professional invoices quickly.",
-      },
-    ],
+    related: ["discount-calculator", "gst-calculator", "quotation-generator"],
+    faqs: [],
   },
+  {
+    name: "WhatsApp Template Builder",
+    slug: "whatsapp-template-builder",
+    description: "Create reusable business WhatsApp templates with dynamic placeholders.",
+    seoDescription: "WhatsApp template builder for offers, reminders, and follow-up customer messages.",
+    category: "Business",
+    related: ["quotation-generator", "offer-poster-generator", "festival-post-generator"],
+    faqs: [],
+  },
+
   {
     name: "Festival Post Generator",
     slug: "festival-post-generator",
-    description:
-      "Create festive business creatives with custom occasions, rich themes, logo branding, and high-resolution export.",
-    seoDescription:
-      "Advanced festival post generator for business marketing creatives. Supports preset festivals, custom occasions, multiple styles, branding fields, and export formats.",
-    category: "Business",
+    description: "Design festive branded creatives with live editing and high-resolution exports.",
+    seoDescription: "Festival post generator for business social creatives with custom themes and export formats.",
+    category: "Creative",
     featured: true,
-    related: ["offer-poster-generator", "whatsapp-template-builder", "invoice-generator", "quotation-generator"],
-    faqs: [
-      {
-        question: "Can I create festival creatives for different occasions?",
-        answer:
-          "Yes. You can choose preset festivals or enter a custom occasion name like store anniversary, wedding season, or regional events.",
-      },
-      {
-        question: "Can I add my business logo and contact details?",
-        answer:
-          "Yes. Upload your logo and add business name, phone, website/Instagram, tagline, CTA, and offer line before downloading.",
-      },
-      {
-        question: "Which output formats are supported?",
-        answer:
-          "You can export for Instagram post, Instagram story, and portrait flyer/poster formats with high-resolution output.",
-      },
-    ],
+    related: ["offer-poster-generator", "instagram-caption-generator", "whatsapp-template-builder"],
+    faqs: [],
   },
   {
     name: "Offer Poster Generator",
     slug: "offer-poster-generator",
-    description:
-      "Design premium retail offer posters with stronger hierarchy, brand-ready layouts, modern themes, and sharper export.",
-    seoDescription:
-      "Offer poster generator for fashion stores and local brands. Create luxury sale, festive offer, grand opening, and wedding collection posters with business branding.",
-    category: "Business",
+    description: "Create promotional posters with premium layouts, branding fields, and export options.",
+    seoDescription: "Offer poster generator for stores and brands with campaign-ready visual templates.",
+    category: "Creative",
     featured: true,
-    related: ["festival-post-generator", "whatsapp-template-builder", "invoice-generator", "quotation-generator"],
-    faqs: [
-      {
-        question: "What kind of businesses can use this offer poster tool?",
-        answer:
-          "It works well for fashion stores, local retailers, service businesses, and any brand that needs clean promotional creatives.",
-      },
-      {
-        question: "Does the poster include logo branding and contact details?",
-        answer:
-          "Yes. You can upload a logo, add headline/subheadline, offer copy, footer text, and contact details before export.",
-      },
-      {
-        question: "Can I use different promotional themes?",
-        answer:
-          "Yes. Choose premium retail themes such as luxury sale, festive offer, grand opening, clearance, wedding collection, and limited-time campaigns.",
-      },
-    ],
+    related: ["festival-post-generator", "instagram-caption-generator", "whatsapp-template-builder"],
+    faqs: [],
   },
   {
     name: "Instagram Caption Generator",
     slug: "instagram-caption-generator",
-    description:
-      "Generate business-ready Instagram captions with tone control, post-purpose targeting, hashtags, and one-click copy.",
-    seoDescription:
-      "Instagram caption generator for brands, local stores, and marketers. Generate sales, festive, launch, and engagement captions with hashtag suggestions.",
-    category: "Business",
+    description: "Generate caption ideas with tone, campaign goal, and hashtag suggestions.",
+    seoDescription: "Instagram caption generator for promotions, festive campaigns, and engagement posts.",
+    category: "Creative",
     featured: true,
-    related: ["festival-post-generator", "offer-poster-generator", "invoice-generator", "quotation-generator"],
-    faqs: [
-      {
-        question: "Can I generate captions for different campaign goals?",
-        answer:
-          "Yes. Choose purpose like product launch, sale offer, festive greeting, store promotion, new arrival, or engagement post.",
-      },
-      {
-        question: "Does it provide hashtags and copy options?",
-        answer:
-          "Yes. You can include hashtag suggestions, copy each caption instantly, and regenerate fresh caption variants anytime.",
-      },
-    ],
+    related: ["festival-post-generator", "offer-poster-generator", "whatsapp-template-builder"],
+    faqs: [],
+  },
+
+  {
+    name: "Image Compressor",
+    slug: "image-compressor",
+    description: "Reduce image size in-browser while preserving practical visual quality.",
+    seoDescription: "Image compressor to optimize image file size quickly with browser-side processing.",
+    category: "Image & PDF",
+    featured: true,
+    related: ["image-resizer", "webp-converter", "compress-pdf"],
+    faqs: [],
+  },
+  {
+    name: "Image Resizer",
+    slug: "image-resizer",
+    description: "Resize images to custom dimensions and export instantly.",
+    seoDescription: "Image resizer tool for changing image dimensions online with fast output.",
+    category: "Image & PDF",
+    related: ["image-compressor", "image-cropper", "webp-converter"],
+    faqs: [],
+  },
+  {
+    name: "Image Cropper",
+    slug: "image-cropper",
+    description: "Crop images with drag handles and preset aspect ratios.",
+    seoDescription: "Online image cropper with ratio presets and quick download.",
+    category: "Image & PDF",
+    related: ["image-resizer", "image-compressor", "ai-background-remover"],
+    faqs: [],
+  },
+  {
+    name: "AI Background Remover",
+    slug: "ai-background-remover",
+    description: "Automatically remove photo backgrounds and export transparent PNG.",
+    seoDescription: "AI background remover for instant transparent cutouts in-browser.",
+    category: "Image & PDF",
+    featured: true,
+    related: ["image-cropper", "jpg-to-png-converter", "webp-converter"],
+    faqs: [],
+  },
+  {
+    name: "JPG to PNG Converter",
+    slug: "jpg-to-png-converter",
+    description: "Convert JPG/JPEG images to PNG format instantly.",
+    seoDescription: "JPG to PNG converter with private browser-side processing.",
+    category: "Image & PDF",
+    related: ["png-to-jpg-converter", "webp-converter", "image-compressor"],
+    faqs: [],
+  },
+  {
+    name: "PNG to JPG Converter",
+    slug: "png-to-jpg-converter",
+    description: "Convert PNG to JPG with adjustable quality.",
+    seoDescription: "PNG to JPG converter for smaller image output and web sharing.",
+    category: "Image & PDF",
+    related: ["jpg-to-png-converter", "webp-converter", "image-compressor"],
+    faqs: [],
+  },
+  {
+    name: "WebP Converter",
+    slug: "webp-converter",
+    description: "Convert images to WebP for better web performance.",
+    seoDescription: "WebP image converter with quality settings and instant download.",
+    category: "Image & PDF",
+    related: ["image-compressor", "png-to-jpg-converter", "jpg-to-png-converter"],
+    faqs: [],
+  },
+  {
+    name: "Image to PDF Converter",
+    slug: "image-to-pdf-converter",
+    description: "Combine one or more images into a single PDF document.",
+    seoDescription: "Image to PDF converter with page ordering and merged PDF output.",
+    category: "Image & PDF",
+    featured: true,
+    related: ["compress-pdf", "image-compressor", "image-cropper"],
+    faqs: [],
+  },
+  {
+    name: "Compress PDF",
+    slug: "compress-pdf",
+    description: "Reduce PDF size and compare original vs compressed output.",
+    seoDescription: "Compress PDF online to optimize file size while maintaining readability.",
+    category: "Image & PDF",
+    featured: true,
+    related: ["image-to-pdf-converter", "image-compressor", "webp-converter"],
+    faqs: [],
+  },
+
+  {
+    name: "Word Counter",
+    slug: "word-counter",
+    description: "Count words, characters, sentences, paragraphs, and estimated reading time.",
+    seoDescription: "Free online word counter for real-time writing metrics.",
+    category: "Essentials",
+    featured: true,
+    related: ["text-case-converter", "json-formatter", "url-shortener"],
+    faqs: [],
+  },
+  {
+    name: "Text Case Converter",
+    slug: "text-case-converter",
+    description: "Convert text to lowercase, uppercase, sentence case, and title-style output.",
+    seoDescription: "Text case converter for instant casing transformations.",
+    category: "Essentials",
+    featured: true,
+    related: ["word-counter", "json-formatter", "url-shortener"],
+    faqs: [],
+  },
+  {
+    name: "Password Generator",
+    slug: "password-generator",
+    description: "Generate secure random passwords with configurable options.",
+    seoDescription: "Strong password generator with symbols, numbers, and case controls.",
+    category: "Essentials",
+    featured: true,
+    related: ["json-formatter", "qr-code-generator", "url-shortener"],
+    faqs: [],
+  },
+  {
+    name: "JSON Formatter",
+    slug: "json-formatter",
+    description: "Validate, pretty-print, and minify JSON.",
+    seoDescription: "JSON formatter and validator for debugging and clean structured output.",
+    category: "Essentials",
+    featured: true,
+    related: ["password-generator", "word-counter", "url-shortener"],
+    faqs: [],
+  },
+  {
+    name: "QR Code Generator",
+    slug: "qr-code-generator",
+    description: "Generate QR codes for URLs and text, then download instantly.",
+    seoDescription: "QR code generator for links and text with quick PNG download.",
+    category: "Essentials",
+    related: ["url-shortener", "password-generator", "word-counter"],
+    faqs: [],
   },
   {
     name: "URL Shortener",
     slug: "url-shortener",
-    description:
-      "Create short shareable links from long URLs with one-click copy.",
-    seoDescription:
-      "Free URL shortener online to convert long links into short URLs, then copy and share instantly.",
-    category: "SEO",
+    description: "Create short links from long URLs with one-click copy.",
+    seoDescription: "URL shortener for clean, shareable links in seconds.",
+    category: "Essentials",
     featured: true,
-    related: ["qr-code-generator", "slug-generator", "character-counter"],
+    related: ["qr-code-generator", "json-formatter", "word-counter"],
+    faqs: [],
+  },
+  {
+    name: "Age Calculator",
+    slug: "age-calculator",
+    description: "Calculate exact age in years, months, and days.",
+    seoDescription: "Age calculator to find precise age from date of birth.",
+    category: "Essentials",
+    related: ["bmi-calculator", "percentage-calculator", "loan-emi-planner"],
+    faqs: [],
+  },
+  {
+    name: "BMI Calculator",
+    slug: "bmi-calculator",
+    description: "Calculate body mass index and health category.",
+    seoDescription: "BMI calculator with instant index and category result.",
+    category: "Essentials",
+    related: ["age-calculator", "percentage-calculator", "loan-emi-planner"],
+    faqs: [],
+  },
+  {
+    name: "Percentage Calculator",
+    slug: "percentage-calculator",
+    description: "Calculate percentages, changes, increases, and decreases.",
+    seoDescription: "Percentage calculator for common value and comparison formulas.",
+    category: "Essentials",
+    related: ["discount-calculator", "loan-emi-planner", "gst-calculator"],
+    faqs: [],
+  },
+  {
+    name: "Discount Calculator",
+    slug: "discount-calculator",
+    description: "Find discount amount, final price, and savings quickly.",
+    seoDescription: "Discount calculator for sales pricing and savings estimation.",
+    category: "Essentials",
+    related: ["percentage-calculator", "gst-calculator", "profit-pricing-calculator"],
+    faqs: [],
+  },
+  {
+    name: "GST Calculator",
+    slug: "gst-calculator",
+    description: "Calculate GST inclusive and exclusive values instantly.",
+    seoDescription: "GST calculator for tax amount, net amount, and gross total.",
+    category: "Essentials",
+    featured: true,
+    related: ["loan-emi-planner", "discount-calculator", "gst-billing-helper"],
+    faqs: [],
+  },
+  {
+    name: "Loan & EMI Planner",
+    slug: "loan-emi-planner",
+    description: "Plan EMI, total interest, payoff value, and compare two loan options side-by-side.",
+    seoDescription: "Loan and EMI planner with EMI calculation, payoff summary, and comparison mode.",
+    category: "Essentials",
+    featured: true,
+    related: ["gst-calculator", "percentage-calculator", "discount-calculator"],
     faqs: [
       {
-        question: "How do I shorten a URL?",
-        answer:
-          "Paste your long link, click generate, then copy the short URL from the result box.",
+        question: "What does this planner calculate?",
+        answer: "It calculates monthly EMI, total interest, total repayment, and principal-vs-interest split.",
       },
       {
-        question: "Can I use this on mobile?",
-        answer:
-          "Yes. The tool is mobile-friendly and includes a single-tap copy button.",
+        question: "Can I compare two loan options?",
+        answer: "Yes. Comparison mode lets you evaluate two scenarios and quickly see which one costs less.",
       },
     ],
+  },
+  {
+    name: "Unit Converter",
+    slug: "unit-converter",
+    description: "Convert units for length, weight, and temperature quickly.",
+    seoDescription: "Unit converter with instant conversions across common measurement types.",
+    category: "Essentials",
+    related: ["currency-converter", "percentage-calculator", "age-calculator"],
+    faqs: [],
+  },
+  {
+    name: "Currency Converter",
+    slug: "currency-converter",
+    description: "Convert major currencies instantly using built-in conversion rates.",
+    seoDescription: "Currency converter with quick multi-currency conversion and clean UX.",
+    category: "Essentials",
+    related: ["unit-converter", "discount-calculator", "loan-emi-planner"],
+    faqs: [],
   },
 ];
 
