@@ -6,6 +6,7 @@ import { Footer } from "@/components/footer";
 import { GoogleAnalytics } from "@/components/google-analytics";
 import { GoogleAdSense } from "@/components/google-adsense";
 import { PwaRegister } from "@/components/pwa-register";
+import { ScrollToTop } from "@/components/scroll-to-top";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.toolhubsite.in"),
@@ -96,6 +97,7 @@ export default function RootLayout({
           />
           <Navbar />
           {children}
+          <ScrollToTop />
           <Footer />
         </ThemeProvider>
       </body>
