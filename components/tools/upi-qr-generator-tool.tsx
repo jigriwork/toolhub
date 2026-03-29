@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import QRCode from "qrcode";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 function sanitizeAmount(value: string) {
   const amount = Number(value);
@@ -18,6 +18,8 @@ export function UpiQrGeneratorTool() {
   const [qrUrl, setQrUrl] = useState("");
   const [error, setError] = useState("");
 
+  const normalizedAmount = useMemo(() => sanitizeAmount(amount), [amount]);
+
   const generate = async () => {
     if (!name.trim() || !upiId.trim()) {
       setError("Name and UPI ID are required.");
@@ -28,9 +30,9 @@ export function UpiQrGeneratorTool() {
       const params = new URLSearchParams({
         pa: upiId.trim(),
         pn: name.trim(),
+        cu: "INR",
       });
 
-      const normalizedAmount = sanitizeAmount(amount);
       if (normalizedAmount) params.set("am", normalizedAmount);
       if (note.trim()) params.set("tn", note.trim());
 
@@ -94,11 +96,42 @@ export function UpiQrGeneratorTool() {
           UPI payment QR preview will appear here.
         </div>
       ) : (
-        <div className="space-y-3 rounded-xl border p-4" style={{ borderColor: "var(--border)" }}>
-          <Image src={qrUrl} alt="Generated UPI QR" width={260} height={260} unoptimized className="rounded-xl border p-2" style={{ borderColor: "var(--border)" }} />
-          <a href={qrUrl} download="toolhub-upi-qr.png" className="btn btn-primary">
-            Download UPI QR
-          </a>
+        <div className="space-y-4 rounded-xl border p-4" style={{ borderColor: "var(--border)" }}>
+          <div className="grid gap-4 md:grid-cols-[280px_1fr] md:items-start">
+            <Image src={qrUrl} alt="Generated UPI QR" width={260} height={260} unoptimized className="rounded-xl border p-2" style={{ borderColor: "var(--border)" }} />
+            <div className="rounded-xl border p-3 text-sm" style={{ borderColor: "var(--border)" }}>
+              <p className="font-semibold">Payment details</p>
+              <div className="mt-2 space-y-1" style={{ color: "var(--muted)" }}>
+                <p><span className="font-medium" style={{ color: "var(--foreground)" }}>Name:</span> {name.trim() || "-"}</p>
+                <p><span className="font-medium" style={{ color: "var(--foreground)" }}>UPI ID:</span> {upiId.trim() || "-"}</p>
+                <p><span className="font-medium" style={{ color: "var(--foreground)" }}>Amount:</span> {normalizedAmount ? `₹${normalizedAmount}` : "Customer enters amount"}</p>
+                <p><span className="font-medium" style={{ color: "var(--foreground)" }}>Note:</span> {note.trim() || "-"}</p>
+              </div>
+              <p className="mt-3 text-xs" style={{ color: "var(--muted)" }}>
+                Share this QR with customers along with these payment details.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <a href={qrUrl} download="toolhub-upi-qr.png" className="btn btn-primary">
+              Download UPI QR
+            </a>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => {
+                const details = [
+                  `Name: ${name.trim()}`,
+                  `UPI ID: ${upiId.trim()}`,
+                  `Amount: ${normalizedAmount ? `₹${normalizedAmount}` : "As per bill"}`,
+                  `Note: ${note.trim() || "-"}`,
+                ].join("\n");
+                void navigator.clipboard.writeText(details);
+              }}
+            >
+              Copy payment details
+            </button>
+          </div>
         </div>
       )}
     </div>

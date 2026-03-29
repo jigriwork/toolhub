@@ -21,6 +21,83 @@ const sampleByFormat: Record<BarcodeFormat, string> = {
   ITF14: "12345678901231",
 };
 
+function checksumMod10(value: string, evenWeight = 3) {
+  const digits = value.split("").map((digit) => Number(digit));
+  const sum = digits.reduce((acc, digit, index) => {
+    const fromRight = digits.length - index;
+    const weight = fromRight % 2 === 0 ? evenWeight : 1;
+    return acc + digit * weight;
+  }, 0);
+  return (10 - (sum % 10)) % 10;
+}
+
+function normalizeBarcodeValue(format: BarcodeFormat, rawValue: string) {
+  const cleaned = rawValue.replace(/\s+/g, "");
+
+  if (format === "CODE128") {
+    if (!cleaned) return { ok: false as const, error: "Enter a value for CODE128." };
+    return { ok: true as const, value: cleaned };
+  }
+
+  if (!/^\d+$/.test(cleaned)) {
+    return { ok: false as const, error: `${format} supports digits only.` };
+  }
+
+  if (format === "EAN13") {
+    if (cleaned.length === 12) return { ok: true as const, value: cleaned };
+    if (cleaned.length === 13) {
+      const base = cleaned.slice(0, 12);
+      const checkDigit = checksumMod10(base, 3);
+      if (Number(cleaned[12]) !== checkDigit) {
+        return { ok: false as const, error: "Invalid EAN13 check digit. Please verify the last digit." };
+      }
+      return { ok: true as const, value: base };
+    }
+    return { ok: false as const, error: "EAN13 accepts 12 digits (auto checksum) or 13 digits (with valid checksum)." };
+  }
+
+  if (format === "EAN8") {
+    if (cleaned.length === 7) return { ok: true as const, value: cleaned };
+    if (cleaned.length === 8) {
+      const base = cleaned.slice(0, 7);
+      const checkDigit = checksumMod10(base, 3);
+      if (Number(cleaned[7]) !== checkDigit) {
+        return { ok: false as const, error: "Invalid EAN8 check digit. Please verify the last digit." };
+      }
+      return { ok: true as const, value: base };
+    }
+    return { ok: false as const, error: "EAN8 accepts 7 digits (auto checksum) or 8 digits (with valid checksum)." };
+  }
+
+  if (format === "UPC") {
+    if (cleaned.length === 11) return { ok: true as const, value: cleaned };
+    if (cleaned.length === 12) {
+      const base = cleaned.slice(0, 11);
+      const checkDigit = checksumMod10(base, 3);
+      if (Number(cleaned[11]) !== checkDigit) {
+        return { ok: false as const, error: "Invalid UPC check digit. Please verify the last digit." };
+      }
+      return { ok: true as const, value: base };
+    }
+    return { ok: false as const, error: "UPC accepts 11 digits (auto checksum) or 12 digits (with valid checksum)." };
+  }
+
+  if (format === "ITF14") {
+    if (cleaned.length === 13) return { ok: true as const, value: cleaned };
+    if (cleaned.length === 14) {
+      const base = cleaned.slice(0, 13);
+      const checkDigit = checksumMod10(base, 3);
+      if (Number(cleaned[13]) !== checkDigit) {
+        return { ok: false as const, error: "Invalid ITF14 check digit. Please verify the last digit." };
+      }
+      return { ok: true as const, value: base };
+    }
+    return { ok: false as const, error: "ITF14 accepts 13 digits (auto checksum) or 14 digits (with valid checksum)." };
+  }
+
+  return { ok: true as const, value: cleaned };
+}
+
 export function BarcodeGeneratorTool() {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [format, setFormat] = useState<BarcodeFormat>("CODE128");
@@ -34,8 +111,15 @@ export function BarcodeGeneratorTool() {
     const svg = svgRef.current;
     if (!svg) return;
 
+    const normalized = normalizeBarcodeValue(format, value.trim());
+    if (!normalized.ok) {
+      setGenerated(false);
+      setError(normalized.error);
+      return;
+    }
+
     try {
-      JsBarcode(svg, value.trim(), {
+      JsBarcode(svg, normalized.value, {
         format,
         width: 2,
         height: 90,
@@ -48,7 +132,7 @@ export function BarcodeGeneratorTool() {
       setError("");
     } catch {
       setGenerated(false);
-      setError("Invalid value for this format. Check digit length and try again.");
+      setError("Invalid value for this format. Check number rules and try again.");
     }
   };
 
