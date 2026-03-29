@@ -11,31 +11,30 @@ export default function HomePage() {
           <div className="mt-2 grid gap-8 lg:grid-cols-[1.3fr_0.9fr] lg:items-end">
             <div>
               <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">
-                Business Tools + Creative Tools in one place
+                Run business operations and creative campaigns faster with ToolHub
               </h1>
               <p
                 className="mt-4 max-w-2xl text-sm sm:text-lg"
                 style={{ color: "var(--muted)" }}
               >
-                ToolHub is now focused on real utility: billing and business operations,
-                creative marketing assets, image/PDF workflows, and daily essentials —
-                all fast, browser-based, and mobile ready.
+                ToolHub gives you practical business workflows, premium creative generators,
+                essential image/PDF utilities, and fast daily tools in one trusted browser-based platform.
               </p>
               <div className="mt-5 flex flex-wrap gap-3">
                 <Link href="/tools/invoice-generator" className="btn btn-primary">
-                  Open Business Suite
+                  Start with Business Suite
                 </Link>
                 <Link href="/tools/festival-post-generator" className="btn btn-secondary">
-                  Open Creative Studio
+                  Explore Creative Studio
                 </Link>
               </div>
             </div>
             <div className="card space-y-3 p-4 sm:p-5">
-              <p className="text-sm font-semibold">Focused product structure</p>
+              <p className="text-sm font-semibold">Built to convert work into output</p>
               <div className="space-y-2 text-sm" style={{ color: "var(--muted)" }}>
-                <p>• Business Suite: invoice, quotation, receipt, and POS workflows</p>
-                <p>• Creative Studio: posters, festive creatives, and caption generation</p>
-                <p>• Essentials: practical calculators, converters, and utility tools</p>
+                <p>• Business Suite: invoicing, quotations, receipts, POS, and payment tools</p>
+                <p>• Creative Studio: festival posts, retail offers, and social copy generation</p>
+                <p>• Image & PDF + Essentials: fast file workflows and daily utility tools</p>
               </div>
             </div>
           </div>
@@ -51,30 +50,13 @@ export default function HomePage() {
         <AdPlaceholder label="Homepage Top Ad Slot" />
       </section>
 
-      <section className="container py-6 sm:py-8">
-        <div className="card premium-card p-4 sm:p-8">
-          <h2 className="text-2xl font-semibold">Why toolhubsite?</h2>
-          <ul
-            className="mt-4 grid gap-3 text-sm sm:grid-cols-2"
-            style={{ color: "var(--muted)" }}
-          >
-            <li>⚡ Fast, browser-based tools with no complex setup</li>
-            <li>
-              🔒 Privacy-first: most processing happens directly in your browser
-            </li>
-            <li>📱 Fully responsive experience across mobile and desktop</li>
-            <li>💼 Clean professional design for a trustworthy experience</li>
-          </ul>
-        </div>
-      </section>
-
       <section className="container py-2 sm:py-4">
         <div className="card premium-card p-4 sm:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h2 className="text-xl font-semibold">Business Suite</h2>
               <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
-                Core business workflows for local stores and service teams.
+                The strongest ToolHub layer for billing, operations, and customer-ready outputs.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -82,8 +64,26 @@ export default function HomePage() {
               <Link href="/tools/quotation-generator" className="btn btn-secondary">Quotation</Link>
               <Link href="/tools/receipt-generator" className="btn btn-secondary">Receipt</Link>
               <Link href="/tools/pos-mvp" className="btn btn-secondary">POS</Link>
+              <Link href="/tools/upi-qr-generator" className="btn btn-secondary">UPI QR</Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="container py-2 sm:py-4">
+        <div className="card premium-card p-4 sm:p-8">
+          <h2 className="text-2xl font-semibold">Why ToolHub?</h2>
+          <ul
+            className="mt-4 grid gap-3 text-sm sm:grid-cols-2"
+            style={{ color: "var(--muted)" }}
+          >
+            <li>⚡ Fast browser-based tools with no setup or learning overhead</li>
+            <li>
+              🔒 Privacy-first by design: most processing happens locally in your browser
+            </li>
+            <li>📱 Responsive workflows built for mobile and desktop operations</li>
+            <li>💼 Clear, professional UI focused on trust and conversion</li>
+          </ul>
         </div>
       </section>
 
@@ -93,7 +93,7 @@ export default function HomePage() {
             <div>
               <h2 className="text-xl font-semibold">Creative Studio</h2>
               <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
-                Build visual campaigns and social copy from one clean creative flow.
+                Premium creative outputs for business marketing campaigns and festive promotions.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -111,12 +111,13 @@ export default function HomePage() {
             <div>
               <h2 className="text-xl font-semibold">Image & PDF Tools</h2>
               <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
-                Compress, convert, crop, and package assets for faster delivery.
+                Essential file workflows for compression, conversion, merge, and split tasks.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
               <Link href="/tools/image-compressor" className="btn btn-secondary">Image Compressor</Link>
               <Link href="/tools/image-to-pdf-converter" className="btn btn-secondary">Image to PDF</Link>
+              <Link href="/tools/pdf-merge" className="btn btn-secondary">PDF Merge</Link>
               <Link href="/tools/compress-pdf" className="btn btn-secondary">Compress PDF</Link>
             </div>
           </div>
@@ -125,12 +126,12 @@ export default function HomePage() {
 
       <section className="container py-4">
         <div className="card p-4 sm:p-8">
-          <h2 className="text-2xl font-semibold">Built for trust and production use</h2>
+          <h2 className="text-2xl font-semibold">Built for trust and production-grade use</h2>
           <p className="mt-3 text-sm sm:text-base" style={{ color: "var(--muted)" }}>
-            toolhubsite is designed as a reliable utility platform with lightweight pages,
-            practical tool descriptions, structured FAQ content, and mobile-first
-            usability. This quality-first foundation helps improve user confidence,
-            retention, and AdSense readiness over time.
+            ToolHub is built as a reliable utility platform with lightweight pages,
+            practical descriptions, structured content, and mobile-first usability.
+            This trust-first product quality helps improve confidence, retention,
+            and conversion.
           </p>
           <p className="mt-3 text-sm sm:text-base" style={{ color: "var(--muted)" }}>
             We do not store your tool input data on our servers. Most processing

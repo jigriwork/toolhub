@@ -114,7 +114,7 @@ export function ToolSearch() {
     <section className="space-y-8 sm:space-y-10">
       <div className="premium-card card mb-4 space-y-4 p-4 sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-sm font-semibold">Find the perfect tool in seconds</p>
+          <p className="text-sm font-semibold">Find the right tool in seconds</p>
           <span className="chip">{tools.length} tools</span>
         </div>
         <input
@@ -158,6 +158,9 @@ export function ToolSearch() {
             </button>
           ))}
         </div>
+        <p className="text-xs" style={{ color: "var(--muted)" }}>
+          Start with Business Suite for invoices, quotations, POS, and payments. Then use Creative, Image & PDF, and Essentials as support tools.
+        </p>
       </div>
 
       <div className="space-y-2">
@@ -232,9 +235,9 @@ export function ToolSearch() {
       </div>
 
       {filteredTools.length === 0 && (
-        <p className="mt-4 text-sm" style={{ color: "var(--muted)" }}>
-          No tools found. Try another keyword.
-        </p>
+        <div className="rounded-xl border border-dashed p-4 text-sm" style={{ borderColor: "var(--border)", color: "var(--muted)" }}>
+          No tools found for this search. Try another keyword or switch category.
+        </div>
       )}
     </section>
   );

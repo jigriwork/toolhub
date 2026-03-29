@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { AdPlaceholder } from "@/components/ad-placeholder";
+import { ToolBadge } from "@/components/tool-badge";
 import { ToolPageActions } from "@/components/tool-page-actions";
 import { getToolBySlug, tools } from "@/data/tools";
 
@@ -31,16 +32,46 @@ export function ToolLayout({
       )
       : [];
 
+  const trustByCategory: Record<string, string> = {
+    Business:
+      "Built for practical business workflows with clear outputs you can use in operations immediately.",
+    Creative:
+      "Designed for premium-ready campaign assets with clean visuals and fast export control.",
+    "Image & PDF":
+      "Optimized for secure browser-side processing so your files stay private and downloadable quickly.",
+    Essentials:
+      "Focused on quick daily utility with clear inputs, accurate output, and copy-ready results.",
+  };
+
+  const introText = tool?.description ?? description;
+  const trustLine = tool ? trustByCategory[tool.category] : "";
+
   return (
     <main className="container section-y">
-      <header className="mb-6 space-y-3 sm:mb-8">
+      <header className="mb-6 space-y-4 sm:mb-8">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <h1 className="page-title font-bold">{title}</h1>
           <ToolPageActions slug={slug} />
         </div>
-        <p className="page-lead w-full">
-          {description}
-        </p>
+
+        {tool ? (
+          <div className="flex flex-wrap gap-2">
+            <ToolBadge label={tool.category} />
+            {tool.badges?.map((badge) => <ToolBadge key={badge} label={badge} />)}
+          </div>
+        ) : null}
+
+        <div className="card rounded-2xl p-4 sm:p-5">
+          <p className="text-sm font-semibold sm:text-base">What this tool does</p>
+          <p className="mt-1 text-sm leading-6 sm:text-base" style={{ color: "var(--muted)" }}>
+            {introText}
+          </p>
+          {trustLine ? (
+            <p className="mt-2 text-xs sm:text-sm" style={{ color: "var(--muted)" }}>
+              {trustLine}
+            </p>
+          ) : null}
+        </div>
       </header>
 
       <div className="card premium-card p-4 sm:p-6">{children}</div>
@@ -48,6 +79,9 @@ export function ToolLayout({
       {relatedTools.length > 0 && (
         <section className="mt-8">
           <h2 className="text-xl font-semibold">Related Tools</h2>
+          <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
+            Continue your workflow with these relevant tools.
+          </p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {relatedTools.map((relatedTool) => (
               <Link
@@ -56,6 +90,12 @@ export function ToolLayout({
                 className="rounded-xl border p-4 transition hover:-translate-y-0.5 hover:shadow-md"
                 style={{ borderColor: "var(--border)", background: "color-mix(in oklab, var(--card) 90%, transparent)" }}
               >
+                <div className="mb-2 flex flex-wrap gap-2">
+                  <ToolBadge label={relatedTool.category} />
+                  {relatedTool.badges?.map((badge) => (
+                    <ToolBadge key={`${relatedTool.slug}-${badge}`} label={badge} />
+                  ))}
+                </div>
                 <p className="font-semibold">{relatedTool.name}</p>
                 <p className="mt-1 text-sm leading-6" style={{ color: "var(--muted)" }}>
                   {relatedTool.description}

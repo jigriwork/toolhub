@@ -19,6 +19,7 @@ export type Tool = {
   seoDescription: string;
   category: ToolCategory;
   featured?: boolean;
+  badges?: Array<"Pro Tool" | "Quick Tool">;
   faqs: ToolFaq[];
   related: string[];
 };
@@ -61,6 +62,7 @@ const allTools: Tool[] = [
     seoDescription: "All-in-one POS running locally in browser with inventory management and print-ready billing.",
     category: "Business",
     featured: true,
+    badges: ["Pro Tool"],
     related: ["gst-billing-helper", "purchase-order-generator", "invoice-generator"],
     faqs: [
       {
@@ -104,6 +106,36 @@ const allTools: Tool[] = [
     seoDescription: "Profit and pricing calculator for margin planning and discount impact analysis.",
     category: "Business",
     related: ["discount-calculator", "gst-calculator", "quotation-generator"],
+    faqs: [],
+  },
+  {
+    name: "Barcode Generator",
+    slug: "barcode-generator",
+    description: "Generate print-ready barcodes in common formats and download as a PNG image.",
+    seoDescription: "Free barcode generator with support for CODE128, EAN, UPC, and ITF formats.",
+    category: "Business",
+    badges: ["Quick Tool"],
+    related: ["qr-code-generator", "invoice-generator", "pos-mvp"],
+    faqs: [],
+  },
+  {
+    name: "UPI QR Generator",
+    slug: "upi-qr-generator",
+    description: "Create UPI payment QR codes with payee details, optional amount, and notes.",
+    seoDescription: "UPI QR generator for Indian businesses with downloadable QR output for payment collection.",
+    category: "Business",
+    badges: ["Quick Tool"],
+    related: ["receipt-generator", "qr-code-generator", "whatsapp-link-generator"],
+    faqs: [],
+  },
+  {
+    name: "WhatsApp Link Generator",
+    slug: "whatsapp-link-generator",
+    description: "Create direct wa.me links with phone number and optional prefilled message.",
+    seoDescription: "WhatsApp link generator to create click-to-chat links with one-click copy.",
+    category: "Business",
+    badges: ["Quick Tool"],
+    related: ["whatsapp-template-builder", "url-shortener", "upi-qr-generator"],
     faqs: [],
   },
   {
@@ -223,6 +255,36 @@ const allTools: Tool[] = [
     faqs: [],
   },
   {
+    name: "PDF Merge",
+    slug: "pdf-merge",
+    description: "Combine multiple PDF files in your chosen order and download one merged PDF.",
+    seoDescription: "Merge PDF files online with drag-to-reorder controls and secure browser-side processing.",
+    category: "Image & PDF",
+    featured: true,
+    badges: ["Quick Tool"],
+    related: ["pdf-split", "compress-pdf", "image-to-pdf-converter"],
+    faqs: [],
+  },
+  {
+    name: "PDF Split",
+    slug: "pdf-split",
+    description: "Split selected page ranges from a PDF into separate downloadable files.",
+    seoDescription: "PDF split tool to export custom page ranges into new PDF files in seconds.",
+    category: "Image & PDF",
+    badges: ["Quick Tool"],
+    related: ["pdf-merge", "compress-pdf", "image-to-pdf-converter"],
+    faqs: [],
+  },
+  {
+    name: "Image Watermark Tool",
+    slug: "image-watermark-tool",
+    description: "Add text or logo watermarks with position, opacity, and size controls.",
+    seoDescription: "Image watermark tool for branding photos with custom text/logo overlays and download support.",
+    category: "Image & PDF",
+    related: ["image-compressor", "image-resizer", "image-cropper"],
+    faqs: [],
+  },
+  {
     name: "Compress PDF",
     slug: "compress-pdf",
     description: "Reduce PDF size and compare original vs compressed output.",
@@ -233,6 +295,16 @@ const allTools: Tool[] = [
     faqs: [],
   },
 
+  {
+    name: "Meta Tag Generator",
+    slug: "meta-tag-generator",
+    description: "Generate SEO meta tags, Open Graph tags, robots directives, and canonical links.",
+    seoDescription: "Meta tag generator for title, description, OG fields, robots, and canonical HTML output.",
+    category: "Essentials",
+    badges: ["Quick Tool"],
+    related: ["json-formatter", "url-shortener", "word-counter"],
+    faqs: [],
+  },
   {
     name: "Word Counter",
     slug: "word-counter",
